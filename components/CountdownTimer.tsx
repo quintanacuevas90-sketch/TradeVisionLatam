@@ -1,43 +1,49 @@
 import React, { useState, useEffect } from 'react';
 
-const CountdownTimer: React.FC = () => {
-    const calculateTimeLeft = () => {
-        const difference = +new Date("2024-12-31T23:59:59") - +new Date();
-        let timeLeft = {};
+interface CountdownTimerProps {
+    expiryTimestamp: number;
+}
 
-        if (difference > 0) {
-            timeLeft = {
-                días: Math.floor(difference / (1000 * 60 * 60 * 24)),
-                horas: Math.floor((difference / (1000 * 60 * 60)) % 24),
-                minutos: Math.floor((difference / 1000 / 60) % 60),
-                segundos: Math.floor((difference / 1000) % 60),
-            };
-        }
-        return timeLeft;
-    };
+// Moved outside the component to be a pure helper function and prevent stale closures.
+const calculateTimeLeft = (expiryTimestamp: number) => {
+    const difference = expiryTimestamp - +new Date();
+    let timeLeft = {};
 
-    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+    if (difference > 0) {
+        timeLeft = {
+            Horas: Math.floor((difference / (1000 * 60 * 60)) % 24),
+            Minutos: Math.floor((difference / 1000 / 60) % 60),
+            Segundos: Math.floor((difference / 1000) % 60),
+        };
+    }
+    return timeLeft;
+};
+
+const CountdownTimer: React.FC<CountdownTimerProps> = ({ expiryTimestamp }) => {
+    // Use lazy initialization for the state to compute it only once.
+    const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(expiryTimestamp));
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setTimeLeft(calculateTimeLeft());
+        // Set an interval to update the time left every second.
+        const timer = setInterval(() => {
+            setTimeLeft(calculateTimeLeft(expiryTimestamp));
         }, 1000);
 
-        return () => clearTimeout(timer);
-    });
+        // Clean up the interval when the component unmounts or the expiryTimestamp changes.
+        return () => clearInterval(timer);
+    }, [expiryTimestamp]); // The effect depends only on expiryTimestamp.
 
-    // Fix: Changed JSX.Element[] to React.ReactNode[] to resolve "Cannot find namespace 'JSX'" error.
     const timerComponents: React.ReactNode[] = [];
 
     Object.keys(timeLeft).forEach((interval) => {
         const value = (timeLeft as any)[interval];
-        if (!value && value !== 0) {
+        if (value === undefined) {
             return;
         }
 
         timerComponents.push(
-            <div key={interval} className="text-center">
-                <span className="text-3xl font-bold text-brand-primary">{value}</span>
+            <div key={interval} className="text-center p-2">
+                <span className="text-3xl font-bold text-brand-accent">{String(value).padStart(2, '0')}</span>
                 <span className="block text-sm text-gray-500 uppercase">{interval}</span>
             </div>
         );
@@ -45,7 +51,7 @@ const CountdownTimer: React.FC = () => {
 
     return (
         <div className="flex justify-center gap-4 my-4">
-            {timerComponents.length ? timerComponents : <span>¡La oferta ha terminado!</span>}
+            {timerComponents.length ? timerComponents : <span className="text-xl font-bold text-red-500">¡La oferta ha terminado!</span>}
         </div>
     );
 };

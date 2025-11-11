@@ -3,39 +3,40 @@ import React from 'react';
 import Header from '../components/Header';
 import NewsTicker from '../components/NewsTicker';
 import HeroSection from '../sections/HeroSection';
-import WhyChooseUsSection from '../sections/WhyChooseUsSection';
-import EducationSection from '../sections/EducationSection';
-import PremiumCoursesCtaSection from '../sections/PremiumCoursesCtaSection';
-import BrokersSection from '../sections/BrokersSection';
-import GiftSection from '../sections/GiftSection';
-import CommunitySection from '../sections/CommunitySection';
 import TestimonialsSection from '../sections/TestimonialsSection';
-import AboutSection from '../sections/AboutSection';
 import BlogSection from '../sections/BlogSection';
 import FaqSection from '../sections/FaqSection';
 import Footer from '../components/Footer';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
+import MentorsSection from '../sections/MentorsSection';
+import MethodologySection from '../sections/MethodologySection';
+import PremiumCoursesCtaSection from '../sections/PremiumCoursesCtaSection';
+import BrokersSection from '../sections/BrokersSection';
+import CommunityBenefitsSection from '../sections/CommunityBenefitsSection';
+
 
 interface MainPageProps {
     onOpenModal: (modal: ModalType) => void;
+    newsItems: string[];
+    isLoadingNews: boolean;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ onOpenModal }) => {
+const MainPage: React.FC<MainPageProps> = ({ onOpenModal, newsItems, isLoadingNews }) => {
     return (
         <>
             <Header onOpenModal={onOpenModal} />
-            <NewsTicker />
+            <div className="pt-20">
+                <NewsTicker newsItems={newsItems} isLoading={isLoadingNews} />
+            </div>
             <main>
                 <HeroSection onOpenModal={onOpenModal} />
-                <WhyChooseUsSection />
-                <EducationSection onOpenModal={onOpenModal} />
+                <MentorsSection />
+                <MethodologySection />
                 <PremiumCoursesCtaSection onOpenModal={onOpenModal} />
                 <BrokersSection />
-                <GiftSection />
-                <CommunitySection onOpenModal={onOpenModal} />
+                <CommunityBenefitsSection onOpenModal={onOpenModal} />
                 <TestimonialsSection />
-                <AboutSection onOpenModal={onOpenModal} />
                 <BlogSection />
                 <FaqSection />
             </main>

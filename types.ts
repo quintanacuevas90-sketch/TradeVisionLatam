@@ -1,38 +1,51 @@
 
-export type ModalType = 'premium-courses' | 'affiliate' | 'legal' | 'brokers' | 'community' | 'education' | 'about' | 'support' | 'consultancy';
+export type ModalType = 'premium-courses' | 'affiliate' | 'legal' | 'brokers' | 'community' | 'support' | 'mentors';
+
+export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora';
 
 export interface Testimonial {
     name: string;
-    text: string;
-    image: string;
+    quote: string;
+    location: string;
+    flagUrl: string;
 }
 
-export interface Broker {
-    name: string;
-    logo: string;
-    type: 'Binarias' | 'Forex' | 'Wallets';
-    description: string;
+export interface PartnerTool {
+  name: string;
+  description: string;
+  advantages: string[];
+  image: string;
+  link: string;
+  cta: string;
+  category: 'binary' | 'forex' | 'wallet';
+  regulation: 'regulated' | 'unregulated' | 'tool_platform' | 'crypto_exchange';
 }
 
 export interface Post {
     id: number;
+    slug: string;
     title: string;
     excerpt: string;
     imageUrl: string;
     author: string;
     date: string;
+    content: string; // Full HTML content of the post
+    category: string;
 }
 
-export interface FAQ {
+export interface ComprehensiveFAQ {
     question: string;
     answer: string;
+    category: string;
 }
 
 export interface ChatMessage {
     id: string;
     role: 'user' | 'model';
     text: string;
+    timestamp: number;
     sources?: GroundingSource[];
+    feedback?: 'up' | 'down';
 }
 
 export interface GroundingSource {
@@ -44,4 +57,17 @@ export enum ChatMode {
     Standard = 'Standard',
     Thinking = 'Thinking',
     Grounded = 'Grounded'
+}
+
+export type SearchResultItem =
+    | { type: 'blog'; data: Post }
+    | { type: 'faq'; data: ComprehensiveFAQ };
+
+export interface Mentor {
+    name: string;
+    role: string;
+    country: string;
+    specialty: string;
+    bio: string;
+    imageUrl: string;
 }

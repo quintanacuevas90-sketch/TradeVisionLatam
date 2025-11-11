@@ -1,54 +1,158 @@
 
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
-import { ModalType } from './types';
+import BlogListPage from './pages/BlogListPage';
+import BlogPostPage from './pages/BlogPostPage';
+import SitemapPage from './pages/SitemapPage';
+import { ModalType, PageType } from './types';
 import PremiumCoursesModal from './modals/PremiumCoursesModal';
 import AffiliateModal from './modals/AffiliateModal';
 import LegalModal from './modals/LegalModal';
 import BrokersModal from './modals/BrokersModal';
 import CommunityModal from './modals/CommunityModal';
 import EducationModal from './modals/EducationModal';
-import AboutModal from './modals/AboutModal';
 import SupportModal from './modals/SupportModal';
 import ConsultancyModal from './modals/ConsultancyModal';
 import Chatbot from './components/Chatbot';
+import WhatsAppButton from './components/WhatsAppButton';
+import { fetchFinancialNews } from './services/geminiService';
+import { generateContextualSummary } from './utils/contextHelper';
+import Router from './components/Router';
+import { useRouter } from './hooks/useRouter';
+import MentorsModal from './modals/MentorsModal';
+import FaqPage from './pages/FaqPage';
+import BrokersPage from './pages/BrokersPage';
+import PremiumCoursesPage from './pages/PremiumCoursesPage';
+import ConsultancyPage from './pages/ConsultancyPage';
+import MethodologyPage from './pages/MethodologyPage';
+import AboutPage from './pages/AboutPage';
+import ResponsibilityPage from './pages/ResponsibilityPage';
+import SocialImpactPage from './pages/SocialImpactPage';
+import CollaboratePage from './pages/CollaboratePage';
 
 const App: React.FC = () => {
+    const { path, navigate } = useRouter();
     const [activeModal, setActiveModal] = useState<ModalType | null>(null);
+    const [newsItems, setNewsItems] = useState<string[]>([]);
+    const [isLoadingNews, setIsLoadingNews] = useState(true);
+    const [chatbotContext, setChatbotContext] = useState<string>('');
+    
+    // Logic to open/close modals based on URL hash query params.
+    // This is now the single source of truth for modal visibility.
+    useEffect(() => {
+        const params = new URLSearchParams(path.split('?')[1] || '');
+        const modalToOpen = params.get('open') as ModalType | null;
+        const validModals: ModalType[] = ['premium-courses', 'affiliate', 'legal', 'brokers', 'community', 'support', 'mentors'];
 
-    const handleOpenModal = (modal: ModalType) => setActiveModal(modal);
-    const handleCloseModal = () => setActiveModal(null);
+        if (modalToOpen && validModals.includes(modalToOpen)) {
+            setActiveModal(modalToOpen);
+        } else {
+            setActiveModal(null);
+        }
+    }, [path]);
+
+    useEffect(() => {
+        const getNews = async () => {
+            setIsLoadingNews(true);
+            const items = await fetchFinancialNews();
+            setNewsItems(items);
+            setIsLoadingNews(false);
+        };
+        getNews();
+    }, []);
+
+    useEffect(() => {
+        let currentPage: PageType = 'main';
+        let pageSlug: string | undefined = undefined;
+
+        const pathname = path.split('?')[0];
+
+        if (pathname === '/blog') {
+            currentPage = 'blog';
+        } else if (pathname.startsWith('/blog/')) {
+            currentPage = 'post';
+            pageSlug = pathname.split('/')[2];
+        } else if (pathname === '/sitemap') {
+            currentPage = 'sitemap';
+        } else if (pathname === '/faq') {
+            currentPage = 'faq';
+        } else if (pathname === '/brokers') {
+            currentPage = 'brokers';
+        } else if (pathname === '/premium-courses') {
+            currentPage = 'premium-courses';
+        } else if (pathname === '/consultancy') {
+            currentPage = 'consultancy';
+        } else if (pathname === '/methodology') {
+            currentPage = 'methodology';
+        } else if (pathname === '/acerca-de') {
+            currentPage = 'acerca-de';
+        } else if (pathname === '/responsabilidad') {
+            currentPage = 'responsabilidad';
+        } else if (pathname === '/impacto-social') {
+            currentPage = 'impacto-social';
+        } else if (pathname === '/colabora') {
+            currentPage = 'colabora';
+        }
+
+
+        const summary = generateContextualSummary(activeModal, currentPage, pageSlug);
+        setChatbotContext(summary);
+    }, [activeModal, path]);
+
+    const handleOpenModal = (modal: ModalType) => {
+        const basePath = path.split('?')[0];
+        navigate(`${basePath}?open=${modal}`);
+    };
+    
+    const handleCloseModal = () => {
+        const basePath = path.split('?')[0];
+        navigate(basePath);
+    };
 
     const renderModal = () => {
         switch (activeModal) {
             case 'premium-courses':
                 return <PremiumCoursesModal onClose={handleCloseModal} />;
             case 'affiliate':
-                return <AffiliateModal onClose={handleCloseModal} />;
+                return <AffiliateModal onClose={handleCloseModal} onOpenModal={handleOpenModal} />;
             case 'legal':
                 return <LegalModal onClose={handleCloseModal} />;
             case 'brokers':
                 return <BrokersModal onClose={handleCloseModal} />;
             case 'community':
                 return <CommunityModal onClose={handleCloseModal} />;
-            case 'education':
-                return <EducationModal onClose={handleCloseModal} />;
-            case 'about':
-                return <AboutModal onClose={handleCloseModal} />;
             case 'support':
                 return <SupportModal onClose={handleCloseModal} />;
-            case 'consultancy':
-                return <ConsultancyModal onClose={handleCloseModal} />;
+            case 'mentors':
+                return <MentorsModal onClose={handleCloseModal} />;
             default:
                 return null;
         }
     };
 
+    const routes = {
+        '/': <MainPage onOpenModal={handleOpenModal} newsItems={newsItems} isLoadingNews={isLoadingNews} />,
+        '/blog': <BlogListPage />,
+        '/blog/:slug': (params: { slug: string }) => <BlogPostPage slug={params.slug} />,
+        '/sitemap': <SitemapPage onOpenModal={handleOpenModal} />,
+        '/faq': <FaqPage onOpenModal={handleOpenModal} />,
+        '/brokers': <BrokersPage onOpenModal={handleOpenModal} />,
+        '/premium-courses': <PremiumCoursesPage />,
+        '/consultancy': <ConsultancyPage />,
+        '/methodology': <MethodologyPage />,
+        '/acerca-de': <AboutPage onOpenModal={handleOpenModal} />,
+        '/responsabilidad': <ResponsibilityPage onOpenModal={handleOpenModal} />,
+        '/impacto-social': <SocialImpactPage />,
+        '/colabora': <CollaboratePage onOpenModal={handleOpenModal} />,
+    };
+
     return (
-        <div className="bg-brand-primary text-brand-white min-h-screen">
-            <MainPage onOpenModal={handleOpenModal} />
+        <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
+            <Router routes={routes} />
             {renderModal()}
-            <Chatbot />
+            <Chatbot newsItems={newsItems} pageContext={chatbotContext} />
+            <WhatsAppButton />
         </div>
     );
 };
