@@ -17,13 +17,13 @@ const LegalModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         1. Alto Riesgo y Pérdida de Capital
                     </h4>
                     <p>
-                        Los productos financieros ofrecidos o discutidos, incluidos los Contratos por Diferencia ('CFDs'), conllevan un <strong>alto nivel de riesgo</strong>. El trading en estos instrumentos es <strong>MUY ESPECULATIVO Y ALTAMENTE RIESGOSO</strong> y puede resultar en la <strong>pérdida de todos sus fondos</strong>.
+                        El trading en instrumentos financieros como los Contratos por Diferencia ('CFDs') conlleva un <strong>alto nivel de riesgo</strong>. Antes de decidir invertir, debe considerar cuidadosamente sus objetivos de inversión, nivel de experiencia y apetito por el riesgo. Esta actividad es <strong>MUY ESPECULATIVA Y ALTAMENTE RIESGOSA</strong> y puede resultar en la <strong>pérdida de todos sus fondos</strong>.
                     </p>
                     <p className="font-bold">
                         Usted <strong>nunca debe invertir dinero que no pueda permitirse perder</strong>.
                     </p>
                     <p>
-                        Los CFDs son productos complejos de alto riesgo. Estos productos solo son adecuados para inversores que:
+                        Estos productos complejos solo son adecuados para inversores que:
                     </p>
                     <ol className="list-decimal list-inside space-y-1 pl-4">
                         <li>Estén dispuestos a asumir los riesgos económicos, legales y de otra índole.</li>
@@ -46,7 +46,7 @@ const LegalModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         Los servicios que ofrece la Plataforma (si proporciona acceso a ejecución de órdenes o información de mercado) se basan en la base de "<strong>solo ejecución</strong>" (<em>execution-only</em>), lo que significa que no se administra la cuenta ni se asesora al Cliente. La provisión de informes, noticias, opiniones o cualquier otra información <strong>no constituye asesoramiento de inversión o investigación de inversiones</strong>.
                     </p>
                     <p>
-                        El Cliente acepta que es el <strong>único responsable de las operaciones que realice</strong>. Cualquier decisión de inversión se toma basándose en su <strong>propio juicio</strong> y <strong>discreción</strong>.
+                        El Cliente acepta que es el <strong>único responsable de las operaciones que realice</strong>. Cualquier decisión de inversión se toma basándose en su <strong>propio juicio</strong> y <strong>discreción</strong>. Debe ser consciente de todos los riesgos asociados con el trading y buscar el asesoramiento de un asesor financiero independiente si tiene alguna duda.
                     </p>
                     <p>
                         La Academia TradeVision y sus integrantes <strong>no serán responsables</strong> por ninguna pérdida de ganancias, ni por ninguna pérdida indirecta o consecuente, independientemente de la causa.
@@ -93,7 +93,7 @@ const LegalModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         5. Instrumentos Financieros y Apalancamiento
                     </h4>
                     <p>
-                        Si se discuten o se negocian CFDs, es fundamental señalar que son productos financieros <strong>apalancados</strong>; el uso del multiplicador (apalancamiento) conlleva un <strong>alto riesgo de pérdida</strong> ya que los movimientos de precios se ven influenciados por el apalancamiento utilizado.
+                        Si se discuten o se negocian CFDs, es fundamental señalar que son productos financieros <strong>apalancados</strong>; el uso del multiplicador (apalancamiento) conlleva un <strong>alto riesgo de pérdida</strong> ya que los movimientos de precios se ven influenciados por el apalancamiento utilizado. El alto grado de apalancamiento puede funcionar tanto a favor como en contra de usted, magnificando tanto las ganancias como las pérdidas.
                     </p>
                 </div>
 

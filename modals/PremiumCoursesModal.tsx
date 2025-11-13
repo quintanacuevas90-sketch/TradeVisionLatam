@@ -5,6 +5,7 @@ import { FaWhatsapp, FaTelegram, FaCheckCircle } from 'react-icons/fa';
 import { FiChevronLeft, FiChevronRight, FiArrowRight } from 'react-icons/fi';
 import { PREMIUM_TESTIMONIALS } from '../constants';
 import { Testimonial } from '../types';
+import { useRouter } from '../hooks/useRouter';
 
 // --- SUB-COMPONENTS MOVED TO TOP LEVEL TO PREVENT RE-DEFINITION ON RENDER ---
 
@@ -21,45 +22,64 @@ interface CourseCardProps {
         link: string;
     };
     isFeatured?: boolean;
+    onClose: () => void;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false }) => (
-    <div className={`
-        relative flex-shrink-0 w-full bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm 
-        border dark:border-white/20 rounded-xl p-6 flex flex-col text-center 
-        shadow-lg transition-all duration-300
-        ${isFeatured 
-            ? 'border-brand-accent md:scale-105 shadow-2xl shadow-brand-accent/20 z-10' 
-            : 'hover:scale-105 hover:border-brand-accent hover:shadow-xl'
+const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false, onClose }) => {
+    const { navigate } = useRouter();
+    const isInternalLink = course.link.startsWith('#/');
+
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (isInternalLink) {
+            e.preventDefault();
+            const path = course.link.substring(1);
+            navigate(path);
+            onClose();
         }
-    `}>
-        {isFeatured && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-accent text-brand-primary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Más Popular</div>}
-        
-        <h3 className="text-lg font-extrabold text-brand-primary dark:text-white uppercase tracking-wide min-h-[40px] flex items-center justify-center">{course.title}</h3>
-        
-        <div className="my-4">
-            <span className="text-5xl font-black text-gray-800 dark:text-white">${course.price}</span>
-            <p className="text-gray-500 text-sm mt-1"><del>{course.anchor}</del></p>
+    };
+
+    const linkProps = isInternalLink 
+        ? { href: course.link, onClick: handleClick } 
+        : { href: course.link, target: "_blank", rel: "noopener noreferrer" };
+
+    return (
+        <div className={`
+            relative flex-shrink-0 w-full bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm 
+            border dark:border-white/20 rounded-xl p-6 flex flex-col text-center 
+            shadow-lg transition-all duration-300
+            ${isFeatured 
+                ? 'border-brand-accent md:scale-105 shadow-2xl shadow-brand-accent/20 z-10' 
+                : 'hover:scale-105 hover:border-brand-accent hover:shadow-xl'
+            }
+        `}>
+            {isFeatured && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-accent text-brand-primary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Más Popular</div>}
+            
+            <h3 className="text-lg font-extrabold text-brand-primary dark:text-white uppercase tracking-wide min-h-[40px] flex items-center justify-center">{course.title}</h3>
+            
+            <div className="my-4">
+                <span className="text-5xl font-black text-gray-800 dark:text-white">${course.price}</span>
+                <p className="text-gray-500 text-sm mt-1"><del>{course.anchor}</del></p>
+            </div>
+
+            <p className="bg-red-600 text-white text-xs font-bold py-1.5 px-4 rounded-full my-4 self-center">{course.urgency}</p>
+            
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 flex-grow min-h-[80px]">{course.description}</p>
+            
+            <ul className="text-left space-y-2 mb-8 text-sm text-gray-700 dark:text-gray-300 flex-grow">
+                {course.content.map((item, index) => (
+                    <li key={index} className="flex items-start">
+                        <FaCheckCircle className="text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <span dangerouslySetInnerHTML={{ __html: item }} />
+                    </li>
+                ))}
+            </ul>
+
+            <a {...linkProps} className="mt-auto w-full bg-brand-accent text-brand-primary font-bold py-3 px-6 rounded-lg hover:bg-opacity-80 transition duration-300 flex items-center justify-center gap-2">
+                {course.cta} <FiArrowRight />
+            </a>
         </div>
-
-        <p className="bg-red-600 text-white text-xs font-bold py-1.5 px-4 rounded-full my-4 self-center">{course.urgency}</p>
-        
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 flex-grow min-h-[80px]">{course.description}</p>
-        
-        <ul className="text-left space-y-2 mb-8 text-sm text-gray-700 dark:text-gray-300 flex-grow">
-            {course.content.map((item, index) => (
-                <li key={index} className="flex items-start">
-                    <FaCheckCircle className="text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                    <span dangerouslySetInnerHTML={{ __html: item }} />
-                </li>
-            ))}
-        </ul>
-
-        <a href={course.link} target="_blank" rel="noopener noreferrer" className="mt-auto w-full bg-brand-accent text-brand-primary font-bold py-3 px-6 rounded-lg hover:bg-opacity-80 transition duration-300 flex items-center justify-center gap-2">
-            {course.cta} <FiArrowRight />
-        </a>
-    </div>
-);
+    );
+};
 
 
 // Testimonial Carousel Component
@@ -130,6 +150,7 @@ const TestimonialCarousel: React.FC<{ testimonials: Testimonial[] }> = ({ testim
 
 const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [offerEndTime, setOfferEndTime] = useState<number | null>(null);
+    const { navigate } = useRouter();
 
     useEffect(() => {
         const storedEndTime = localStorage.getItem('tradevisionOfferEndTime');
@@ -152,8 +173,8 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             urgency: "¡SOLO 20 CUPOS DISPONIBLES ESTE MES!",
             description: "Diseñado para el trader estancado. Elimina la improvisación y opera con un sistema basado en probabilidad y gestión de riesgo.",
             content: ["4 Fórmulas de Operación de Alta Efectividad.", "<strong>Backtesting al Extremo</strong> para confirmar validez.", "<strong>Psicotrading y Gestión de Riesgo</strong> (La Clave Maestra)."],
-            cta: "ASEGURAR MI CUPO",
-            link: "https://wa.me/message/T6UFHN3SSTIEJ1"
+            cta: "VER PROGRAMA COMPLETO",
+            link: "#/cursos/binarias-intermedio"
         },
         {
             title: "VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (BINARIAS PRO)",
@@ -162,8 +183,8 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             urgency: "¡Oferta válida solo por 48 horas!",
             description: "Un reseteo mental completo. Olvida los indicadores y los mitos. Aprende a leer el verdadero motor del mercado: el lenguaje del precio.",
             content: ["<strong>ROMPIENDO MITOS:</strong> Olvídate de Bots y Scripts.", "Aprende el verdadero motor del mercado: <strong>Lenguaje del Precio</strong>.", "Aplicación universal para cualquier activo y temporalidad."],
-            cta: "DOMINAR EL MERCADO",
-            link: "https://wa.me/message/T6UFHN3SSTIEJ1"
+            cta: "VER PROGRAMA COMPLETO",
+            link: "#/cursos/binarias-pro-c90"
         },
         {
             title: "ÉLITE INSTITUCIONAL: LÓGICA Y EJECUCIÓN (FOREX Y CFD)",
@@ -172,8 +193,8 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             urgency: "¡ÚLTIMOS 8 CUPOS PARA ESTA GENERACIÓN!",
             description: "El programa definitivo para la profesionalización. Deja de ser la liquidez y aprende a operar junto al dinero inteligente.",
             content: ["El precio se mueve por <strong>LIQUIDEZ</strong>, no por noticias.", "El Patrón <strong>AMD Revelado</strong> (Acumulación, Manipulación, Distribución).", "Busca entradas con riesgo mínimo y beneficio <strong>5:1 o más</strong>."],
-            cta: "TRANSFORMAR MI TRADING",
-            link: "https://t.me/trainfxbot"
+            cta: "VER PROGRAMA COMPLETO",
+            link: "#/cursos/forex-elite"
         },
     ];
 
@@ -212,7 +233,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                 <section>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
                         {courses.map((course, index) => (
-                            <CourseCard key={course.title} course={course} isFeatured={index === 1} />
+                            <CourseCard key={course.title} course={course} isFeatured={index === 1} onClose={onClose} />
                         ))}
                     </div>
                 </section>
@@ -242,7 +263,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                     <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">Es momento de tomar la decisión que transformará tu cuenta.</p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
                         <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-green-600 transition">SOPORTE DIRECTO</a>
-                        <a href="https://t.me/tradevision90" target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-600 transition">ÚNETE A LA COMUNIDAD</a>
+                        <a href="https.t.me/tradevision90" target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-600 transition">ÚNETE A LA COMUNIDAD</a>
                         <a href="https://linktr.ee/TradeVisionLatam" target="_blank" rel="noopener noreferrer" className="bg-brand-primary text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-700 transition">Todas Nuestras Redes</a>
                     </div>
                     <p className="text-xl font-extrabold text-red-500">¡NO HAY ATAJOS. HAY UN SISTEMA. ES HORA DE UNIRTE!</p>
@@ -262,7 +283,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                  <div className="text-center border-t border-gray-200 dark:border-white/20 pt-6">
                     <h4 className="text-xl font-bold">¿Buscas Cursos y Libros Gratis?</h4>
                     <p className="text-gray-600 dark:text-gray-400 my-2">Únete a nuestra comunidad principal y accede a una vasta biblioteca de recursos sin costo.</p>
-                    <a href="https://t.me/tradevision90" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 transition">
+                    <a href="https.t.me/tradevision90" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 transition">
                         <FaTelegram />
                         ¡Accede Aquí!
                     </a>

@@ -6,7 +6,7 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FiCpu, FiDollarSign, FiBarChart2, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
-import { FaPaypal, FaBitcoin, FaHandHoldingHeart } from 'react-icons/fa';
+import { FaPaypal, FaBitcoin, FaHandHoldingHeart, FaWhatsapp } from 'react-icons/fa';
 
 const SocialImpactPage: React.FC = () => {
     const { navigate } = useRouter();
@@ -57,6 +57,21 @@ const SocialImpactPage: React.FC = () => {
             { name: "Amara Srisuk (Asesora)", country: "Tailandia", role: "Asesora TradeVision" }
         ]
     };
+
+    const impactImages = [
+        'https://i.pinimg.com/736x/d5/0f/92/d50f92f4005204e8810bf59f9d27e235.jpg',
+        'https://i.pinimg.com/736x/e8/9b/26/e89b26c2e7de5f64abeb79b8c64ec0e5.jpg',
+        'https://i.pinimg.com/736x/06/76/15/06761526f68e1ad76a8ceb353e3c755f.jpg',
+        'https://i.pinimg.com/736x/93/e0/f6/93e0f6c1c40fa937cc9d3055d2b74845.jpg',
+        'https://i.pinimg.com/736x/73/24/7a/73247a520e649503f27d5b603bf8575b.jpg',
+        'https://i.pinimg.com/736x/ce/0c/23/ce0c23c686f1ac78137de89c4eb9d2b2.jpg',
+        'https://i.pinimg.com/736x/99/6b/36/996b368ef12e238228ccdde4eac0d20a.jpg',
+        'https://i.pinimg.com/736x/75/3f/d7/753fd7fa4c802871215d1707e1c97ddd.jpg',
+        'https://i.pinimg.com/736x/25/52/75/25527538fda4feaa84a57691a8034150.jpg',
+        'https://i.pinimg.com/736x/ed/99/d9/ed99d97cb74ad0242177b252c80b2512.jpg',
+        'https://i.pinimg.com/736x/cf/2c/dd/cf2cddd0e25b9a419a65c3ea07040241.jpg',
+        'https://i.pinimg.com/736x/0d/40/a0/0d40a0c97aa76697a576397cd8febcbd.jpg',
+    ];
 
 
     return (
@@ -125,21 +140,69 @@ const SocialImpactPage: React.FC = () => {
                      </div>
                 </AnimatedSection>
 
+                {/* Nothing Stops Us Section */}
+                <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center">
+                        <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Nada Nos Detiene</h2>
+                        <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                            Seguimos llevando sonrisas y educación a cada rincón.
+                        </p>
+                        <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {impactImages.map((src, index) => (
+                                <div key={index} className="aspect-square overflow-hidden rounded-lg shadow-lg group">
+                                    <img 
+                                        src={src} 
+                                        alt={`Impacto social de TradeVision ${index + 1}`} 
+                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </AnimatedSection>
+
                 {/* Collaboration */}
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-900">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
                         <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Únete a la Causa y Ayúdanos a Seguir Creciendo</h2>
-                        <p className="mt-4 text-gray-600 dark:text-gray-300">Para seguir llevando educación a los más desfavorecidos, hemos habilitado 3 cuentas autorizadas para colaboraciones y donaciones en LATAM. Tu apoyo se convierte directamente en material educativo y nuevos talleres.</p>
-                        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            <a href="#" className="flex flex-col items-center justify-center p-6 bg-brand-accent text-brand-primary font-bold rounded-lg transition transform hover:scale-105 shadow-lg">
-                                <FaHandHoldingHeart size={32} className="mb-2" /> Colaborar con VOLET
+                        <p className="mt-4 text-gray-600 dark:text-gray-300">
+                            Para seguir llevando educación a los más desfavorecidos, toda colaboración se coordina directamente con nuestro personal autorizado para garantizar la máxima transparencia y seguridad.
+                        </p>
+
+                        <div className="mt-8">
+                            <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 bg-whatsapp-green text-white font-bold py-4 px-10 rounded-lg text-lg hover:bg-green-600 transition duration-300 transform hover:scale-105">
+                                <FaWhatsapp size={24} />
+                                Contactar a Personal Autorizado para Colaborar
                             </a>
-                             <a href="#" className="flex flex-col items-center justify-center p-6 bg-brand-accent text-brand-primary font-bold rounded-lg transition transform hover:scale-105 shadow-lg">
-                                <FaPaypal size={32} className="mb-2" /> Colaborar con PAYPAL
-                            </a>
-                            <a href="#" className="flex flex-col items-center justify-center p-6 bg-brand-accent text-brand-primary font-bold rounded-lg transition transform hover:scale-105 shadow-lg">
-                                <FaBitcoin size={32} className="mb-2" /> Colaborar con BINANCE (USDT)
-                            </a>
+                            <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">Este es el primer paso obligatorio para cualquier tipo de aporte.</p>
+                        </div>
+                        
+                        <div className="mt-8">
+                            <h4 className="font-semibold text-gray-700 dark:text-gray-300">Aceptamos aportes a través de:</h4>
+                            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                Volet • PayPal • Binance (USDT) • Zinli • Zelle • Soles (Perú) • Bolívares (Venezuela)
+                            </p>
+                        </div>
+
+                        <div className="mt-12 text-left max-w-3xl mx-auto p-6 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-r-lg">
+                            <div className="flex items-start">
+                                <FaHandHoldingHeart className="h-8 w-8 mr-4 text-blue-500 flex-shrink-0" />
+                                <div>
+                                    <h3 className="text-xl font-extrabold text-blue-800 dark:text-blue-300">Destino y Transparencia de tu Aporte</h3>
+                                    <p className="mt-2 text-blue-700 dark:text-blue-200">
+                                        Tu aporte irá a un fondo de resguardo y será utilizado exclusivamente para las obras sociales en cola en zonas centrales de: <strong>Venezuela, Colombia, Chile, Perú, Bolivia, Ecuador y Argentina.</strong>
+                                    </p>
+                                    <p className="mt-4 text-sm text-blue-700 dark:text-blue-200">
+                                        Consulta con nuestro personal qué programas están disponibles y las necesidades actuales. Además de aportes monetarios, también aceptamos:
+                                    </p>
+                                    <ul className="mt-2 list-disc list-inside text-sm text-blue-700 dark:text-blue-200 space-y-1">
+                                        <li>Ropa y calzado en buen estado.</li>
+                                        <li>Equipos electrónicos funcionales (laptops, tablets).</li>
+                                        <li>Alimentos no perecederos.</li>
+                                        <li>Apoyo con transporte y logística.</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </AnimatedSection>

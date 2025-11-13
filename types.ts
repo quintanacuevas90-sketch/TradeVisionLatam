@@ -1,7 +1,8 @@
 
+
 export type ModalType = 'premium-courses' | 'affiliate' | 'legal' | 'brokers' | 'community' | 'support' | 'mentors';
 
-export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora';
+export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora' | 'forex-elite' | 'binarias-pro-c90' | 'binarias-intermedio' | 'comunidad';
 
 export interface Testimonial {
     name: string;
@@ -36,6 +37,7 @@ export interface Post {
 export interface ComprehensiveFAQ {
     question: string;
     answer: string;
+
     category: string;
 }
 

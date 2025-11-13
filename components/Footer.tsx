@@ -15,9 +15,9 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
             title: 'Navegación',
             links: [
                 { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
+                { label: 'Recursos Gratuitos', action: () => navigate('/comunidad') },
                 { label: 'Brokers Recomendados', action: () => navigate('/brokers') },
                 { label: 'Blog de Trading', action: () => navigate('/blog') },
-                { label: 'Comunidad', action: () => onOpenModal('community') },
             ]
         },
         {

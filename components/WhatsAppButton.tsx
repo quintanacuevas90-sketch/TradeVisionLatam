@@ -9,7 +9,7 @@ const WhatsAppButton: React.FC = () => {
       href={whatsappLink}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-[160px] right-6 bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-all duration-300 z-50 flex items-center justify-center group"
+      className="fixed bottom-[88px] right-6 bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-all duration-300 z-50 flex items-center justify-center group"
       aria-label="Contactar por WhatsApp"
     >
       <FaWhatsapp size={20} />

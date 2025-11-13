@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
 import BlogListPage from './pages/BlogListPage';
@@ -30,6 +28,11 @@ import AboutPage from './pages/AboutPage';
 import ResponsibilityPage from './pages/ResponsibilityPage';
 import SocialImpactPage from './pages/SocialImpactPage';
 import CollaboratePage from './pages/CollaboratePage';
+import ForexElitePage from './pages/ForexElitePage';
+import BinariasProPage from './pages/BinariasProPage';
+import BinariasIntermedioPage from './pages/BinariasIntermedioPage';
+import CommunityPage from './pages/CommunityPage';
+import { useChatbotTriggers } from './hooks/useChatbotTriggers';
 
 const App: React.FC = () => {
     const { path, navigate } = useRouter();
@@ -37,6 +40,8 @@ const App: React.FC = () => {
     const [newsItems, setNewsItems] = useState<string[]>([]);
     const [isLoadingNews, setIsLoadingNews] = useState(true);
     const [chatbotContext, setChatbotContext] = useState<string>('');
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const { triggerText, closeTrigger } = useChatbotTriggers(activeModal, isChatOpen);
     
     // Logic to open/close modals based on URL hash query params.
     // This is now the single source of truth for modal visibility.
@@ -93,6 +98,14 @@ const App: React.FC = () => {
             currentPage = 'impacto-social';
         } else if (pathname === '/colabora') {
             currentPage = 'colabora';
+        } else if (pathname === '/cursos/forex-elite') {
+            currentPage = 'forex-elite';
+        } else if (pathname === '/cursos/binarias-pro-c90') {
+            currentPage = 'binarias-pro-c90';
+        } else if (pathname === '/cursos/binarias-intermedio') {
+            currentPage = 'binarias-intermedio';
+        } else if (pathname === '/comunidad') {
+            currentPage = 'comunidad';
         }
 
 
@@ -145,13 +158,24 @@ const App: React.FC = () => {
         '/responsabilidad': <ResponsibilityPage onOpenModal={handleOpenModal} />,
         '/impacto-social': <SocialImpactPage />,
         '/colabora': <CollaboratePage onOpenModal={handleOpenModal} />,
+        '/cursos/forex-elite': <ForexElitePage />,
+        '/cursos/binarias-pro-c90': <BinariasProPage />,
+        '/cursos/binarias-intermedio': <BinariasIntermedioPage />,
+        '/comunidad': <CommunityPage onOpenModal={handleOpenModal} />,
     };
 
     return (
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
             <Router routes={routes} />
             {renderModal()}
-            <Chatbot newsItems={newsItems} pageContext={chatbotContext} />
+            <Chatbot
+                isOpen={isChatOpen}
+                setIsOpen={setIsChatOpen}
+                newsItems={newsItems}
+                pageContext={chatbotContext}
+                triggerText={triggerText}
+                onCloseTrigger={closeTrigger}
+            />
             <WhatsAppButton />
         </div>
     );

@@ -11,9 +11,9 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
 import MentorsSection from '../sections/MentorsSection';
 import MethodologySection from '../sections/MethodologySection';
-import PremiumCoursesCtaSection from '../sections/PremiumCoursesCtaSection';
 import BrokersSection from '../sections/BrokersSection';
 import CommunityBenefitsSection from '../sections/CommunityBenefitsSection';
+import FreeCommunityCtaSection from '../sections/FreeCommunityCtaSection';
 
 
 interface MainPageProps {
@@ -31,9 +31,9 @@ const MainPage: React.FC<MainPageProps> = ({ onOpenModal, newsItems, isLoadingNe
             </div>
             <main>
                 <HeroSection onOpenModal={onOpenModal} />
+                <FreeCommunityCtaSection />
                 <MentorsSection />
                 <MethodologySection />
-                <PremiumCoursesCtaSection onOpenModal={onOpenModal} />
                 <BrokersSection />
                 <CommunityBenefitsSection onOpenModal={onOpenModal} />
                 <TestimonialsSection />

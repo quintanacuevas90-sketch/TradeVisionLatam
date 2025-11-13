@@ -12,13 +12,32 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
     const { navigate } = useRouter();
     return (
         <div className="relative min-h-screen flex items-center justify-center text-center overflow-hidden bg-brand-primary">
-            {/* Professional Trading Chart Background */}
-            <div 
-                className="absolute inset-0 bg-cover bg-center opacity-10 z-0" 
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070&auto=format&fit=crop')" }}
-            ></div>
-            
             <div className="absolute inset-0 bg-gradient-to-t from-brand-primary via-brand-primary/90 to-brand-primary z-0"></div>
+
+             {/* Subtle trading graph background */}
+            <div className="absolute inset-0 z-0 opacity-10 mix-blend-soft-light pointer-events-none">
+                <svg
+                    className="w-full h-full"
+                    viewBox="0 0 1440 600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    preserveAspectRatio="none"
+                >
+                    <path
+                        d="M0,320L48,314.7C96,309,192,299,288,272C384,245,480,203,576,197.3C672,192,768,224,864,240C960,256,1056,256,1152,234.7C1248,213,1344,171,1392,149.3L1440,128"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                        className="text-brand-accent"
+                    />
+                    <path
+                        d="M0,400L48,380C96,360,192,320,288,325.3C384,331,480,384,576,394.7C672,405,768,373,864,362.7C960,352,1056,363,1152,341.3C1248,320,1344,267,1392,240L1440,213"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        fill="none"
+                        className="text-white"
+                    />
+                </svg>
+            </div>
 
              {/* Updated Background Glows for better responsiveness */}
              <div className="absolute -bottom-24 -left-24 w-60 h-60 md:w-96 md:h-96 bg-brand-accent/5 md:bg-brand-accent/10 rounded-full filter blur-3xl"></div>

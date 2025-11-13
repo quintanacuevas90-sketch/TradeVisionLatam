@@ -1,4 +1,5 @@
 
+
 import { ModalType, PageType } from '../types';
 import { 
     BINARY_BROKERS, 
@@ -59,6 +60,18 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
             break;
         case 'colabora':
              context += `\nEstá en la página 'Forma Parte de TradeVision' (/colabora). Esta es una página de reclutamiento para mentores, influencers y gestores de comunidad que deseen asociarse con la academia.`;
+            break;
+        case 'forex-elite':
+            context += `\nEstá en la página de ventas del curso 'ÉLITE INSTITUCIONAL: LÓGICA Y EJECUCIÓN'. Este es el programa avanzado de Forex y Smart Money Concepts (SMC) de $349. La página detalla el problema que resuelve, los objetivos del curso (AMD, Order Blocks, etc.), las ventajas y FAQs.`;
+            break;
+        case 'binarias-pro-c90':
+            context += `\nEstá en la página de ventas del curso 'VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (C90trade)'. Este es el programa avanzado de opciones binarias de $149. La página se enfoca en el concepto de 'reseteo mental', enseñando a operar sin indicadores y dominando la acción del precio, aplicable a cualquier temporalidad, incluyendo 'ráfagas' y 'blitz'.`;
+            break;
+        case 'binarias-intermedio':
+            context += `\nEstá en la página de ventas del curso 'SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO'. Este es un programa para traders estancados que no son rentables, con un costo de $79. Se enfoca en 4 estrategias de alta efectividad, gestión de riesgo y, principalmente, en Psicotrading para eliminar la improvisación.`;
+            break;
+        case 'comunidad':
+            context += `\nEstá en la página de aterrizaje del 'Ecosistema Gratuito'. Esta página ofrece acceso a +1000 libros, +20 cursos gratis y análisis de expertos. El objetivo principal es que el usuario se una a la comunidad de Telegram.`;
             break;
         case 'main':
         default:

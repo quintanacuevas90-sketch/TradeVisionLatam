@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
     const mainNavLinks = [
         { label: 'Brokers', action: () => navigate('/brokers') },
         { label: 'Cursos', action: () => navigate('/premium-courses') },
-        { label: 'Comunidad', action: () => onOpenModal('community') },
+        { label: 'Comunidad', action: () => navigate('/comunidad') },
         { label: 'Blog', action: () => navigate('/blog') },
     ];
 
@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
             title: 'Academia y Oportunidades',
             links: [
                 { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
-                { label: 'Únete a la Comunidad', action: () => onOpenModal('community') },
+                { label: 'Comunidad Gratuita', action: () => navigate('/comunidad') },
                 { label: 'Conoce a los Mentores', action: () => onOpenModal('mentors') },
                 { label: 'Sobre Nosotros', action: () => navigate('/acerca-de') },
                 { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },

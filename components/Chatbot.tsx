@@ -1,10 +1,9 @@
-
-
 import React, { useState, useRef, useEffect } from 'react';
 import { FiX, FiSend, FiCpu, FiGlobe, FiZap, FiThumbsUp, FiThumbsDown, FiCopy, FiSearch, FiMoreVertical, FiDownload, FiTrash2 } from 'react-icons/fi';
 import { FaRobot } from 'react-icons/fa';
 import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage, ChatMode } from '../types';
+import ChatbotTrigger from './ChatbotTrigger';
 
 const WELCOME_MESSAGE: ChatMessage = {
     id: 'initial-welcome',
@@ -24,12 +23,15 @@ Escribe tu pregunta para comenzar.`,
 };
 
 interface ChatbotProps {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
     newsItems: string[];
     pageContext: string;
+    triggerText: string | null;
+    onCloseTrigger: () => void;
 }
 
-const Chatbot: React.FC<ChatbotProps> = ({ newsItems, pageContext }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageContext, triggerText, onCloseTrigger }) => {
     const [messages, setMessages] = useState<ChatMessage[]>(() => {
         try {
             const savedMessages = localStorage.getItem('tradevision-chat-history');
@@ -67,6 +69,12 @@ const Chatbot: React.FC<ChatbotProps> = ({ newsItems, pageContext }) => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const handleOpenChat = () => {
+        setIsOpen(true);
+        if (triggerText) {
+            onCloseTrigger();
+        }
+    };
 
     const handleSend = async () => {
         if (!input.trim()) return;
@@ -162,16 +170,22 @@ const Chatbot: React.FC<ChatbotProps> = ({ newsItems, pageContext }) => {
 
     return (
         <>
+            <div className="fixed bottom-[160px] right-6 z-[51]">
+                {triggerText && !isOpen && (
+                    <ChatbotTrigger text={triggerText} onClose={onCloseTrigger} />
+                )}
+            </div>
+        
             <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="fixed bottom-[88px] right-6 bg-brand-accent text-brand-primary p-3 rounded-full shadow-lg hover:bg-opacity-80 transition-all duration-300 z-[52] transform hover:scale-110 group flex items-center justify-center"
+                onClick={handleOpenChat}
+                className="fixed bottom-[160px] right-6 bg-brand-accent text-brand-primary p-3 rounded-full shadow-lg hover:bg-opacity-80 transition-all duration-300 z-[52] transform hover:scale-110 group flex items-center justify-center animate-pulse"
                 aria-label="Abrir Chat"
                 aria-haspopup="dialog"
                 aria-expanded={isOpen}
             >
                 <FaRobot size={24} />
                  <span className="absolute right-full mr-3 w-max bg-gray-800 text-white text-sm rounded-md px-3 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                    Bot TradeVision
+                    IA TraderVision
                 </span>
             </button>
 
