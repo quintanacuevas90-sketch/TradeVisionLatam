@@ -5,11 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=./",  <-- ESTE ES EL CAMBIO CRÍTICO
-    "preview": "vite preview"
-  },
-    "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --base=./", 
     "preview": "vite preview"
   },
   "dependencies": {
