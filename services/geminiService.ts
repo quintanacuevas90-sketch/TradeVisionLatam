@@ -1,6 +1,3 @@
-
-
-
 import { GoogleGenAI, Chat, GenerateContentResponse, GroundingChunk, Type } from "@google/genai";
 import { ChatMode, GroundingSource } from '../types';
 
