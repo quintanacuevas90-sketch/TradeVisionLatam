@@ -66,12 +66,18 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false, onC
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 flex-grow min-h-[80px]">{course.description}</p>
             
             <ul className="text-left space-y-2 mb-8 text-sm text-gray-700 dark:text-gray-300 flex-grow">
-                {course.content.map((item, index) => (
-                    <li key={index} className="flex items-start">
-                        <FaCheckCircle className="text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                        <span dangerouslySetInnerHTML={{ __html: item }} />
-                    </li>
-                ))}
+                {course.content.map((item, index) => {
+                    const isImportant = item.includes('<strong>');
+                    return (
+                        <li key={index} className="flex items-start">
+                            <FaCheckCircle
+                                size={16}
+                                className={`${isImportant ? 'text-brand-accent' : 'text-green-500'} mr-3 mt-0.5 flex-shrink-0`}
+                            />
+                            <span dangerouslySetInnerHTML={{ __html: item }} />
+                        </li>
+                    );
+                })}
             </ul>
 
             <a {...linkProps} className="mt-auto w-full bg-brand-accent text-brand-primary font-bold py-3 px-6 rounded-lg hover:bg-opacity-80 transition duration-300 flex items-center justify-center gap-2">
@@ -167,6 +173,20 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
 
     const courses = [
         {
+            title: "MANUAL PRO: INGENIERÍA DE PROMPTS CON IA",
+            price: "15",
+            anchor: "Valor Real: $50 USD",
+            urgency: "Precio de Lanzamiento",
+            description: "La IA de TradeVision ha revolucionado nuestro Day Trading desde 2022, reduciendo el aprendizaje de una década a solo un año de automatización.",
+            content: [
+                "Aprende los <strong>6 Prompts maestros</strong> para entrenar a 10 asesores expertos.",
+                "Automatiza gestión de riesgo, Order Flow, Smart Money y Análisis Fundamental.",
+                "Incluye el prompt para <strong>crear tus propios prompts</strong> de cualquier estrategia."
+            ],
+            cta: "OBTENER MANUAL",
+            link: "#/manual/ia-prompts"
+        },
+        {
             title: "SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO",
             price: "79",
             anchor: "Valor Real: $150 USD",
@@ -187,7 +207,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             link: "#/cursos/binarias-pro-c90"
         },
         {
-            title: "ÉLITE INSTITUCIONAL: LÓGICA Y EJECUCIÓN (FOREX Y CFD)",
+            title: "ÉLITE INSTITUCIONAL: CURSO FOREX (LÓGICA Y EJECUCIÓN)",
             price: "349",
             anchor: "Valor del Programa: $750 USD",
             urgency: "¡ÚLTIMOS 8 CUPOS PARA ESTA GENERACIÓN!",
@@ -231,9 +251,9 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                 
                 {/* 3. Course Offers */}
                 <section>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
-                        {courses.map((course, index) => (
-                            <CourseCard key={course.title} course={course} isFeatured={index === 1} onClose={onClose} />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                        {courses.map((course) => (
+                            <CourseCard key={course.title} course={course} onClose={onClose} />
                         ))}
                     </div>
                 </section>

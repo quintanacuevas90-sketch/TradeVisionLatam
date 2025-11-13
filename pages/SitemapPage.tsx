@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -85,12 +84,13 @@ const SitemapPage: React.FC<SitemapPageProps> = ({ onOpenModal }) => {
                                 <h2 className="text-2xl font-bold mt-8 mb-4 border-b-2 border-brand-accent pb-2">Enlaces Externos y Redes Sociales</h2>
                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {SOCIAL_LINKS.map(link => (
-                                         <a key={link.name} href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-brand-accent hover:underline">
-                                            {React.createElement(link.icon, { className: 'text-brand-accent' })} {link.name}
+                                         <a key={link.name} href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-brand-accent dark:hover:text-brand-accent transition">
+                                            {React.createElement(link.icon, { className: `flex-shrink-0 ${link.colorClass}` })}
+                                            <span className="hover:underline">{link.name}</span>
                                         </a>
                                     ))}
-                                    <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-brand-accent hover:underline">
-                                        <FaWhatsapp className="text-brand-accent" /> Soporte Directo WhatsApp
+                                    <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-brand-accent dark:hover:text-brand-accent transition">
+                                        <FaWhatsapp className="text-whatsapp-green" /> Soporte Directo WhatsApp
                                     </a>
                                 </div>
                             </div>

@@ -41,7 +41,7 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
             context += `\nEstá en la página de Brokers Recomendados. Se listan brokers para Binarias, Forex y Wallets. Algunos ejemplos son: ${brokerSample}.`;
             break;
         case 'premium-courses':
-            context += `\nEstá en la página de Cursos Premium. Se muestran detalles sobre: 1) SISTEMA DE EJECUCIÓN (Intermedio, $79), 2) VISIÓN AVANZADA (Binarias Pro, $149), 3) ÉLITE INSTITUCIONAL (Forex, $349).`;
+            context += `\nEstá en la página de Cursos Premium. Se muestran detalles sobre: 1) MANUAL PRO: INGENIERÍA DE PROMPTS CON IA ($15), 2) SISTEMA DE EJECUCIÓN (Intermedio, $79), 3) VISIÓN AVANZADA (Binarias Pro, $149), 4) ÉLITE INSTITUCIONAL (Forex, $349).`;
             break;
         case 'consultancy':
             context += `\nEstá en la página de Consultoría para Mentores. Se describe un servicio para ayudar a educadores a crear su marca, web y sistema de afiliados de forma ética.`;
@@ -73,6 +73,9 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
         case 'comunidad':
             context += `\nEstá en la página de aterrizaje del 'Ecosistema Gratuito'. Esta página ofrece acceso a +1000 libros, +20 cursos gratis y análisis de expertos. El objetivo principal es que el usuario se una a la comunidad de Telegram.`;
             break;
+        case 'ia-manual':
+            context += `\nEstá en la página de ventas del 'MANUAL: INGENIERÍA DE PROMPTS PARA LA MENTE MAESTRA DEL TRADING'. Este es un manual de $15 que enseña a usar IA (GPT/Deepseek) con 6 prompts maestros para automatizar el análisis de trading, gestión de riesgo, SMC, etc.`;
+            break;
         case 'main':
         default:
              context += `\nLa página principal de TradeVision Latam, una academia de trading.`;
@@ -84,7 +87,7 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
 
         switch (modal) {
             case 'premium-courses':
-                context += `Cursos Premium: 1) SISTEMA DE EJECUCIÓN (Intermedio, $79), 2) VISIÓN AVANZADA (Binarias Pro, $149), 3) ÉLITE INSTITUCIONAL (Forex, $349). Se mencionan testimonios de alumnos élite y herramientas recomendadas como Fusion Markets y cTrader.`;
+                context += `Cursos Premium: 1) MANUAL PRO: INGENIERÍA DE PROMPTS CON IA ($15), 2) SISTEMA DE EJECUCIÓN (Intermedio, $79), 3) VISIÓN AVANZADA (Binarias Pro, $149), 4) ÉLITE INSTITUCIONAL (Forex, $349). Se mencionan testimonios de alumnos élite y herramientas recomendadas como Fusion Markets y cTrader.`;
                 break;
             case 'affiliate':
                 context += `Programa de Afiliados: Ofrece un Manual de Afiliados por $89.99 que enseña a evitar baneos y gestionar comunidades. Detalla plataformas de sub-afiliación como Affstore, Quotex, y CasaTrade con modelos RevShare y CPA. Advierte sobre prácticas prohibidas y explica términos legales.`;

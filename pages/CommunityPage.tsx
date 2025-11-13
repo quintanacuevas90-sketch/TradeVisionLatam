@@ -60,7 +60,7 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ onOpenModal }) => {
                              <div className="flex justify-center flex-wrap gap-4">
                                 {SOCIAL_LINKS.map((link) => (
                                     <a key={link.name} href={link.href} className="flex items-center gap-2 bg-white dark:bg-gray-700 py-2 px-4 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition" target="_blank" rel="noopener noreferrer">
-                                        {React.createElement(link.icon, { className: 'text-brand-accent' })}
+                                        {React.createElement(link.icon, { className: link.colorClass })}
                                         <span className="font-semibold">{link.name}</span>
                                     </a>
                                 ))}

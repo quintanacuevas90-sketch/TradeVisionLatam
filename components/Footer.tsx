@@ -50,7 +50,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                         <p className="text-gray-500 dark:text-gray-400">Forjando traders disciplinados en Latinoamérica.</p>
                         <div className="flex space-x-4 mt-6">
                             {SOCIAL_LINKS.map((link) => (
-                                <a key={link.name} href={link.href} className="text-gray-500 dark:text-gray-400 hover:text-brand-accent transition text-2xl" target="_blank" rel="noopener noreferrer" aria-label={link.name}>
+                                <a key={link.name} href={link.href} className={`transition text-2xl hover:opacity-80 ${link.colorClass}`} target="_blank" rel="noopener noreferrer" aria-label={link.name}>
                                     {React.createElement(link.icon)}
                                 </a>
                             ))}

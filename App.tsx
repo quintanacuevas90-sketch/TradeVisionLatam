@@ -33,6 +33,7 @@ import BinariasProPage from './pages/BinariasProPage';
 import BinariasIntermedioPage from './pages/BinariasIntermedioPage';
 import CommunityPage from './pages/CommunityPage';
 import { useChatbotTriggers } from './hooks/useChatbotTriggers';
+import AiManualPage from './pages/AiManualPage';
 
 const App: React.FC = () => {
     const { path, navigate } = useRouter();
@@ -56,6 +57,20 @@ const App: React.FC = () => {
             setActiveModal(null);
         }
     }, [path]);
+
+    // Listener for custom event to open chatbot from anywhere
+    useEffect(() => {
+        const handleOpenChat = () => {
+            // A small delay can make the transition feel smoother if a modal is closing
+            setTimeout(() => setIsChatOpen(true), 50);
+        };
+
+        window.addEventListener('open-chatbot', handleOpenChat);
+
+        return () => {
+            window.removeEventListener('open-chatbot', handleOpenChat);
+        };
+    }, []); // Empty dependency array ensures this runs only once on mount
 
     useEffect(() => {
         const getNews = async () => {
@@ -106,6 +121,8 @@ const App: React.FC = () => {
             currentPage = 'binarias-intermedio';
         } else if (pathname === '/comunidad') {
             currentPage = 'comunidad';
+        } else if (pathname === '/manual/ia-prompts') {
+            currentPage = 'ia-manual';
         }
 
 
@@ -162,6 +179,7 @@ const App: React.FC = () => {
         '/cursos/binarias-pro-c90': <BinariasProPage />,
         '/cursos/binarias-intermedio': <BinariasIntermedioPage />,
         '/comunidad': <CommunityPage onOpenModal={handleOpenModal} />,
+        '/manual/ia-prompts': <AiManualPage />,
     };
 
     return (

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiMenu, FiX, FiSun, FiMoon, FiSearch } from 'react-icons/fi';
+import { FaRobot } from 'react-icons/fa';
 import { ModalType } from '../types';
 import { useTheme } from '../contexts/ThemeContext';
 import Logo from './Logo';
 import Search from './Search';
 import { useRouter } from '../hooks/useRouter';
 import TrendingCurrenciesWidget from './TrendingCurrenciesWidget';
+import Accordion from './Accordion';
 
 interface HeaderProps {
     onOpenModal: (modal: ModalType) => void;
@@ -57,29 +59,24 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
     // Restructured navigation links for the side menu with clear grouping
     const navLinkGroups = [
         {
-            title: 'Contenido y Recursos',
+            title: 'Navegación Principal',
             links: [
+                { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
+                { label: 'Comunidad', action: () => navigate('/comunidad') },
+                { label: 'Brokers', action: () => navigate('/brokers') },
                 { label: 'Blog', action: () => navigate('/blog') },
-                { label: 'Nuestra Metodología', action: () => navigate('/methodology') },
                 { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
-                { label: 'Brokers Recomendados', action: () => navigate('/brokers') },
             ]
         },
         {
-            title: 'Academia y Oportunidades',
+            title: 'Contenido y Recursos',
             links: [
-                { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
-                { label: 'Comunidad Gratuita', action: () => navigate('/comunidad') },
+                { label: 'Nuestra Metodología', action: () => navigate('/methodology') },
                 { label: 'Conoce a los Mentores', action: () => onOpenModal('mentors') },
                 { label: 'Sobre Nosotros', action: () => navigate('/acerca-de') },
                 { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },
                 { label: 'Impacto Social', action: () => navigate('/impacto-social') },
                 { label: 'Forma Parte de TradeVision', action: () => navigate('/colabora') },
-            ]
-        },
-        {
-            title: 'Programas y Soporte',
-            links: [
                 { label: 'Programa de Afiliados', action: () => onOpenModal('affiliate') },
                 { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
                 { label: 'Información Legal', action: () => onOpenModal('legal') },
@@ -177,27 +174,42 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                     </div>
                     <div className="flex-grow overflow-y-auto -mr-4 pr-4">
                         <nav className="flex flex-col">
-                            {navLinkGroups.map((group, groupIndex) => (
-                                <div key={group.title}>
-                                    {groupIndex > 0 && <hr className="my-3 border-gray-200 dark:border-white/10" />}
-                                    <h3 className="px-3 py-2 text-xs font-bold uppercase text-gray-400 dark:text-gray-500 tracking-wider">
-                                        {group.title}
-                                    </h3>
-                                    <div className="flex flex-col space-y-1">
-                                        {group.links.map(link => (
-                                            <button
-                                                key={link.label}
-                                                onClick={() => handleSideMenuClick(link.action)}
-                                                className="text-left text-base text-gray-800 dark:text-white hover:text-brand-accent transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10"
-                                            >
-                                                {link.label}
-                                            </button>
-                                        ))}
-                                    </div>
+                            {navLinkGroups.map((group) => (
+                                <div key={group.title} className="border-b border-gray-200 dark:border-white/10 last:border-b-0">
+                                    <Accordion variant="menu" title={group.title}>
+                                        <div className="flex flex-col space-y-1">
+                                            {group.links.map(link => (
+                                                <button
+                                                    key={link.label}
+                                                    onClick={() => handleSideMenuClick(link.action)}
+                                                    className="text-left text-base text-gray-800 dark:text-white hover:text-brand-accent transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10"
+                                                >
+                                                    {link.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </Accordion>
                                 </div>
                             ))}
                         </nav>
                     </div>
+
+                    <div className="mt-auto pt-4 border-t border-gray-200 dark:border-white/10">
+                        <button
+                            onClick={() => {
+                                setIsSideMenuOpen(false);
+                                // Use a short delay to allow the menu to start closing before opening the chat
+                                setTimeout(() => {
+                                    window.dispatchEvent(new CustomEvent('open-chatbot'));
+                                }, 150);
+                            }}
+                            className="w-full flex items-center justify-center gap-3 bg-brand-accent text-brand-primary font-bold py-3 px-4 rounded-lg transition-transform duration-200 transform hover:scale-105"
+                        >
+                            <FaRobot className="animate-pulse" size={20} />
+                            Asistente IA
+                        </button>
+                    </div>
+
                 </div>
             </div>
 

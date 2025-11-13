@@ -66,12 +66,18 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false }) =
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 flex-grow min-h-[80px]">{course.description}</p>
             
             <ul className="text-left space-y-2 mb-8 text-sm text-gray-700 dark:text-gray-300 flex-grow">
-                {course.content.map((item, index) => (
-                    <li key={index} className="flex items-start">
-                        <FaCheckCircle className="text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                        <span dangerouslySetInnerHTML={{ __html: item }} />
-                    </li>
-                ))}
+                {course.content.map((item, index) => {
+                    const isImportant = item.includes('<strong>');
+                    return (
+                        <li key={index} className="flex items-start">
+                            <FaCheckCircle
+                                size={16}
+                                className={`${isImportant ? 'text-brand-accent' : 'text-green-500'} mr-3 mt-0.5 flex-shrink-0`}
+                            />
+                            <span dangerouslySetInnerHTML={{ __html: item }} />
+                        </li>
+                    );
+                })}
             </ul>
 
             <a {...linkProps} className="mt-auto w-full bg-brand-accent text-brand-primary font-bold py-3 px-6 rounded-lg hover:bg-opacity-80 transition duration-300 flex items-center justify-center gap-2">
@@ -155,9 +161,23 @@ const PremiumCoursesPage: React.FC = () => {
     }, []);
 
     const courses = [
+        {
+            title: "MANUAL PRO: INGENIERÍA DE PROMPTS CON IA",
+            price: "15",
+            anchor: "Valor Real: $50 USD",
+            urgency: "Precio de Lanzamiento",
+            description: "La IA de TradeVision ha revolucionado nuestro Day Trading desde 2022, reduciendo el aprendizaje de una década a solo un año de automatización.",
+            content: [
+                "Aprende los <strong>6 Prompts maestros</strong> para entrenar a 10 asesores expertos.",
+                "Automatiza gestión de riesgo, Order Flow, Smart Money y Análisis Fundamental.",
+                "Incluye el prompt para <strong>crear tus propios prompts</strong> de cualquier estrategia."
+            ],
+            cta: "OBTENER MANUAL",
+            link: "#/manual/ia-prompts"
+        },
         { title: "SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO", price: "79", anchor: "Valor Real: $150 USD", urgency: "¡SOLO 20 CUPOS DISPONIBLES ESTE MES!", description: "Diseñado para el trader estancado. Elimina la improvisación y opera con un sistema basado en probabilidad y gestión de riesgo.", content: ["4 Fórmulas de Operación de Alta Efectividad.", "<strong>Backtesting al Extremo</strong> para confirmar validez.", "<strong>Psicotrading y Gestión de Riesgo</strong> (La Clave Maestra)."], cta: "VER PROGRAMA COMPLETO", link: "#/cursos/binarias-intermedio" },
         { title: "VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (BINARIAS PRO)", price: "149", anchor: "Valor Real: $299 USD", urgency: "¡Oferta válida solo por 48 horas!", description: "Un reseteo mental completo. Olvida los indicadores y los mitos. Aprende a leer el verdadero motor del mercado: el lenguaje del precio.", content: ["<strong>ROMPIENDO MITOS:</strong> Olvídate de Bots y Scripts.", "Aprende el verdadero motor del mercado: <strong>Lenguaje del Precio</strong>.", "Aplicación universal para cualquier activo y temporalidad."], cta: "VER PROGRAMA COMPLETO", link: "#/cursos/binarias-pro-c90" },
-        { title: "ÉLITE INSTITUCIONAL: LÓGICA Y EJECUCIÓN (FOREX Y CFD)", price: "349", anchor: "Valor del Programa: $750 USD", urgency: "¡ÚLTIMOS 8 CUPOS PARA ESTA GENERACIÓN!", description: "El programa definitivo para la profesionalización. Deja de ser la liquidez y aprende a operar junto al dinero inteligente.", content: ["El precio se mueve por <strong>LIQUIDEZ</strong>, no por noticias.", "El Patrón <strong>AMD Revelado</strong> (Acumulación, Manipulación, Distribución).", "Busca entradas con riesgo mínimo y beneficio <strong>5:1 o más</strong>."], cta: "VER PROGRAMA COMPLETO", link: "#/cursos/forex-elite" },
+        { title: "ÉLITE INSTITUCIONAL: CURSO FOREX (LÓGICA Y EJECUCIÓN)", price: "349", anchor: "Valor del Programa: $750 USD", urgency: "¡ÚLTIMOS 8 CUPOS PARA ESTA GENERACIÓN!", description: "El programa definitivo para la profesionalización. Deja de ser la liquidez y aprende a operar junto al dinero inteligente.", content: ["El precio se mueve por <strong>LIQUIDEZ</strong>, no por noticias.", "El Patrón <strong>AMD Revelado</strong> (Acumulación, Manipulación, Distribución).", "Busca entradas con riesgo mínimo y beneficio <strong>5:1 o más</strong>."], cta: "VER PROGRAMA COMPLETO", link: "#/cursos/forex-elite" },
     ];
     const recommendedTools = [
         { name: "FUSION MARKETS (Bróker)", link: "https://fusionmarkets.com/?refcode=102866", color: "bg-blue-600 hover:bg-blue-700" },
@@ -179,7 +199,7 @@ const PremiumCoursesPage: React.FC = () => {
                             <p className="text-lg font-bold">Elige tu nivel de compromiso. La decisión es tuya. El momento es ahora. 👇</p>
                         </section>
                         <section className="text-center"><h3 className="text-xl font-bold text-brand-accent">¡Oferta por Tiempo Limitado!</h3><p className="text-gray-600 dark:text-gray-400 mt-1">Si antes de que termine el contador compras uno de nuestros cursos de Binarias, ¡recibirás un <strong>script premium de regalo</strong>!</p>{offerEndTime && <CountdownTimer expiryTimestamp={offerEndTime} />}</section>
-                        <section><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">{courses.map((course, index) => (<CourseCard key={course.title} course={course} isFeatured={index === 1} />))}</div></section>
+                        <section><div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">{courses.map((course) => (<CourseCard key={course.title} course={course} />))}</div></section>
                         <section className="text-center"><h2 className="text-3xl font-bold mb-6">La Voz de Nuestros Alumnos Élite</h2><TestimonialCarousel testimonials={PREMIUM_TESTIMONIALS} /></section>
                         <section className="text-center p-6 bg-gray-100 dark:bg-white/5 rounded-lg"><h2 className="text-2xl font-bold mb-4">🛠️ Herramientas de Ejecución Profesional</h2><p className="text-gray-600 dark:text-gray-400 mb-6">(Recomendadas por José Quintana)</p><div className="flex flex-wrap justify-center gap-4">{recommendedTools.map(tool => (<a key={tool.name} href={tool.link} target="_blank" rel="noopener noreferrer" className={`font-bold py-2 px-6 rounded-lg text-white transition-opacity ${tool.color}`}>{tool.name}</a>))}</div></section>
                         <section className="text-center"><h2 className="text-3xl font-bold text-red-500 mb-2">💳 ACCESO Y SOPORTE INMEDIATO</h2><p className="text-lg text-gray-700 dark:text-gray-300 mb-6">Es momento de tomar la decisión que transformará tu cuenta.</p><div className="flex flex-col sm:flex-row justify-center gap-4 mb-6"><a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-green-600 transition">SOPORTE DIRECTO</a><a href="https.t.me/tradevision90" target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-600 transition">ÚNETE A LA COMUNIDAD</a><a href="https://linktr.ee/TradeVisionLatam" target="_blank" rel="noopener noreferrer" className="bg-brand-primary text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-700 transition">Todas Nuestras Redes</a></div><p className="text-xl font-extrabold text-red-500">¡NO HAY ATAJOS. HAY UN SISTEMA. ES HORA DE UNIRTE!</p></section>

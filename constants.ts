@@ -1,5 +1,6 @@
 import { Testimonial, Post, ComprehensiveFAQ, PartnerTool, Mentor } from './types';
-import { FaTelegram, FaInstagram, FaYoutube, FaTiktok, FaWhatsapp } from 'react-icons/fa';
+import { FaTelegram, FaInstagram, FaTiktok, FaWhatsapp } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 export const TESTIMONIALS: Testimonial[] = [
     {
@@ -928,7 +929,7 @@ export const BLOG_POSTS: Post[] = [
     {
         id: 6,
         slug: "el-diario-de-trading-herramienta-poderosa",
-        title: "El Diario de Trading: Tu Herramienta Más Poderosa",
+        title: "El Diario de Trading: Tu Ferramenta Mais Poderosa",
         excerpt: "Registrar tus operaciones es el secreto para un crecimiento exponencial. Aprende qué anotar y cómo analizarlo para mejorar...",
         imageUrl: "https://picsum.photos/400/250?random=16",
         author: "Equipo TradeVision",
@@ -1047,11 +1048,11 @@ export const IP_LEGAL_TEXT = `Todo el contenido de TradeVision Latam, incluyendo
 Cualquier copia, reproducción, reventa, distribución o republicación no autorizada de este material en Internet o cualquier otro medio está estrictamente prohibida y será sancionada legalmente. El acceso a los cursos de pago es personal e intransferible.`;
 
 export const SOCIAL_LINKS = [
-    { name: 'Comunidad Telegram', icon: FaTelegram, href: 'https://t.me/tradevision90' },
-    { name: 'Canal WhatsApp', icon: FaWhatsapp, href: 'https://whatsapp.com/channel/0029Vb6gcptJZg49w13b0L1H' },
-    { name: 'Instagram', icon: FaInstagram, href: '#' },
-    { name: 'YouTube', icon: FaYoutube, href: '#' },
-    { name: 'TikTok', icon: FaTiktok, href: '#' },
+    { name: 'Comunidad Telegram', icon: FaTelegram, href: 'https://t.me/tradevision90', colorClass: 'text-telegram-blue' },
+    { name: 'Canal WhatsApp', icon: FaWhatsapp, href: 'https://whatsapp.com/channel/0029Vb6gcptJZg49w13b0L1H', colorClass: 'text-whatsapp-green' },
+    { name: 'Instagram', icon: FaInstagram, href: 'https://www.instagram.com/tradervision90?igsh=bzlhM3lscWQxdTd4', colorClass: 'text-pink-500' },
+    { name: 'TikTok', icon: FaTiktok, href: 'https://www.tiktok.com/@neriontrade?_r=1&_t=ZM-91N6RoC5YE7', colorClass: 'text-black dark:text-white' },
+    { name: 'X (Threads)', icon: FaXTwitter, href: 'https://www.threads.com/@tradervision90', colorClass: 'text-black dark:text-white' },
 ];
 
 
