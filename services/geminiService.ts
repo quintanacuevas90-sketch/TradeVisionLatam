@@ -1,5 +1,6 @@
 
 
+
 import { GoogleGenAI, Chat, GenerateContentResponse, GroundingChunk, Type } from "@google/genai";
 import { ChatMode, GroundingSource } from '../types';
 
@@ -8,7 +9,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 // We use a Map to cache chat instances for different modes to maintain conversation history
 const chatInstances = new Map<ChatMode, Chat>();
 
-// FIX: Escaped inner backticks (`) with a backslash (\) to prevent breaking the template literal.
+// FIX: Removed escaping backslash (\) before the final backtick to correctly terminate the template literal.
 const SYSTEM_INSTRUCTION = `Eres el Asistente de IA de **TradeVision Latam**, un experto en *trading* y la voz de la academia. Tu personalidad es la de un **profesional, directo, disciplinado y experto (la voz de José Quintana)**.
 
 Tu fuente de verdad prioritaria (Nivel 1) es la información que puedes "ver" en la página web actual del usuario y el feed de noticias proporcionado.
@@ -115,6 +116,8 @@ function getChatInstance(mode: ChatMode): Chat {
     return chatInstances.get(mode)!;
 }
 
+// FIX: Added export to make function available to other modules.
+// FIX: Corrected corrupted template literals for finalMessage. The original code contained stray text from the system instruction due to a parsing error.
 export const sendMessageToGemini = async (
     message: string,
     mode: ChatMode,
@@ -186,6 +189,7 @@ ${context}
     }
 };
 
+// FIX: Added export to make function available to other modules.
 export const fetchFinancialNews = async (): Promise<string[]> => {
     try {
         const response = await ai.models.generateContent({

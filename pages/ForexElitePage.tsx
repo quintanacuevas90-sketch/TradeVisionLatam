@@ -8,25 +8,8 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FaBrain, FaWhatsapp } from 'react-icons/fa';
 import { FiBarChart2, FiGitCommit, FiRepeat, FiTarget, FiTrendingUp, FiGlobe, FiUsers, FiDollarSign, FiZapOff, FiArrowLeft } from 'react-icons/fi';
+import BenefitCard from '../components/BenefitCard';
 
-// FIX: Defined BenefitCard props with an interface and typed as React.FC.
-// This resolves the TypeScript error where 'key' was not recognized as a special React prop.
-// The component has also been moved outside the main component to prevent re-declaration on every render.
-interface BenefitCardProps {
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-}
-
-const BenefitCard: React.FC<BenefitCardProps> = ({ icon, title, description }) => (
-    <div className="flex items-start gap-4 p-4 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
-        <div className="flex-shrink-0 text-brand-accent text-2xl mt-1">{icon}</div>
-        <div>
-            <h4 className="font-bold text-lg text-brand-primary dark:text-white">{title}</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
-        </div>
-    </div>
-);
 
 const ForexElitePage: React.FC = () => {
     const { navigate } = useRouter();

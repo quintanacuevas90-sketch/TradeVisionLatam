@@ -4,6 +4,7 @@ import { FaBook, FaUserTie, FaShieldAlt } from 'react-icons/fa';
 import { FiUsers } from 'react-icons/fi';
 import { ModalType } from '../types';
 import AnimatedSection from '../components/AnimatedSection';
+import BenefitCard from '../components/BenefitCard';
 
 interface CommunityBenefitsSectionProps {
     onOpenModal: (modal: ModalType) => void;
@@ -32,19 +33,6 @@ const benefits = [
     }
 ];
 
-const BenefitCard: React.FC<{ icon: React.ReactNode; title: string; description: string; }> = ({ icon, title, description }) => (
-    <div className="relative group bg-white dark:bg-white/5 p-6 rounded-lg border border-gray-200 dark:border-white/10 hover:border-brand-accent transition duration-300 transform hover:-translate-y-2 shadow-sm hover:shadow-lg h-full overflow-hidden">
-        <div className="relative z-10 flex items-start gap-4 h-full">
-            <div className="flex-shrink-0 mt-1">{icon}</div>
-            <div>
-                <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white text-left">{title}</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-left">{description}</p>
-            </div>
-        </div>
-    </div>
-);
-
-
 const CommunityBenefitsSection: React.FC<CommunityBenefitsSectionProps> = ({ onOpenModal }) => {
     return (
         <AnimatedSection id="beneficios-comunidad" className="py-20 bg-gray-50 dark:bg-gray-800">
@@ -58,7 +46,7 @@ const CommunityBenefitsSection: React.FC<CommunityBenefitsSectionProps> = ({ onO
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {benefits.map(benefit => (
-                        <BenefitCard key={benefit.title} {...benefit} />
+                        <BenefitCard key={benefit.title} {...benefit} variant="community" />
                     ))}
                 </div>
 
