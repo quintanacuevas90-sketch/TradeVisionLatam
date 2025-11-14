@@ -51,7 +51,7 @@ const TestimonialsSection: React.FC = () => {
                     className="inline-flex items-center gap-3 bg-brand-accent text-white font-bold py-4 px-10 rounded-full text-xl hover:bg-brand-primary transition duration-300 transform hover:scale-105"
                 >
                     <FaTelegram size={24} />
-                    ¡Únete a la Comunidad!
+                    Unirse a la Comunidad
                 </a>
             </div>
         </AnimatedSection>

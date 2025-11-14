@@ -54,7 +54,7 @@ const BinariasIntermedioPage: React.FC = () => {
                         </ul>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg shadow-brand-accent/30">
-                                DEJAR DE IMPROVISAR AHORA ($79)
+                                Iniciar Sistema de Ejecución ($79)
                             </a>
                             <button onClick={() => navigate('/premium-courses')} className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-brand-accent text-brand-accent font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-accent hover:text-brand-primary transition duration-300 w-full sm:w-auto">
                                 Volver a Cursos Premium

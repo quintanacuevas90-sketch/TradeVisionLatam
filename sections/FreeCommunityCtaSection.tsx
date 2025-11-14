@@ -14,9 +14,9 @@ const FreeCommunityCtaSection: React.FC = () => {
                 </p>
                 <button
                     onClick={() => navigate('/comunidad')}
-                    className="mt-8 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-105"
+                    className="mt-8 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-105 animate-pulse-glow"
                 >
-                    ACCEDE GRATIS AHORA
+                    Unirse al Ecosistema Gratuito
                 </button>
             </div>
         </AnimatedSection>

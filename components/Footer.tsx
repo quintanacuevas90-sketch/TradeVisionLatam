@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { ModalType } from '../types';
 import { LEGAL_TEXT, IP_LEGAL_TEXT, SOCIAL_LINKS } from '../constants';
 import { useRouter } from '../hooks/useRouter';
+import VerifiedBadge from './VerifiedBadge';
 
 interface FooterProps {
     onOpenModal: (modal: ModalType) => void;
@@ -35,6 +37,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
             title: 'Legal',
             links: [
                 { label: 'Información Legal', action: () => onOpenModal('legal') },
+                { label: 'Verificación y Alcance', action: () => navigate('/verificacion-legal') },
                 { label: 'Política de Riesgo', action: () => onOpenModal('legal') },
                 { label: 'Mapa del Sitio', action: () => navigate('/sitemap') },
             ]
@@ -77,9 +80,12 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                     
                     <h5 className="font-bold mb-2 mt-4">Propiedad Intelectual y Prohibición de Distribución</h5>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 whitespace-pre-line">{IP_LEGAL_TEXT}</p>
-
-                    <p className="text-center text-sm text-gray-500">© {new Date().getFullYear()} TradeVision Latam. Todos los derechos reservados.</p>
                     
+                    <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+                        <p className="text-center sm:text-left text-sm text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} TradeVision Latam. Todos los derechos reservados.</p>
+                        <VerifiedBadge />
+                    </div>
+
                     <p className="text-center text-[11px] text-gray-500 dark:text-gray-400 mt-4">
                         Reclamaciones de Propiedad de Material: TradeVision Latam respeta la propiedad intelectual de terceros. Si usted considera que algún material alojado en este sitio infringe sus derechos de autor, por favor contacte a nuestro equipo legal a tradevision2026@gmail.com con la petición detallada para su pronta revisión y atención.
                     </p>

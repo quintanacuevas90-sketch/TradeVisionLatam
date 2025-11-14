@@ -82,7 +82,7 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ onOpenModal }) => {
                                 className="inline-flex items-center justify-center gap-3 bg-brand-accent text-brand-primary font-extrabold py-5 px-12 rounded-xl text-2xl transform hover:scale-110 transition duration-300 shadow-lg shadow-brand-accent/50 animate-pulse"
                             >
                                 <FaTelegram size={32} />
-                                SÍ, QUIERO UNIRME A LA COMUNIDAD GRATIS
+                                ACCEDER A LA COMUNIDAD GRATUITA
                             </a>
                         </div>
                         <div className="mt-12 text-center text-sm">

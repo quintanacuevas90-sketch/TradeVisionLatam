@@ -36,7 +36,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                 "Automatiza gestión de riesgo, Order Flow, Smart Money y Análisis Fundamental.",
                 "Incluye el prompt para <strong>crear tus propios prompts</strong> de cualquier estrategia."
             ],
-            cta: "OBTENER MANUAL",
+            cta: "Acceder al Manual de IA",
             link: "#/manual/ia-prompts"
         },
         {
@@ -46,7 +46,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             urgency: "¡SOLO 20 CUPOS DISPONIBLES ESTE MES!",
             description: "Diseñado para el trader estancado. Elimina la improvisación y opera con un sistema basado en probabilidad y gestión de riesgo.",
             content: ["4 Fórmulas de Operación de Alta Efectividad.", "<strong>Backtesting al Extremo</strong> para confirmar validez.", "<strong>Psicotrading y Gestión de Riesgo</strong> (La Clave Maestra)."],
-            cta: "VER PROGRAMA COMPLETO",
+            cta: "Explorar Módulos del Programa",
             link: "#/cursos/binarias-intermedio"
         },
         {
@@ -56,7 +56,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             urgency: "¡Oferta válida solo por 48 horas!",
             description: "Un reseteo mental completo. Olvida los indicadores y los mitos. Aprende a leer el verdadero motor del mercado: el lenguaje del precio.",
             content: ["<strong>ROMPIENDO MITOS:</strong> Olvídate de Bots y Scripts.", "Aprende el verdadero motor del mercado: <strong>Lenguaje del Precio</strong>.", "Aplicación universal para cualquier activo y temporalidad."],
-            cta: "VER PROGRAMA COMPLETO",
+            cta: "Asegure su Cupo Exclusivo",
             link: "#/cursos/binarias-pro-c90"
         },
         {
@@ -66,7 +66,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
             urgency: "¡ÚLTIMOS 8 CUPOS PARA ESTA GENERACIÓN!",
             description: "El programa definitivo para la profesionalización. Deja de ser la liquidez y aprende a operar junto al dinero inteligente.",
             content: ["El precio se mueve por <strong>LIQUIDEZ</strong>, no por noticias.", "El Patrón <strong>AMD Revelado</strong> (Acumulación, Manipulación, Distribución).", "Busca entradas con riesgo mínimo y beneficio <strong>5:1 o más</strong>."],
-            cta: "VER PROGRAMA COMPLETO",
+            cta: "Explorar Módulos del Programa",
             link: "#/cursos/forex-elite"
         },
     ];
@@ -83,8 +83,8 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                 
                 {/* 1. Urgency Hook */}
                 <section className="text-center">
-                    <h3 className="text-xl font-bold text-brand-accent">¡Oferta por Tiempo Limitado!</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">Si antes de que termine el contador compras uno de nuestros cursos de Binarias, ¡recibirás un <strong>script premium de regalo</strong>!</p>
+                    <h3 className="text-xl font-bold text-brand-accent">¡Oportunidad por Tiempo Limitado!</h3>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">La disponibilidad de la Tutoría Estratégica de Onboarding con nuestro equipo de mentores es limitada a los cupos prioritarios de esta semana. Asegure su acceso antes de que el grupo se cierre.</p>
                     {offerEndTime && <CountdownTimer expiryTimestamp={offerEndTime} />}
                 </section>
 

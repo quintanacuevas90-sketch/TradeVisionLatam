@@ -8,17 +8,15 @@ import ChatbotTrigger from './ChatbotTrigger';
 const WELCOME_MESSAGE: ChatMessage = {
     id: 'initial-welcome',
     role: 'model',
-    text: `Asistente de IA de TradeVision Latam.
+    text: `Soy VisionBot, el Asistente de IA de TradeVision.
 
-Estoy entrenado con nuestra base de conocimiento para resolver tus consultas.
+Mi propósito es asistirlo con disciplina y precisión, reflejando la metodología de nuestra academia. He sido entrenado para resolver sus consultas sobre:
 
-Puedes preguntarme sobre:
-- Nuestros Cursos (Precios, contenido, diferencias).
-- Brokers y Afiliados (Enlaces, requisitos).
-- Consultas de Trading (Definiciones, guías).
-- Información de la página web.
+- **Cursos Premium:** Metodología y Acceso.
+- **Ecosistema Gratuito:** Recursos y Beneficios.
+- **Brokers y Afiliados:** Cumplimiento y Ventajas.
 
-Escribe tu pregunta para comenzar.`,
+Formule su pregunta para iniciar la consulta.`,
     timestamp: Date.now(),
 };
 

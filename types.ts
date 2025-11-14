@@ -2,7 +2,7 @@
 
 export type ModalType = 'premium-courses' | 'affiliate' | 'legal' | 'brokers' | 'community' | 'support' | 'mentors';
 
-export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora' | 'forex-elite' | 'binarias-pro-c90' | 'binarias-intermedio' | 'comunidad' | 'ia-manual';
+export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora' | 'forex-elite' | 'binarias-pro-c90' | 'binarias-intermedio' | 'comunidad' | 'ia-manual' | 'legal-verification';
 
 export interface Testimonial {
     name: string;

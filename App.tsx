@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
 import BlogListPage from './pages/BlogListPage';
@@ -34,6 +35,7 @@ import BinariasIntermedioPage from './pages/BinariasIntermedioPage';
 import CommunityPage from './pages/CommunityPage';
 import { useChatbotTriggers } from './hooks/useChatbotTriggers';
 import AiManualPage from './pages/AiManualPage';
+import LegalVerificationPage from './pages/LegalVerificationPage';
 
 const App: React.FC = () => {
     const { path, navigate } = useRouter();
@@ -123,6 +125,8 @@ const App: React.FC = () => {
             currentPage = 'comunidad';
         } else if (pathname === '/manual/ia-prompts') {
             currentPage = 'ia-manual';
+        } else if (pathname === '/verificacion-legal') {
+            currentPage = 'legal-verification';
         }
 
 
@@ -180,6 +184,7 @@ const App: React.FC = () => {
         '/cursos/binarias-intermedio': <BinariasIntermedioPage />,
         '/comunidad': <CommunityPage onOpenModal={handleOpenModal} />,
         '/manual/ia-prompts': <AiManualPage />,
+        '/verificacion-legal': <LegalVerificationPage onOpenModal={handleOpenModal} />,
     };
 
     return (

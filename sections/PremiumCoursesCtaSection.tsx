@@ -21,7 +21,7 @@ const PremiumCoursesCtaSection: React.FC<PremiumCoursesCtaSectionProps> = ({ onO
                         onClick={() => navigate('/premium-courses')}
                         className="bg-brand-accent text-brand-primary font-bold py-4 px-10 rounded-lg text-xl hover:bg-opacity-90 transition duration-300 transform hover:scale-105"
                     >
-                        Ver Cursos Premium
+                        Ver Colección de Módulos Premium
                     </button>
                 </div>
             </div>

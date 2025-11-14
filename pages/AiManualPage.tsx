@@ -64,7 +64,7 @@ const AiManualPage: React.FC = () => {
                         <p className="text-xl sm:text-2xl font-semibold text-gray-300 mb-6">ACCESO INMEDIATO A 10 ASESORES EXPERTOS</p>
                         <h2 className="text-2xl sm:text-3xl text-brand-accent font-bold mb-8">MANUAL: INGENIERÍA DE PROMPTS PARA LA MENTE MAESTRA DEL TRADING (GPT/DEEPSEEK)</h2>
                         <a href={manualPurchaseLink} target="_blank" rel="noopener noreferrer" className="inline-block bg-brand-accent text-brand-primary font-bold py-4 px-10 rounded-lg text-xl hover:bg-opacity-90 transition duration-300 transform hover:scale-105 shadow-lg shadow-brand-accent/30">
-                            OBTENER MANUAL POR $15 USD
+                            Acceder al Manual ($15 USD)
                         </a>
                     </div>
                 </AnimatedSection>
@@ -122,7 +122,7 @@ const AiManualPage: React.FC = () => {
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                              <a href={manualPurchaseLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105">
-                                OBTENER MANUAL POR $15 USD
+                                Acceder al Manual ($15 USD)
                             </a>
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-green-600 transition duration-300 w-full sm:w-auto">
                                 <FaWhatsapp /> Soporte Vía WhatsApp

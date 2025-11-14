@@ -63,7 +63,7 @@ const ForexElitePage: React.FC = () => {
                         <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">Deja de ser la liquidez. Aprende a operar junto al 'Dinero Inteligente' (Smart Money) y domina el mercado con la metodología que mueve el 90% del volumen.</p>
                         <p className="text-sm text-gray-400 mb-8">Un programa avanzado diseñado y guiado por José Quintana, Asesor Principal de TradeVision Latam.</p>
                         <a href="https://t.me/trainfxbot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg shadow-brand-accent/30">
-                            COMPRAR AHORA ($349)
+                            Asegure su Cupo Exclusivo ($349)
                         </a>
                     </div>
                 </AnimatedSection>
@@ -126,7 +126,7 @@ const ForexElitePage: React.FC = () => {
                         <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto mb-8">El precio de la ignorancia siempre será mayor que el precio de la educación. Deja de ser la liquidez y únete a la élite.</p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="https://t.me/trainfxbot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105">
-                                COMPRAR AHORA ($349)
+                                Asegure su Cupo Exclusivo ($349)
                             </a>
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-green-600 transition duration-300 w-full sm:w-auto">
                                 <FaWhatsapp /> Pagar por Soporte Directo

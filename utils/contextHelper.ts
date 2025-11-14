@@ -76,6 +76,9 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
         case 'ia-manual':
             context += `\nEstá en la página de ventas del 'MANUAL: INGENIERÍA DE PROMPTS PARA LA MENTE MAESTRA DEL TRADING'. Este es un manual de $15 que enseña a usar IA (GPT/Deepseek) con 6 prompts maestros para automatizar el análisis de trading, gestión de riesgo, SMC, etc.`;
             break;
+        case 'legal-verification':
+            context += `\nEstá en la página de 'Verificación Legal y Alcance Global'. Esta página detalla la estructura educativa de TradeVision, su registro bajo normativas de consultoría en Canadá, Brasil y la UE (España), y su compromiso con la transparencia.`;
+            break;
         case 'main':
         default:
              context += `\nLa página principal de TradeVision Latam, una academia de trading.`;

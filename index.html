@@ -13,6 +13,11 @@
       html {
         scroll-behavior: smooth;
       }
+      body {
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10+ and Edge */
+        user-select: none; /* Standard syntax */
+      }
       @keyframes infinite-scroll {
         from { transform: translateX(0); }
         to { transform: translateX(-50%); }
@@ -44,6 +49,17 @@
       }
       .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
         scroll-margin-top: 100px;
+      }
+      @keyframes pulse-glow {
+        0%, 100% {
+          box-shadow: 0 0 10px rgba(64, 224, 208, 0.4), 0 0 15px rgba(64, 224, 208, 0.2);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(64, 224, 208, 0.6), 0 0 30px rgba(64, 224, 208, 0.4);
+        }
+      }
+      .animate-pulse-glow {
+        animation: pulse-glow 2s infinite ease-in-out;
       }
     </style>
     <script>
