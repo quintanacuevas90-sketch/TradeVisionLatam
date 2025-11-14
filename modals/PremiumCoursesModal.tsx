@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
 import CountdownTimer from '../components/CountdownTimer';
-import { FaWhatsapp, FaTelegram } from 'react-icons/fa';
+import { FaTelegram } from 'react-icons/fa';
 import { PREMIUM_TESTIMONIALS } from '../constants';
 import CourseCard from '../components/CourseCard';
 import TestimonialCarousel from '../components/TestimonialCarousel';
@@ -105,11 +105,11 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                 {/* 3. Course Cards */}
                 <section>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {courses.map((course, index) => (
+                        {courses.map((course) => (
                             <CourseCard 
                                 key={course.title} 
                                 course={course}
-                                isFeatured={index === 3} // Feature the Forex course
+                                isFeatured={course.title.includes('FOREX')}
                                 onClose={onClose}
                             />
                         ))}
