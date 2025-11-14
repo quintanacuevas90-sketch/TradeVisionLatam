@@ -46,8 +46,21 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
     const [mode, setMode] = useState<ChatMode>(ChatMode.Standard);
     const [searchQuery, setSearchQuery] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [shouldRender, setShouldRender] = useState(isOpen);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (isOpen) {
+            setShouldRender(true);
+        } else {
+            // Wait for animation to finish before unmounting
+            const timer = setTimeout(() => {
+                setShouldRender(false);
+            }, 500); // Should match the animation duration
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -189,9 +202,9 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
                 </span>
             </button>
 
-            {isOpen && (
+            {shouldRender && (
                 <div 
-                    className="fixed bottom-24 right-5 w-full max-w-sm h-[70vh] max-h-[600px] bg-white dark:bg-brand-primary border border-gray-200 dark:border-white/20 rounded-lg shadow-2xl flex flex-col z-[52] text-gray-800 dark:text-white overflow-hidden bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"
+                    className={`fixed bottom-24 right-5 w-full max-w-sm h-[70vh] max-h-[600px] bg-white dark:bg-brand-primary border border-gray-200 dark:border-white/20 rounded-lg shadow-2xl flex flex-col z-[52] text-gray-800 dark:text-white overflow-hidden bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-500 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-[calc(100%+1.25rem)]'}`}
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="chatbot-title"

@@ -109,7 +109,7 @@ const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                             <CourseCard 
                                 key={course.title} 
                                 course={course}
-                                isFeatured={course.title.includes('FOREX')}
+                                isFeatured={course.title.toLowerCase().includes('forex')}
                                 onClose={onClose}
                             />
                         ))}
