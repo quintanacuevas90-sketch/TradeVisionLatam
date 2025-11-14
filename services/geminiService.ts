@@ -1,10 +1,40 @@
 import { GoogleGenAI, Chat, GenerateContentResponse, GroundingChunk, Type } from "@google/genai";
 import { ChatMode, GroundingSource } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 // We use a Map to cache chat instances for different modes to maintain conversation history
 const chatInstances = new Map<ChatMode, Chat>();
+
+// --- DEFERRED AI INSTANCE ---
+// This prevents the app from crashing on startup if the API_KEY is not set.
+let ai: GoogleGenAI | null = null;
+
+/**
+ * Lazily initializes and returns the GoogleGenAI instance.
+ * Returns null if the API key is missing, preventing a crash.
+ */
+function getAiInstance(): GoogleGenAI | null {
+    if (ai) {
+        return ai;
+    }
+
+    const apiKey = process.env.API_KEY;
+
+    if (!apiKey) {
+        // Log an error for developers, but don't crash the app.
+        // UI-facing functions will handle this null return value.
+        console.error("Gemini API Key is not configured. AI features will be disabled.");
+        return null;
+    }
+
+    try {
+        ai = new GoogleGenAI({ apiKey });
+        return ai;
+    } catch (error) {
+        console.error("Failed to initialize GoogleGenAI:", error);
+        return null;
+    }
+}
+
 
 const SYSTEM_INSTRUCTION = `# IDENTIDAD Y MISIÓN
 Eres **VisionBot**, el Asistente de IA oficial de **TradeVision Latam**. Tu identidad es la de un **experto en trading: profesional, directo y disciplinado**, reflejando la voz y autoridad de nuestro Asesor Principal, José Quintana. Tu misión es asistir a los usuarios reforzando la metodología, los cursos y la cultura de disciplina de TradeVision.
@@ -37,7 +67,12 @@ Eres **VisionBot**, el Asistente de IA oficial de **TradeVision Latam**. Tu iden
 - **Manejo de Ofensas:** Si un usuario es agresivo, responde con calma y profesionalismo, sin entrar en debate.
 `;
 
-function getChatInstance(mode: ChatMode): Chat {
+function getChatInstance(mode: ChatMode): Chat | null {
+    const aiInstance = getAiInstance();
+    if (!aiInstance) {
+        return null;
+    }
+
     if (!chatInstances.has(mode)) {
         let model;
         let config: any = {
@@ -59,7 +94,7 @@ function getChatInstance(mode: ChatMode): Chat {
                 break;
         }
 
-        chatInstances.set(mode, ai.chats.create({ model, config }));
+        chatInstances.set(mode, aiInstance.chats.create({ model, config }));
     }
     return chatInstances.get(mode)!;
 }
@@ -72,6 +107,11 @@ export const sendMessageToGemini = async (
 ): Promise<void> => {
     try {
         const chat = getChatInstance(mode);
+        
+        if (!chat) {
+            onStream("El Asistente de IA no está configurado correctamente (falta la clave de API). Por favor, contacte al administrador del sitio.", []);
+            return;
+        }
 
         let finalMessage = message;
         if (context && context.trim().length > 0) {
@@ -131,13 +171,22 @@ ${context}
         }
     } catch (error) {
         console.error("Error sending message to Gemini:", error);
-        onStream("Ocurrió un error. Por favor, revisa la consola para más detalles.", []);
+        let errorMessage = "Ocurrió un error al procesar tu solicitud. Por favor, intenta de nuevo más tarde.";
+        if (error instanceof Error && error.message.includes('API key not valid')) {
+            errorMessage = "Error: La clave de API de IA no es válida. Por favor, contacte al administrador del sitio.";
+        }
+        onStream(errorMessage, []);
     }
 };
 
 export const fetchFinancialNews = async (): Promise<string[]> => {
+    const aiInstance = getAiInstance();
+    if (!aiInstance) {
+        return [ "No se pudo conectar al servicio de noticias. La clave de API no está configurada." ];
+    }
+    
     try {
-        const response = await ai.models.generateContent({
+        const response = await aiInstance.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: "Dame los 5 titulares de noticias más recientes e importantes, combinando noticias del mercado de divisas (Forex) de https://es.tradingview.com/markets/currencies/news/ con noticias sobre Criptomonedas y Bitcoin. Formatea la respuesta como una lista con guiones, donde cada titular está en una nueva línea.",
             config: {
@@ -163,6 +212,9 @@ export const fetchFinancialNews = async (): Promise<string[]> => {
         ];
     } catch (error) {
         console.error("Error fetching news from Gemini:", error);
+         if (error instanceof Error && error.message.includes('API key not valid')) {
+            return ["Error: La clave de API para el servicio de noticias no es válida."];
+        }
         return [
             "Error al cargar noticias en tiempo real. Mostrando noticias de ejemplo.",
             "Jerome Powell signals potential rate hikes amidst inflation concerns.",
