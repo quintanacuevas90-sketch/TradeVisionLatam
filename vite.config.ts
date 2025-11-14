@@ -19,20 +19,8 @@ export default defineConfig(({ mode }) => {
           '@': path.resolve(__dirname, '.'),
         }
       }
-            build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            'vendor': [
-              'react',
-              'react-dom'
-            ]
-          },
-          chunkFileNames: 'js/[name]-[hash].js',
-          entryFileNames: 'js/[name]-[hash].js'
-        }
-      },
-      chunkSizeWarningLimit: 1000
+                build: {
+      chunkSizeWarningLimit: 1000,
     },
-    };
-});
+  })
+);
