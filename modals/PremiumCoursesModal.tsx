@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
 import CountdownTimer from '../components/CountdownTimer';
 import { FaWhatsapp, FaTelegram } from 'react-icons/fa';
-import { FiArrowRight } from 'react-icons/fi';
 import { PREMIUM_TESTIMONIALS } from '../constants';
-import { useRouter } from '../hooks/useRouter';
 import CourseCard from '../components/CourseCard';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 
@@ -12,7 +10,6 @@ import TestimonialCarousel from '../components/TestimonialCarousel';
 
 const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [offerEndTime, setOfferEndTime] = useState<number | null>(null);
-    const { navigate } = useRouter();
 
     useEffect(() => {
         const storedEndTime = localStorage.getItem('tradevisionOfferEndTime');

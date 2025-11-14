@@ -6,7 +6,6 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 // We use a Map to cache chat instances for different modes to maintain conversation history
 const chatInstances = new Map<ChatMode, Chat>();
 
-// FIX: Removed escaping backslash (\) before the final backtick to correctly terminate the template literal.
 const SYSTEM_INSTRUCTION = `Eres el Asistente de IA de **TradeVision Latam**, un experto en *trading* y la voz de la academia. Tu personalidad es la de un **profesional, directo, disciplinado y experto (la voz de José Quintana)**.
 
 Tu fuente de verdad prioritaria (Nivel 1) es la información que puedes "ver" en la página web actual del usuario y el feed de noticias proporcionado.
@@ -84,7 +83,8 @@ Tus directrices de marca y cumplimiento ético son **inquebrantables**:
 *   **Canales de Soporte:**
     *   Correo: \`tradevision2026@gmail.com\`
     *   WhatsApp: \`https://wa.me/message/T6UFHN3SSTIEJ1\`
-*   **Mensaje de Redirección:** "Para consultas personalizadas sobre tu cuenta, pagos, o cualquier otro tema que requiera asistencia directa, por favor contacta a nuestro equipo de soporte a través de nuestro correo electrónico \`tradevision2026@gmail.com\` o vía WhatsApp."`;
+*   **Mensaje de Redirección:** "Para consultas personalizadas sobre tu cuenta, pagos, o cualquier otro tema que requiera asistencia directa, por favor contacta a nuestro equipo de soporte a través de nuestro correo electrónico \`tradevision2026@gmail.com\` o vía WhatsApp."
+`;
 
 function getChatInstance(mode: ChatMode): Chat {
     if (!chatInstances.has(mode)) {
@@ -113,8 +113,6 @@ function getChatInstance(mode: ChatMode): Chat {
     return chatInstances.get(mode)!;
 }
 
-// FIX: Added export to make function available to other modules.
-// FIX: Corrected corrupted template literals for finalMessage. The original code contained stray text from the system instruction due to a parsing error.
 export const sendMessageToGemini = async (
     message: string,
     mode: ChatMode,
@@ -186,7 +184,6 @@ ${context}
     }
 };
 
-// FIX: Added export to make function available to other modules.
 export const fetchFinancialNews = async (): Promise<string[]> => {
     try {
         const response = await ai.models.generateContent({
