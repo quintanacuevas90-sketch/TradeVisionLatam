@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -5,8 +6,8 @@ import AnimatedSection from '../components/AnimatedSection';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
-import { FaUserGraduate, FaShieldAlt, FaCheckCircle } from 'react-icons/fa';
-import { FiTrendingUp, FiAlertTriangle, FiHome, FiSend, FiArrowLeft } from 'react-icons/fi';
+import { FaUserGraduate, FaShieldAlt, FaCheckCircle, FaCopy } from 'react-icons/fa';
+import { FiTrendingUp, FiAlertTriangle, FiHome, FiSend, FiArrowLeft, FiCheck } from 'react-icons/fi';
 import CollaborationTermsModal from '../modals/CollaborationTermsModal';
 import PageBackButton from '../components/PageBackButton';
 
@@ -84,10 +85,12 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
     const { navigate } = useRouter();
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState<Partial<Record<keyof typeof formData | 'terms', string>>>({});
-    const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [formStatus, setFormStatus] = useState<'idle' | 'submitting'>('idle');
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showLegalModal, setShowLegalModal] = useState(false);
+    const [showCopyModal, setShowCopyModal] = useState(false);
+    const [emailContent, setEmailContent] = useState({ subject: '', body: '' });
+    const [copyStatus, setCopyStatus] = useState<'idle' | 'address' | 'body'>('idle');
 
     useEffect(() => {
         document.title = "Forma Parte de TradeVision | Colabora con Nosotros";
@@ -178,69 +181,95 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
         
         const subject = `Nueva Aplicación de Colaboración: ${position} - ${firstName} ${lastName}`;
         const body = `
-            Nueva aplicación recibida desde la página "Forma Parte de TradeVision":
-            --------------------------------------------------
-            Nombre: ${firstName} ${lastName}
-            Correo Electrónico: ${email}
-            Teléfono (WhatsApp): ${phone}
-            País de Residencia: ${country}
-            Idiomas: ${languages}
-            Posición de Interés: ${position}
-            Red Social Principal: ${socialLink}
-            Cómo nos conoció: ${source}
-            --------------------------------------------------
-            Biografía y Visión:
-            ${bio}
-            --------------------------------------------------
-        `;
+Nueva aplicación recibida desde la página "Forma Parte de TradeVision":
+--------------------------------------------------
+Nombre: ${firstName} ${lastName}
+Correo Electrónico: ${email}
+Teléfono (WhatsApp): ${phone}
+País de Residencia: ${country}
+Idiomas: ${languages}
+Posición de Interés: ${position}
+Red Social Principal: ${socialLink}
+Cómo nos conoció: ${source}
+--------------------------------------------------
+Biografía y Visión:
+${bio}
+--------------------------------------------------
+        `.trim();
 
-        window.location.href = `mailto:tradevision2026@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        
-        setTimeout(() => {
-            setFormStatus('success');
-            setShowSuccessModal(true);
-        }, 1000);
+        setEmailContent({ subject, body });
+        setShowCopyModal(true);
+        setFormStatus('idle');
     };
 
-    const handleCloseSuccessModal = () => {
-        setShowSuccessModal(false);
+    const handleCloseCopyModal = () => {
+        setShowCopyModal(false);
         setFormData(initialFormData);
         setErrors({});
         setTermsAccepted(false);
         setFormStatus('idle');
     };
+    
+    const handleCopyToClipboard = (text: string, type: 'address' | 'body') => {
+        navigator.clipboard.writeText(text).then(() => {
+            setCopyStatus(type);
+            setTimeout(() => setCopyStatus('idle'), 2000); // Reset after 2s
+        });
+    };
 
     const inputClasses = (field: keyof typeof formData) => 
         `w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border ${errors[field] ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} focus:ring-2 focus:ring-brand-accent focus:outline-none transition-colors`;
 
+    const CopySubmissionModal = () => {
+        if (!showCopyModal) return null;
+        const emailAddress = "tradevision2026@gmail.com";
+        
+        return (
+            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" aria-modal="true" role="dialog">
+                <AnimatedSection className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-8 max-w-2xl w-full">
+                    <h2 className="text-2xl font-bold text-brand-primary dark:text-white">Completa el Envío de tu Postulación</h2>
+                    <p className="mt-2 text-gray-600 dark:text-gray-300">Para asegurar la entrega, necesitamos que envíes la postulación manualmente desde tu correo. ¡Sigue estos 3 sencillos pasos!</p>
+
+                    <div className="mt-6 space-y-4 text-left">
+                        <div>
+                            <label className="font-bold text-gray-700 dark:text-gray-200">Paso 1: Copia nuestra dirección de correo</label>
+                            <div className="flex gap-2 mt-1">
+                                <input type="text" readOnly value={emailAddress} className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 font-mono text-sm"/>
+                                <button onClick={() => handleCopyToClipboard(emailAddress, 'address')} className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 rounded-md font-semibold hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                    {copyStatus === 'address' ? <><FiCheck className="text-green-500"/> ¡Copiado!</> : <><FaCopy /> Copiar</>}
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="font-bold text-gray-700 dark:text-gray-200">Paso 2: Copia el cuerpo del mensaje</label>
+                            <div className="relative mt-1">
+                                <textarea readOnly value={emailContent.body} rows={8} className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 font-mono text-sm"/>
+                                <button onClick={() => handleCopyToClipboard(emailContent.body, 'body')} className="absolute bottom-2 right-2 flex items-center gap-2 px-3 py-1 bg-gray-200 dark:bg-gray-600 rounded-md font-semibold text-xs hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                    {copyStatus === 'body' ? '¡Copiado!' : 'Copiar Mensaje'}
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="font-bold text-gray-700 dark:text-gray-200">Paso 3: Envía el correo desde tu email</label>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Abre tu cliente de correo (Gmail, Outlook, etc.), pega la dirección en "Para:", usa "<strong className="text-brand-accent">{emailContent.subject}</strong>" como asunto, pega el cuerpo del mensaje y ¡envíalo!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 text-center">
+                        <button onClick={handleCloseCopyModal} className="bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg">He enviado el correo / Cerrar</button>
+                    </div>
+                </AnimatedSection>
+            </div>
+        );
+    };
 
     return (
         <>
             <Header onOpenModal={onOpenModal} />
             
-            {showSuccessModal && (
-                <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" aria-modal="true" role="dialog">
-                    <AnimatedSection className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-8 max-w-md w-full text-center">
-                        <FaCheckCircle className="text-green-500 text-5xl mx-auto mb-4" />
-                        <h2 className="text-2xl font-bold text-brand-primary dark:text-white">¡Postulación Recibida!</h2>
-                        <p className="mt-4 text-gray-600 dark:text-gray-300">
-                            Gracias por tu interés en unirte a <span translate="no">TradeVision Latam</span>. Hemos recibido tu postulación.
-                        </p>
-                        <div className="mt-4 text-left bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
-                            <h3 className="font-bold text-brand-primary dark:text-white">Próximos Pasos:</h3>
-                            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                                Nuestro equipo de operaciones revisará tu perfil. Si tu experiencia y visión se alinean con nuestra misión, nos pondremos en contacto contigo para coordinar una entrevista.
-                            </p>
-                        </div>
-                        <button 
-                            onClick={handleCloseSuccessModal}
-                            className="mt-6 bg-brand-accent text-brand-primary font-bold py-2 px-8 rounded-lg"
-                        >
-                            Entendido
-                        </button>
-                    </AnimatedSection>
-                </div>
-            )}
+            <CopySubmissionModal />
             
             {showLegalModal && <CollaborationTermsModal onClose={handleCloseLegalModal} />}
 
@@ -390,7 +419,7 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
                             <div className="text-center">
                                 {formStatus !== 'success' && (
                                     <button type="submit" disabled={formStatus === 'submitting' || !termsAccepted} className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                                        <FiSend /> {formStatus === 'submitting' ? 'Enviando...' : 'Enviar Aplicación'}
+                                        <FiSend /> {formStatus === 'submitting' ? 'Procesando...' : 'Enviar Aplicación'}
                                     </button>
                                 )}
                             </div>

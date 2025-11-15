@@ -1,5 +1,3 @@
-
-
 import { ModalType, PageType } from '../types';
 import { 
     BINARY_BROKERS, 
@@ -53,7 +51,7 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
             context += `\nEstá en la página 'Acerca de TradeVision Latam'. Esta página describe la misión, visión, hitos y presenta al equipo de mentores globales.`;
             break;
         case 'responsabilidad':
-            context += `\nEstá en la página 'Nuestra Responsabilidad'. Esta página detalla el impacto y la ética de TradeVision, enfocándose en la educación gratuita, la disciplina y el apoyo comunitario. Se mencionan iniciativas como 'Trading con Disciplina' y 'Academia Abierta', testimonios y una sección de preguntas frecuentes sobre su responsabilidad social.`;
+            context += `\nEstá en la página 'Nuestra Responsabilidad'. Esta página detalla el impacto y la ética de TradeVision, enfocándose en la educación gratuita, la disciplina y el apoyo comunitario. Se mencionan iniciativas como 'Trading con Disciplina' y 'Academia Aberta', testimonios y una sección de preguntas frecuentes sobre su responsabilidad social.`;
             break;
         case 'impacto-social':
             context += `\nEstá en la página de Impacto Social. Se detallan las iniciativas comunitarias de TradeVision, incluyendo talleres de IA, Cripto y economía para jóvenes. Se mencionan formas de donar a través de Volet, PayPal y Binance, con un estricto proceso de verificación de 2 pasos a través de Soporte para evitar fraudes.`;
@@ -90,6 +88,9 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
             break;
         case 'transparencia-legal':
             context += `\nEstá viendo la página de 'Transparencia y Legalidad'. Describe la estructura corporativa de TradeVision como una consultoría educativa registrada internacionalmente y su compromiso con el cumplimiento normativo.`;
+            break;
+        case 'execution-zone':
+            context += `\nEstá en la 'Zona de Ejecución', una página interactiva para traders. Contiene cuatro módulos: 1) Un quiz de mentalidad (psicología). 2) Un carrusel de patrones de velas. 3) Un simulador de disciplina y riesgo. 4) Un carrusel de 50 diapositivas de mentalidad avanzada. El objetivo es forjar la disciplina.`;
             break;
         case 'main':
         default:

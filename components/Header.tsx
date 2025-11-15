@@ -71,6 +71,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
         {
             title: 'Contenido y Recursos',
             links: [
+                { label: 'Zona de Ejecución', action: () => navigate('/zona-de-ejecucion') },
                 { label: 'Nuestra Metodología', action: () => navigate('/methodology') },
                 { label: 'Conoce a los Mentores', action: () => onOpenModal('mentors') },
                 { label: 'Sobre Nosotros', action: () => navigate('/acerca-de') },

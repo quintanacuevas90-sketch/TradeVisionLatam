@@ -1,3 +1,5 @@
+
+
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -25,15 +27,28 @@ const TerminosAcademiaPage: React.FC = () => {
             content: "Al acceder o utilizar los servicios, cursos y contenido de <span translate='no'>TradeVision Latam</span> (en adelante, 'La Academia'), usted acepta estar sujeto a estos Términos y Condiciones. Si no está de acuerdo con alguna parte de los términos, no podrá acceder al servicio."
         },
         {
-            title: "2. Descripción de los Servicios",
+            title: "2. Política de Uso para Menores de Edad",
+            content: `
+                <p class="font-bold">1. Prohibición de Uso:</p>
+                <p>Los servicios, plataformas de simulación y herramientas educativas de <span translate='no'>TradeVision Latam</span> están destinados exclusivamente a <strong>personas que hayan alcanzado la mayoría de edad (18 años)</strong> en su jurisdicción de residencia.</p>
+                <p class="font-bold mt-4">2. Responsabilidad del Usuario:</p>
+                <p>Al aceptar estos términos, el usuario declara y garantiza ser mayor de edad. El acceso y uso por parte de un menor de edad, aunque sea con fines educativos, está estrictamente prohibido sin la supervisión y consentimiento explícito y documentado del padre, tutor o representante legal.</p>
+                <p class="font-bold mt-4">3. Exención de Responsabilidad:</p>
+                <p><span translate='no'>TradeVision Latam</span> no asume ninguna responsabilidad por el uso de la plataforma por parte de menores de edad que hayan falseado su edad. El padre, tutor o representante legal será el único responsable de todas las acciones, resultados y consecuencias derivadas de la participación del menor en las plataformas de educación y simulación de <em>trading</em>.</p>
+                <p class="font-bold mt-4">4. Verificación de Identidad (KYC):</p>
+                <p>Nos reservamos el derecho de solicitar pruebas de edad y restringir o suspender cuentas que no cumplan con este requisito, en línea con la Directiva de la UE y las normativas de legalidad internacional.</p>
+            `
+        },
+        {
+            title: "3. Descripción de los Servicios",
             content: "La Academia proporciona contenido educativo sobre trading y mercados financieros únicamente con fines informativos y de formación. Nuestros servicios no constituyen asesoramiento financiero, de inversión, legal o fiscal. Toda la formación se realiza en un contexto educativo y/o simulado."
         },
         {
-            title: "3. Propiedad Intelectual",
+            title: "4. Propiedad Intelectual",
             content: "Todo el contenido de La Academia, incluyendo cursos, videos, guías, metodologías (ej. 'Lenguaje del Precio', patrón 'AMD') y software es propiedad intelectual de <span translate='no'>TradeVision Latam</span>. Cualquier copia, distribución o reventa no autorizada está estrictamente prohibida y será sancionada legalmente."
         },
         {
-            title: "4. Regla de Ejecución Consistente (Anti-Juego)",
+            title: "5. Regla de Ejecución Consistente (Anti-Juego)",
             content: `
                 <p class="font-bold">TRADEVISION fomenta el trading disciplinado y sostenible. Está ESTRICTAMENTE PROHIBIDO cualquier comportamiento clasificado como práctica de "Juego" (Gambling) en entornos simulados o reales. Esto incluye:</p>
                 <ul class="list-disc list-inside space-y-2 mt-2">
@@ -45,19 +60,19 @@ const TerminosAcademiaPage: React.FC = () => {
             `
         },
         {
-            title: "5. Pagos, Reembolsos y Cancelaciones",
+            title: "6. Pagos, Reembolsos y Cancelaciones",
             content: "Debido a la naturaleza digital de nuestros productos y el acceso inmediato al contenido de propiedad intelectual, todas las ventas de cursos y manuales son finales. No se ofrecen reembolsos una vez que se ha concedido el acceso."
         },
         {
-            title: "6. Cláusula de Protección de Reputación y Confidencialidad",
+            title: "7. Cláusula de Protección de Reputación y Confidencialidad",
             content: "Toda comunicación con <span translate='no'>TradeVision Latam</span> (emails, soporte, contenido de la comunidad) se considera estrictamente confidencial. La Academia se reserva el derecho de proteger su honor, reputación y propiedad intelectual. Cualquier acción de difamación, calumnia o ataque a la imagen pública de la compañía o de sus representantes legales será considerada una violación contractual y puede dar lugar a acciones legales. La creación de contenido negativo y no veraz en redes sociales para forzar reembolsos o acciones similares es una violación material de estos términos."
         },
         {
-            title: "7. Limitación de Responsabilidad",
+            title: "8. Limitación de Responsabilidad",
             content: "La Academia no será responsable de ninguna pérdida o daño, directo o indirecto, que surja del uso de nuestro contenido o de las decisiones de trading que usted tome. El trading es una actividad de alto riesgo y usted es el único responsable de sus acciones."
         },
         {
-            title: "8. Modificación de los Términos",
+            title: "9. Modificación de los Términos",
             content: "Nos reservamos el derecho de modificar estos términos en cualquier momento. Es su responsabilidad revisar esta página periódicamente para estar al tanto de los cambios."
         }
     ];

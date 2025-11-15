@@ -18,6 +18,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
             title: 'Navegación',
             links: [
                 { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
+                { label: 'Zona de Ejecución', action: () => navigate('/zona-de-ejecucion') },
                 { label: 'Recursos Gratuitos', action: () => navigate('/comunidad') },
                 { label: 'Brokers Recomendados', action: () => navigate('/brokers') },
                 { label: 'Blog de Trading', action: () => navigate('/blog') },
@@ -59,11 +60,21 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                         <h3 className="text-xl font-extrabold mb-4" translate="no">Trade<span className="text-brand-accent">Vision</span></h3>
                         <p className="text-gray-500 dark:text-gray-400">Forjando traders disciplinados en Latinoamérica.</p>
                         <div className="flex space-x-4 mt-6">
-                            {SOCIAL_LINKS.map((link) => (
-                                <a key={link.name} href={link.href} className={`transition text-2xl hover:opacity-80 ${link.colorClass}`} target="_blank" rel="noopener noreferrer" aria-label={link.name}>
-                                    {React.createElement(link.icon)}
-                                </a>
-                            ))}
+                            {SOCIAL_LINKS.map((link) => {
+                                const isMail = link.href.startsWith('mailto:');
+                                const props = {
+                                    key: link.name,
+                                    href: link.href,
+                                    className: `transition text-2xl hover:opacity-80 ${link.colorClass}`,
+                                    'aria-label': link.name,
+                                    ...(!isMail && { target: '_blank', rel: 'noopener noreferrer' })
+                                };
+                                return (
+                                    <a {...props}>
+                                        {React.createElement(link.icon)}
+                                    </a>
+                                );
+                            })}
                         </div>
                     </div>
                     {footerLinkGroups.map((group) => (

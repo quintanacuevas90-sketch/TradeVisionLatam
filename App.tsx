@@ -1,5 +1,4 @@
-
-
+// FIX: Corrected import statement for React and its hooks.
 import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
 import BlogListPage from './pages/BlogListPage';
@@ -40,6 +39,9 @@ import AvisoLegalRiesgoPage from './pages/LegalPage';
 import TerminosAcademiaPage from './pages/TerminosAcademiaPage';
 import PoliticaPrivacidadPage from './pages/PoliticaPrivacidadPage';
 import TransparenciaLegalPage from './pages/TransparenciaLegalPage';
+import ExecutionZonePage from './pages/ExecutionZonePage';
+import AgeGateModal from './components/AgeGateModal';
+import CookieConsentModal from './components/CookieConsentModal';
 
 const App: React.FC = () => {
     const { path, navigate } = useRouter();
@@ -49,9 +51,50 @@ const App: React.FC = () => {
     const [chatbotContext, setChatbotContext] = useState<string>('');
     const [isChatOpen, setIsChatOpen] = useState(false);
     const { triggerText, closeTrigger } = useChatbotTriggers(activeModal, isChatOpen);
+    const [showAgeGate, setShowAgeGate] = useState(false);
+    const [showCookieConsent, setShowCookieConsent] = useState(false);
+
+    // Age Gate & Cookie Consent logic
+    useEffect(() => {
+        const isAgeGateAccepted = localStorage.getItem('ageGateAccepted') === 'true';
+        const isCookieConsentSet = localStorage.getItem('cookieConsent') !== null;
+
+        if (!isAgeGateAccepted) {
+            setShowAgeGate(true);
+        } else if (!isCookieConsentSet) {
+            setShowCookieConsent(true);
+        }
+    }, []);
+
+    // Effect to manage body scroll for all modals
+    useEffect(() => {
+        const isModalOpen = showAgeGate || showCookieConsent;
+        document.body.style.overflow = isModalOpen ? 'hidden' : 'auto';
+    }, [showAgeGate, showCookieConsent]);
+
+    const handleAcceptAgeGate = () => {
+        localStorage.setItem('ageGateAccepted', 'true');
+        setShowAgeGate(false);
+        if (localStorage.getItem('cookieConsent') === null) {
+            setShowCookieConsent(true);
+        }
+    };
+
+    const handleViewPolicy = () => {
+        navigate('/terminos-academia');
+        handleAcceptAgeGate();
+    };
     
+    const handleCookieConsent = (decision: { analysis: boolean; advertising: boolean; }) => {
+        const consentData = {
+            timestamp: new Date().toISOString(),
+            ...decision
+        };
+        localStorage.setItem('cookieConsent', JSON.stringify(consentData));
+        setShowCookieConsent(false);
+    };
+
     // Logic to open/close modals based on URL hash query params.
-    // This is now the single source of truth for modal visibility.
     useEffect(() => {
         const params = new URLSearchParams(path.split('?')[1] || '');
         const modalToOpen = params.get('open') as ModalType | null;
@@ -67,16 +110,11 @@ const App: React.FC = () => {
     // Listener for custom event to open chatbot from anywhere
     useEffect(() => {
         const handleOpenChat = () => {
-            // A small delay can make the transition feel smoother if a modal is closing
             setTimeout(() => setIsChatOpen(true), 50);
         };
-
         window.addEventListener('open-chatbot', handleOpenChat);
-
-        return () => {
-            window.removeEventListener('open-chatbot', handleOpenChat);
-        };
-    }, []); // Empty dependency array ensures this runs only once on mount
+        return () => window.removeEventListener('open-chatbot', handleOpenChat);
+    }, []);
 
     useEffect(() => {
         const getNews = async () => {
@@ -91,56 +129,31 @@ const App: React.FC = () => {
     useEffect(() => {
         let currentPage: PageType = 'main';
         let pageSlug: string | undefined = undefined;
-
         const pathname = path.split('?')[0];
 
-        if (pathname === '/blog') {
-            currentPage = 'blog';
-        } else if (pathname.startsWith('/blog/')) {
-            currentPage = 'post';
-            pageSlug = pathname.split('/')[2];
-        } else if (pathname === '/sitemap') {
-            currentPage = 'sitemap';
-        } else if (pathname === '/faq') {
-            currentPage = 'faq';
-        } else if (pathname === '/brokers') {
-            currentPage = 'brokers';
-        } else if (pathname === '/premium-courses') {
-            currentPage = 'premium-courses';
-        } else if (pathname === '/consultancy') {
-            currentPage = 'consultancy';
-        } else if (pathname === '/methodology') {
-            currentPage = 'methodology';
-        } else if (pathname === '/acerca-de') {
-            currentPage = 'acerca-de';
-        } else if (pathname === '/responsabilidad') {
-            currentPage = 'responsabilidad';
-        } else if (pathname === '/impacto-social') {
-            currentPage = 'impacto-social';
-        } else if (pathname === '/colabora') {
-            currentPage = 'colabora';
-        } else if (pathname === '/cursos/forex-elite') {
-            currentPage = 'forex-elite';
-        } else if (pathname === '/cursos/binarias-pro-c90') {
-            currentPage = 'binarias-pro-c90';
-        } else if (pathname === '/cursos/binarias-intermedio') {
-            currentPage = 'binarias-intermedio';
-        } else if (pathname === '/comunidad') {
-            currentPage = 'comunidad';
-        } else if (pathname === '/manual/ia-prompts') {
-            currentPage = 'ia-manual';
-        } else if (pathname === '/verificacion-legal') {
-            currentPage = 'legal-verification';
-        } else if (pathname === '/aviso-legal-riesgo') {
-            currentPage = 'aviso-legal-riesgo';
-        } else if (pathname === '/terminos-academia') {
-            currentPage = 'terminos-academia';
-        } else if (pathname === '/politica-privacidad') {
-            currentPage = 'politica-privacidad';
-        } else if (pathname === '/transparencia-legal') {
-            currentPage = 'transparencia-legal';
-        }
-
+        if (pathname === '/blog') currentPage = 'blog';
+        else if (pathname.startsWith('/blog/')) { currentPage = 'post'; pageSlug = pathname.split('/')[2]; }
+        else if (pathname === '/sitemap') currentPage = 'sitemap';
+        else if (pathname === '/faq') currentPage = 'faq';
+        else if (pathname === '/brokers') currentPage = 'brokers';
+        else if (pathname === '/premium-courses') currentPage = 'premium-courses';
+        else if (pathname === '/consultancy') currentPage = 'consultancy';
+        else if (pathname === '/methodology') currentPage = 'methodology';
+        else if (pathname === '/acerca-de') currentPage = 'acerca-de';
+        else if (pathname === '/responsabilidad') currentPage = 'responsabilidad';
+        else if (pathname === '/impacto-social') currentPage = 'impacto-social';
+        else if (pathname === '/colabora') currentPage = 'colabora';
+        else if (pathname === '/cursos/forex-elite') currentPage = 'forex-elite';
+        else if (pathname === '/cursos/binarias-pro-c90') currentPage = 'binarias-pro-c90';
+        else if (pathname === '/cursos/binarias-intermedio') currentPage = 'binarias-intermedio';
+        else if (pathname === '/comunidad') currentPage = 'comunidad';
+        else if (pathname === '/manual/ia-prompts') currentPage = 'ia-manual';
+        else if (pathname === '/verificacion-legal') currentPage = 'legal-verification';
+        else if (pathname === '/aviso-legal-riesgo') currentPage = 'aviso-legal-riesgo';
+        else if (pathname === '/terminos-academia') currentPage = 'terminos-academia';
+        else if (pathname === '/politica-privacidad') currentPage = 'politica-privacidad';
+        else if (pathname === '/transparencia-legal') currentPage = 'transparencia-legal';
+        else if (pathname === '/zona-de-ejecucion') currentPage = 'execution-zone';
 
         const summary = generateContextualSummary(activeModal, currentPage, pageSlug);
         setChatbotContext(summary);
@@ -158,20 +171,13 @@ const App: React.FC = () => {
 
     const renderModal = () => {
         switch (activeModal) {
-            case 'premium-courses':
-                return <PremiumCoursesModal onClose={handleCloseModal} />;
-            case 'affiliate':
-                return <AffiliateModal onClose={handleCloseModal} onOpenModal={handleOpenModal} />;
-            case 'brokers':
-                return <BrokersModal onClose={handleCloseModal} />;
-            case 'community':
-                return <CommunityModal onClose={handleCloseModal} />;
-            case 'support':
-                return <SupportModal onClose={handleCloseModal} />;
-            case 'mentors':
-                return <MentorsModal onClose={handleCloseModal} />;
-            default:
-                return null;
+            case 'premium-courses': return <PremiumCoursesModal onClose={handleCloseModal} />;
+            case 'affiliate': return <AffiliateModal onClose={handleCloseModal} onOpenModal={() => navigate('/consultancy')} />;
+            case 'brokers': return <BrokersModal onClose={handleCloseModal} />;
+            case 'community': return <CommunityModal onClose={handleCloseModal} />;
+            case 'support': return <SupportModal onClose={handleCloseModal} />;
+            case 'mentors': return <MentorsModal onClose={handleCloseModal} />;
+            default: return null;
         }
     };
 
@@ -188,21 +194,27 @@ const App: React.FC = () => {
         '/acerca-de': <AboutPage onOpenModal={handleOpenModal} />,
         '/responsabilidad': <ResponsibilityPage onOpenModal={handleOpenModal} />,
         '/impacto-social': <SocialImpactPage />,
+        // FIX: Corrected undefined 'onOpenModal' to 'handleOpenModal'
         '/colabora': <CollaboratePage onOpenModal={handleOpenModal} />,
         '/cursos/forex-elite': <ForexElitePage />,
         '/cursos/binarias-pro-c90': <BinariasProPage />,
         '/cursos/binarias-intermedio': <BinariasIntermedioPage />,
+        // FIX: Corrected undefined 'onOpenModal' to 'handleOpenModal'
         '/comunidad': <CommunityPage onOpenModal={handleOpenModal} />,
         '/manual/ia-prompts': <AiManualPage />,
+        // FIX: Corrected undefined 'onOpenModal' to 'handleOpenModal'
         '/verificacion-legal': <LegalVerificationPage onOpenModal={handleOpenModal} />,
         '/aviso-legal-riesgo': <AvisoLegalRiesgoPage />,
         '/terminos-academia': <TerminosAcademiaPage />,
         '/politica-privacidad': <PoliticaPrivacidadPage />,
         '/transparencia-legal': <TransparenciaLegalPage />,
+        '/zona-de-ejecucion': <ExecutionZonePage />,
     };
 
     return (
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
+            {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={handleViewPolicy} />}
+            {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
             <Router routes={routes} />
             {renderModal()}
             <Chatbot

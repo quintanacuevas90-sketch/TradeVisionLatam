@@ -1,9 +1,9 @@
-
 import React from 'react';
 import Modal from './Modal';
 import Accordion from '../components/Accordion';
 import { FiAlertTriangle } from 'react-icons/fi';
 import { FaWhatsapp, FaCheckCircle } from 'react-icons/fa';
+import { useRouter } from '../hooks/useRouter';
 
 const manualPurchaseLink = "https://wa.me/message/T6UFHN3SSTIEJ1?text=Hola,%20quisiera%20comprar%20el%20Manual%20de%20Afiliados.";
 
@@ -73,7 +73,13 @@ const faqs = [
     { question: "¿Qué pasa si me suspenden la cuenta?", answer: "Si te suspenden por violar las normas, generalmente pierdes el acceso y cualquier comisión pendiente de pago." }
 ];
 
-const AffiliateModal: React.FC<{ onClose: () => void; onOpenModal: (modal: 'consultancy') => void; }> = ({ onClose, onOpenModal }) => {
+const AffiliateModal: React.FC<{ onClose: () => void; onOpenModal: (path: string) => void; }> = ({ onClose, onOpenModal }) => {
+    const { navigate } = useRouter();
+    const handleConsultancyClick = () => {
+        navigate('/consultancy');
+        onClose();
+    };
+
     return (
         <Modal onClose={onClose} title="Programa de Afiliados de Alto Rendimiento">
             <div className="space-y-8">
@@ -155,7 +161,7 @@ const AffiliateModal: React.FC<{ onClose: () => void; onOpenModal: (modal: 'cons
                         <li>Auditoría de Comunidades</li>
                     </ul>
                     <button 
-                        onClick={() => onOpenModal('consultancy')}
+                        onClick={handleConsultancyClick}
                         className="bg-brand-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-brand-accent hover:text-brand-primary transition duration-300"
                     >
                         Consultoría para Mentores

@@ -1,6 +1,7 @@
 import { Testimonial, Post, ComprehensiveFAQ, PartnerTool, Mentor } from './types';
 import { FaTelegram, FaInstagram, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import { FiMail } from 'react-icons/fi';
 
 export const TESTIMONIALS: Testimonial[] = [
     {
@@ -1052,6 +1053,7 @@ export const SOCIAL_LINKS = [
     { name: 'Instagram', icon: FaInstagram, href: 'https://www.instagram.com/tradervision90?igsh=bzlhM3lscWQxdTd4', colorClass: 'text-pink-500' },
     { name: 'TikTok', icon: FaTiktok, href: 'https://www.tiktok.com/@neriontrade?_r=1&_t=ZM-91N6RoC5YE7', colorClass: 'text-black dark:text-white' },
     { name: 'X (Threads)', icon: FaXTwitter, href: 'https://www.threads.com/@tradervision90', colorClass: 'text-black dark:text-white' },
+    { name: 'Correo Electrónico', icon: FiMail, href: 'mailto:tradevision2026@gmail.com', colorClass: 'text-gray-500 dark:text-gray-400' },
 ];
 
 
