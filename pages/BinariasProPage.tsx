@@ -7,6 +7,7 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FaBookOpen, FaBrain, FaWhatsapp } from 'react-icons/fa';
 import { FiCheck, FiClock, FiXCircle, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
+import PageBackButton from '../components/PageBackButton';
 
 const BinariasProPage: React.FC = () => {
     const { navigate } = useRouter();
@@ -54,6 +55,9 @@ const BinariasProPage: React.FC = () => {
                         </svg>
                     </div>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20">
+                        <div className="absolute top-8 left-8">
+                            <PageBackButton variant="on-dark" />
+                        </div>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO</h1>
                         <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">"Un reseteo mental completo. Olvida los indicadores, los mitos y los 'scripts mágicos'. Aprende a leer el verdadero motor del mercado."</p>
                         <ul className="flex flex-col sm:flex-row justify-center gap-x-6 gap-y-2 text-gray-200 mb-8">

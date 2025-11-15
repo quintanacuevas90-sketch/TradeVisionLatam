@@ -1,4 +1,6 @@
 
+
+
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -51,7 +53,7 @@ const LegalVerificationPage: React.FC<LegalVerificationPageProps> = ({ onOpenMod
 
                         <div className="space-y-8">
                             <InfoCard icon={<FiShield />} title="Estructura Legal y Registro">
-                                <p>La estructura educativa y de consultoría de TRADEVISION Latam está debidamente registrada y opera en conformidad con las normativas de <strong>Consultoría Educativa y Económica</strong> aplicables en jurisdicciones clave.</p>
+                                <p>La estructura educativa y de consultoría de <strong translate="no">TRADEVISION Latam</strong> está debidamente registrada y opera en conformidad con las normativas de <strong>Consultoría Educativa y Económica</strong> aplicables en jurisdicciones clave.</p>
                                 <p>Esto nos permite ofrecer nuestros servicios de formación y consultoría con pleno respaldo legal, garantizando a nuestros alumnos y socios un entorno profesional y seguro.</p>
                             </InfoCard>
 
@@ -68,12 +70,12 @@ const LegalVerificationPage: React.FC<LegalVerificationPageProps> = ({ onOpenMod
                                  <p className="font-bold text-brand-accent">"Décadas de Experiencia Educativa Respaldan Nuestra Metodología"</p>
                                  <p>Nuestra autoridad no se basa en afirmaciones vacías, sino en años de experiencia consolidada en el sector de la formación económica y financiera. Contamos con el respaldo y la acreditación de entidades de consultoría educativa reconocidas, lo que valida la calidad y la seriedad de nuestros programas.</p>
                                  <p>Nuestro enfoque se centra exclusivamente en la <strong>Formación, Educación y Consultoría Económica</strong>. No somos un ente regulador financiero ni ofrecemos asesoramiento de inversión. Nuestra misión es empoderar a los traders a través del conocimiento y la disciplina.</p>
-                            </InfoCard>
+                             </InfoCard>
 
                             <div className="text-center pt-8 border-t border-gray-200 dark:border-white/10">
                                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Para una total transparencia, le invitamos a revisar nuestros documentos legales completos.</p>
                                 <button
-                                    onClick={() => onOpenModal('legal')}
+                                    onClick={() => navigate('/aviso-legal-riesgo')}
                                     className="text-brand-accent font-semibold hover:underline"
                                 >
                                     Ver Advertencia de Riesgo y Términos Legales

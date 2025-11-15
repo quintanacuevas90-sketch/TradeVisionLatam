@@ -26,7 +26,7 @@ const BrokerCard: React.FC<BrokerCardProps> = ({ broker }) => {
             <div className="relative h-48 overflow-hidden">
                 <img src={broker.image} alt={broker.name} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <h3 className="absolute bottom-4 left-4 text-2xl font-extrabold text-white">{broker.name}</h3>
+                <h3 className="absolute bottom-4 left-4 text-2xl font-extrabold text-white" translate="no">{broker.name}</h3>
                 {regulationInfo && (
                     <span className={`absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full ${regulationInfo.classes}`}>
                         {regulationInfo.text}

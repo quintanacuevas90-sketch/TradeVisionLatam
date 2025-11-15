@@ -8,6 +8,7 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FiChevronLeft, FiChevronRight, FiUsers, FiBookOpen, FiAward, FiTrendingUp, FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import { FaGraduationCap } from 'react-icons/fa';
+import PageBackButton from '../components/PageBackButton';
 
 // Testimonial type for the carousel
 interface ResponsibilityTestimonial {
@@ -114,8 +115,11 @@ const ResponsibilityPage: React.FC<{ onOpenModal: (modal: ModalType) => void; }>
                     <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1974&auto=format&fit=crop')" }}></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/80 to-brand-primary"></div>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                        <div className="absolute top-8 left-8">
+                            <PageBackButton variant="on-dark" />
+                        </div>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">Cambiando Mentalidades, No Solo Cuentas</h1>
-                        <p className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-300">En TradeVision Latam, vamos más allá del trading. Creemos que el éxito financiero real comienza con la educación gratuita, la disciplina ética y el apoyo comunitario.</p>
+                        <p className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-300">En <span translate="no">TradeVision Latam</span>, vamos más allá del trading. Creemos que el éxito financiero real comienza con la educación gratuita, la disciplina ética y el apoyo comunitario.</p>
                     </div>
                 </AnimatedSection>
 
@@ -169,7 +173,7 @@ const ResponsibilityPage: React.FC<{ onOpenModal: (modal: ModalType) => void; }>
                 <AnimatedSection className="py-20 bg-white dark:bg-brand-primary">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">TradeVision en Medios</h2>
+                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white"><span translate="no">TradeVision</span> en Medios</h2>
                             <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Nuestro compromiso con el trading ético está siendo reconocido.</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -190,14 +194,21 @@ const ResponsibilityPage: React.FC<{ onOpenModal: (modal: ModalType) => void; }>
                             <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">¿Necesitas más Información?</h2>
                         </div>
                         <div className="max-w-3xl mx-auto space-y-4">
-                            {faqs.map((faq, index) => (
-                                <Accordion key={index} title={faq.q}>
-                                    <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{faq.a}</p>
-                                </Accordion>
-                            ))}
+                            {faqs.map((faq, index) => {
+                                const qParts = faq.q.split('TradeVision');
+                                const finalQ = qParts.length > 1 ? <>{qParts[0]}<span translate="no">TradeVision</span>{qParts[1]}</> : faq.q;
+                                const aParts = faq.a.split('TradeVision');
+                                const finalA = aParts.length > 1 ? <>{aParts[0]}<span translate="no">TradeVision</span>{aParts[1]}</> : faq.a;
+
+                                return (
+                                    <Accordion key={index} title={finalQ as string}>
+                                        <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{finalA}</p>
+                                    </Accordion>
+                                )
+                            })}
                             <Accordion title={supportFaq.q}>
                                 <div className="space-y-4">
-                                    <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{supportFaq.a}</p>
+                                    <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{supportFaq.a.replace('TradeVision', '')}<span translate="no">TradeVision</span></p>
                                     <button
                                         onClick={() => navigate('/impacto-social')}
                                         className="inline-flex items-center gap-2 bg-brand-accent text-brand-primary font-bold py-2 px-6 rounded-lg hover:bg-opacity-90 transition duration-300"

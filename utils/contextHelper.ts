@@ -79,6 +79,18 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
         case 'legal-verification':
             context += `\nEstá en la página de 'Verificación Legal y Alcance Global'. Esta página detalla la estructura educativa de TradeVision, su registro bajo normativas de consultoría en Canadá, Brasil y la UE (España), y su compromiso con la transparencia.`;
             break;
+        case 'aviso-legal-riesgo':
+            context += `\nEstá viendo la página de 'Aviso Legal y Advertencia de Riesgo'. El contenido detalla los riesgos del trading, la exención de responsabilidad de la academia, y las políticas sobre el contenido educativo.`;
+            break;
+        case 'terminos-academia':
+            context += `\nEstá viendo la página de 'Términos de la Academia (T&C)'. Detalla las reglas de uso de los servicios de TradeVision, incluyendo políticas de propiedad intelectual, reglas de ejecución anti-juego y cláusulas de protección de la reputación.`;
+            break;
+        case 'politica-privacidad':
+            context += `\nEstá viendo la página de 'Política de Privacidad'. Explica cómo TradeVision recopila, usa y protege los datos de los usuarios, así como los derechos de los usuarios sobre su información.`;
+            break;
+        case 'transparencia-legal':
+            context += `\nEstá viendo la página de 'Transparencia y Legalidad'. Describe la estructura corporativa de TradeVision como una consultoría educativa registrada internacionalmente y su compromiso con el cumplimiento normativo.`;
+            break;
         case 'main':
         default:
              context += `\nLa página principal de TradeVision Latam, una academia de trading.`;
@@ -94,9 +106,6 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
                 break;
             case 'affiliate':
                 context += `Programa de Afiliados: Ofrece un Manual de Afiliados por $89.99 que enseña a evitar baneos y gestionar comunidades. Detalla plataformas de sub-afiliación como Affstore, Quotex, y CasaTrade con modelos RevShare y CPA. Advierte sobre prácticas prohibidas y explica términos legales.`;
-                break;
-            case 'legal':
-                context += `Información Legal y Advertencia de Riesgo: ${LEGAL_TEXT}`;
                 break;
             case 'brokers':
                 const binaryNames = BINARY_BROKERS.map(b => b.name).join(', ');

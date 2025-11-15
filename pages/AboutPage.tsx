@@ -8,6 +8,7 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { MENTORS } from '../constants';
 import { FiArrowLeft, FiArrowRight, FiTarget, FiEye, FiZap, FiUsers, FiCpu, FiGlobe, FiBriefcase } from 'react-icons/fi';
+import PageBackButton from '../components/PageBackButton';
 
 interface AboutPageProps {
     onOpenModal: (modal: ModalType) => void;
@@ -58,7 +59,10 @@ const AboutPage: React.FC<AboutPageProps> = ({ onOpenModal }) => {
                     <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1554224155-8d04421cd6e1?q=80&w=2070&auto=format&fit=crop')" }}></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/80 to-brand-primary"></div>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">Somos TradeVision Latam</h1>
+                        <div className="absolute top-8 left-8">
+                            <PageBackButton variant="on-dark" />
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">Somos <span translate="no">TradeVision Latam</span></h1>
                         <p className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-300">
                             Más que una academia. Somos un ecosistema global de traders profesionales dedicados a la disciplina, la ética y la rentabilidad sostenible.
                         </p>
@@ -77,7 +81,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onOpenModal }) => {
                              <div className="space-y-4">
                                 <FiBriefcase size={40} className="text-brand-accent" />
                                 <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Nuestra Misión: Profesionalizar el Trading en LATAM</h2>
-                                <p className="text-gray-600 dark:text-gray-300">En TradeVision Latam, estamos comprometidos a hacer del trading una experiencia transparente, accesible y gratificante. No somos solo instructores; somos asesores y estrategas (liderados por la voz de José Quintana) comprometidos con tu crecimiento. Te apoyamos con condiciones educativas excepcionales, herramientas tecnológicas (Bots/Scripts) y una comunidad que valora la lógica sobre la suerte.</p>
+                                <p className="text-gray-600 dark:text-gray-300">En <span translate="no">TradeVision Latam</span>, estamos comprometidos a hacer del trading una experiencia transparente, accesible y gratificante. No somos solo instructores; somos asesores y estrategas (liderados por la voz de José Quintana) comprometidos con tu crecimiento. Te apoyamos con condiciones educativas excepcionales, herramientas tecnológicas (Bots/Scripts) y una comunidad que valora la lógica sobre la suerte.</p>
                             </div>
                         </div>
                     </div>
@@ -88,9 +92,14 @@ const AboutPage: React.FC<AboutPageProps> = ({ onOpenModal }) => {
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
                         <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white mb-12">Nuestros Hitos de Fundación</h2>
                          <div className="relative max-w-2xl mx-auto text-left">
-                            {milestones.map((milestone, index) => (
-                                <Milestone key={index} {...milestone} />
-                            ))}
+                            {milestones.map((milestone, index) => {
+                                const descriptionParts = milestone.description.split('TradeVision');
+                                const finalDescription = descriptionParts.length > 1 
+                                    ? <>{descriptionParts[0]}<span translate="no">TradeVision</span>{descriptionParts[1]}</>
+                                    : milestone.description;
+
+                                return <Milestone key={index} {...milestone} description={finalDescription} />
+                            })}
                          </div>
                     </div>
                 </AnimatedSection>
@@ -123,7 +132,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onOpenModal }) => {
                 <AnimatedSection className="py-20 bg-white dark:bg-brand-primary">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
                          <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Nuestra Regulación: La Ética Profesional</h2>
-                         <p className="mt-4 text-gray-600 dark:text-gray-300">TradeVision Latam no es un broker, somos una academia de formación. No manejamos su capital de inversión. Nuestra "regulación" es el Cumplimiento Ético (Pilar I).</p>
+                         <p className="mt-4 text-gray-600 dark:text-gray-300"><span translate="no">TradeVision Latam</span> no es un broker, somos una academia de formación. No manejamos su capital de inversión. Nuestra "regulación" es el Cumplimiento Ético (Pilar I).</p>
                          <div className="mt-8 text-left grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg">
                                 <h4 className="font-bold text-brand-primary dark:text-white">Transparencia de Riesgo</h4>
@@ -138,7 +147,7 @@ const AboutPage: React.FC<AboutPageProps> = ({ onOpenModal }) => {
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Prohibimos el marketing engañoso (cero "Hágase Millonario"). Nuestro programa se basa en la transparencia, como se detalla en nuestra página de FAQ.</p>
                             </div>
                          </div>
-                         <button onClick={() => onOpenModal('legal')} className="mt-8 inline-flex items-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition">
+                         <button onClick={() => navigate('/aviso-legal-riesgo')} className="mt-8 inline-flex items-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition">
                             Leer Nuestra Política de Riesgo <FiArrowRight />
                         </button>
                     </div>

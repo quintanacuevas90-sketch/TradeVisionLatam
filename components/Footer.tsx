@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { ModalType } from '../types';
 import { LEGAL_TEXT, IP_LEGAL_TEXT, SOCIAL_LINKS } from '../constants';
@@ -36,20 +37,26 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
         {
             title: 'Legal',
             links: [
-                { label: 'Información Legal', action: () => onOpenModal('legal') },
-                { label: 'Verificación y Alcance', action: () => navigate('/verificacion-legal') },
-                { label: 'Política de Riesgo', action: () => onOpenModal('legal') },
+                { label: 'Aviso Legal y Riesgo', action: () => navigate('/aviso-legal-riesgo') },
+                { label: 'Términos de la Academia', action: () => navigate('/terminos-academia') },
+                { label: 'Política de Privacidad', action: () => navigate('/politica-privacidad') },
+                { label: 'Transparencia y Legalidad', action: () => navigate('/transparencia-legal') },
                 { label: 'Mapa del Sitio', action: () => navigate('/sitemap') },
             ]
         }
     ];
+
+    const claimsText = "Reclamaciones de Propiedad de Material: TradeVision Latam respeta la propiedad intelectual de terceros. Si usted considera que algún material alojado en este sitio infringe sus derechos de autor, por favor contacte a nuestro equipo legal a tradevision2026@gmail.com con la petición detallada para su pronta revisión y atención.";
+    const claimsParts = claimsText.split('TradeVision Latam');
+    const legalParts = LEGAL_TEXT.split('TradeVision Latam');
+    const ipLegalParts = IP_LEGAL_TEXT.split('TradeVision Latam');
 
     return (
         <footer className="bg-gray-100 dark:bg-brand-primary py-12">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
                     <div className="lg:col-span-2">
-                        <h3 className="text-xl font-extrabold mb-4">Trade<span className="text-brand-accent">Vision</span></h3>
+                        <h3 className="text-xl font-extrabold mb-4" translate="no">Trade<span className="text-brand-accent">Vision</span></h3>
                         <p className="text-gray-500 dark:text-gray-400">Forjando traders disciplinados en Latinoamérica.</p>
                         <div className="flex space-x-4 mt-6">
                             {SOCIAL_LINKS.map((link) => (
@@ -66,7 +73,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                                 {group.links.map((item) => (
                                     <li key={item.label}>
                                         <button onClick={item.action} className="text-gray-500 dark:text-gray-400 hover:text-brand-accent transition text-left">
-                                            {item.label}
+                                            {item.label === 'Brokers Recomendados' ? <><span translate="no">Brokers</span> Recomendados</> : item.label}
                                         </button>
                                     </li>
                                 ))}
@@ -76,18 +83,25 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                 </div>
                 <div className="border-t border-gray-200 dark:border-white/10 pt-8">
                     <h5 className="font-bold mb-2">Advertencia de Riesgo</h5>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">{LEGAL_TEXT}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                        {legalParts[0]}<span translate="no">TradeVision Latam</span>{legalParts[1]}
+                    </p>
                     
                     <h5 className="font-bold mb-2 mt-4">Propiedad Intelectual y Prohibición de Distribución</h5>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 whitespace-pre-line">{IP_LEGAL_TEXT}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 whitespace-pre-line">
+                        {ipLegalParts[0]}<span translate="no">TradeVision Latam</span>{ipLegalParts[1]}
+                    </p>
                     
                     <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
-                        <p className="text-center sm:text-left text-sm text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} TradeVision Latam. Todos los derechos reservados.</p>
+                        <div className='text-center sm:text-left'>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} <span translate="no">TradeVision Latam</span>. Todos los derechos reservados.</p>
+                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Estructura de Consultoría Educativa registrada para operar en Canadá, Brasil y Unión Europea (España).</p>
+                        </div>
                         <VerifiedBadge />
                     </div>
 
                     <p className="text-center text-[11px] text-gray-500 dark:text-gray-400 mt-4">
-                        Reclamaciones de Propiedad de Material: TradeVision Latam respeta la propiedad intelectual de terceros. Si usted considera que algún material alojado en este sitio infringe sus derechos de autor, por favor contacte a nuestro equipo legal a tradevision2026@gmail.com con la petición detallada para su pronta revisión y atención.
+                        {claimsParts[0]}<span translate="no">TradeVision Latam</span>{claimsParts[1]}
                     </p>
                 </div>
             </div>

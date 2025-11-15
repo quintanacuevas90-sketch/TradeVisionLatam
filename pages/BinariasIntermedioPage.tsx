@@ -7,6 +7,7 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FaBookOpen, FaWhatsapp } from 'react-icons/fa';
 import { FiCheck, FiClock, FiCheckSquare, FiShield, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
+import PageBackButton from '../components/PageBackButton';
 
 const BinariasIntermedioPage: React.FC = () => {
     const { navigate } = useRouter();
@@ -46,6 +47,9 @@ const BinariasIntermedioPage: React.FC = () => {
                         </svg>
                     </div>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20">
+                        <div className="absolute top-8 left-8">
+                            <PageBackButton variant="on-dark" />
+                        </div>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO</h1>
                         <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-4">Para ti, que ya sabes lo básico, pero sigues sin ser rentable.</p>
                         <p className="text-base sm:text-lg text-gray-400 max-w-3xl mx-auto mb-8">"Este no es un curso más. Es el sistema diseñado para sacarte del estancamiento, eliminar la improvisación y forjar la mentalidad correcta."</p>

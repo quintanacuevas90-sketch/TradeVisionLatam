@@ -7,6 +7,7 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FiBarChart2, FiCpu, FiArrowLeft } from 'react-icons/fi';
 import { FaBrain, FaRocket } from 'react-icons/fa';
+import PageBackButton from '../components/PageBackButton';
 
 // Re-usable Pillar component from the modal
 const MethodologyPillar: React.FC<{ icon: React.ReactNode; title: string; subtitle: string; children: React.ReactNode; }> = ({ icon, title, subtitle, children }) => (
@@ -38,12 +39,15 @@ const MethodologyPage: React.FC = () => {
             <main className="pt-20">
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+                        <div className="mb-8">
+                            <PageBackButton />
+                        </div>
                         <header className="text-center mb-12">
                             <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">
                                 Nuestra Metodología
                             </h1>
                             <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                                En TradeVision Latam, no te enseñamos una sola herramienta; te sumergimos en un ecosistema completo. La rentabilidad sostenida no proviene de una "bala de plata", sino de la integración de la <strong>tecnología</strong> (Indicadores, Bots, Scripts) con la <strong>lógica del precio</strong> (Acción del Precio, SMC) y la <strong>disciplina mental</strong>.
+                                En <span translate="no">TradeVision Latam</span>, no te enseñamos una sola herramienta; te sumergimos en un ecosistema completo. La rentabilidad sostenida no proviene de una "bala de plata", sino de la integración de la <strong>tecnología</strong> (Indicadores, Bots, Scripts) con la <strong>lógica del precio</strong> (Acción del Precio, SMC) y la <strong>disciplina mental</strong>.
                             </p>
                         </header>
                         
@@ -81,7 +85,7 @@ const MethodologyPage: React.FC = () => {
                         
                         <footer className="mt-6 p-6 bg-brand-primary/90 text-white border-l-4 border-brand-accent rounded-r-lg text-center">
                             <p className="font-semibold italic text-lg">
-                                "La metodología de TradeVision Latam no te da un 'pez'. Te damos el ecosistema de pesca completo: el <strong>mapa</strong> (Análisis Técnico/SMC), la <strong>caña de pescar automatizada</strong> (Bots/Indicadores) y la <strong>mentalidad</strong> (Psicotrading) para operar como un profesional."
+                                "La metodología de <span translate="no">TradeVision Latam</span> no te da un 'pez'. Te damos el ecosistema de pesca completo: el <strong>mapa</strong> (Análisis Técnico/SMC), la <strong>caña de pescar automatizada</strong> (Bots/Indicadores) y la <strong>mentalidad</strong> (Psicotrading) para operar como un profesional."
                             </p>
                         </footer>
 

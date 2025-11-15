@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -11,6 +10,7 @@ import { useRouter } from '../hooks/useRouter';
 import { FiCalendar, FiUser, FiBookmark, FiTwitter, FiFacebook, FiLinkedin, FiArrowLeft, FiHome } from 'react-icons/fi';
 import { FaWhatsapp, FaTelegram } from 'react-icons/fa';
 import Accordion from '../components/Accordion';
+import PageBackButton from '../components/PageBackButton';
 
 interface BlogPostPageProps {
     slug: string;
@@ -169,13 +169,16 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ slug }) => {
         return (
             <>
                 <Header onOpenModal={onOpenModal} />
-                <main className="pt-20 min-h-screen flex items-center justify-center text-center bg-gray-50 dark:bg-gray-800">
-                    <div>
-                        <h1 className="text-4xl font-bold">Artículo no encontrado</h1>
-                        <p className="mt-4">El artículo que buscas no existe o ha sido movido.</p>
-                        <button onClick={() => navigate('/blog')} className="mt-6 bg-brand-accent text-brand-primary font-bold py-3 px-6 rounded-lg">
-                            Volver al Blog
-                        </button>
+                <main className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-800">
+                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <PageBackButton />
+                        <div className="text-center mt-8">
+                            <h1 className="text-4xl font-bold">Artículo no encontrado</h1>
+                            <p className="mt-4">El artículo que buscas no existe o ha sido movido.</p>
+                            <button onClick={() => navigate('/blog')} className="mt-6 bg-brand-accent text-brand-primary font-bold py-3 px-6 rounded-lg">
+                                Volver al Blog
+                            </button>
+                        </div>
                     </div>
                 </main>
                 <Footer onOpenModal={onOpenModal} />
@@ -214,6 +217,9 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ slug }) => {
                     
                     <div className="py-12 bg-gray-50 dark:bg-gray-900">
                         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+                             <div className="mb-8">
+                                <PageBackButton />
+                            </div>
                             <div className="lg:grid lg:grid-cols-4 lg:gap-12">
                                 <aside className="hidden lg:block lg:col-span-1">
                                     <div className="sticky top-24">

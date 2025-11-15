@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useMemo } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -11,6 +9,7 @@ import { ModalType } from '../types';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import { FiSearch, FiBookmark, FiArrowLeft } from 'react-icons/fi';
 import { useRouter } from '../hooks/useRouter';
+import PageBackButton from '../components/PageBackButton';
 
 const STORAGE_KEY = 'tradevision_read_later';
 const POSTS_PER_PAGE = 9;
@@ -92,8 +91,11 @@ const BlogListPage: React.FC = () => {
             <main className="pt-20">
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="mb-8">
+                            <PageBackButton />
+                        </div>
                         <div className="text-center mb-12">
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Blog de TradeVision</h1>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Blog de <span translate="no">TradeVision</span></h1>
                             <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto">
                                 Artículos, guías y análisis para traders que buscan consistencia y profesionalismo.
                             </p>

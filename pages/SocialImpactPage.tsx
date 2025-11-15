@@ -7,6 +7,7 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FiCpu, FiDollarSign, FiBarChart2, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
 import { FaPaypal, FaBitcoin, FaHandHoldingHeart, FaWhatsapp } from 'react-icons/fa';
+import PageBackButton from '../components/PageBackButton';
 
 const SocialImpactPage: React.FC = () => {
     const { navigate } = useRouter();
@@ -83,6 +84,9 @@ const SocialImpactPage: React.FC = () => {
                     <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop')" }}></div>
                     <div className="absolute inset-0 bg-brand-primary/50"></div>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                        <div className="absolute top-8 left-8">
+                            <PageBackButton variant="on-dark" />
+                        </div>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">Educación Real. Impacto Real.</h1>
                         <p className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-200">Nuestra misión va más allá de los mercados. Creemos en llevar la educación financiera (IA, Cripto, Economía) a las comunidades que más lo necesitan en Latinoamérica.</p>
                     </div>

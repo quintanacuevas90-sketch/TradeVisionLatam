@@ -10,7 +10,7 @@ import { FiArrowRight } from 'react-icons/fi';
 const BrokersSection: React.FC = () => {
     const { navigate } = useRouter();
 
-    const title = <>Brokers <span className="text-brand-accent">Recomendados</span></>;
+    const title = <><span translate="no">Brokers</span> <span className="text-brand-accent">Recomendados</span></>;
     const subtitle = "Plataformas para practicar (Demo) y herramientas para operar profesionalmente (Regulados).";
     const brokers: PartnerTool[] = FEATURED_BROKERS;
 

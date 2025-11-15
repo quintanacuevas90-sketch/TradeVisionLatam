@@ -9,6 +9,7 @@ import { useRouter } from '../hooks/useRouter';
 import { FaBrain, FaWhatsapp } from 'react-icons/fa';
 import { FiBarChart2, FiGitCommit, FiRepeat, FiTarget, FiTrendingUp, FiGlobe, FiUsers, FiDollarSign, FiZapOff, FiArrowLeft } from 'react-icons/fi';
 import BenefitCard from '../components/BenefitCard';
+import PageBackButton from '../components/PageBackButton';
 
 
 const ForexElitePage: React.FC = () => {
@@ -59,6 +60,9 @@ const ForexElitePage: React.FC = () => {
                         </svg>
                     </div>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20">
+                        <div className="absolute top-8 left-8">
+                            <PageBackButton variant="on-dark" />
+                        </div>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">ÉLITE INSTITUCIONAL: LÓGICA Y EJECUCIÓN</h1>
                         <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">Deja de ser la liquidez. Aprende a operar junto al 'Dinero Inteligente' (Smart Money) y domina el mercado con la metodología que mueve el 90% del volumen.</p>
                         <p className="text-sm text-gray-400 mb-8">Un programa avanzado diseñado y guiado por José Quintana, Asesor Principal de TradeVision Latam.</p>

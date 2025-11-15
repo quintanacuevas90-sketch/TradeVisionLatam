@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
 import BlogListPage from './pages/BlogListPage';
@@ -7,7 +8,6 @@ import SitemapPage from './pages/SitemapPage';
 import { ModalType, PageType } from './types';
 import PremiumCoursesModal from './modals/PremiumCoursesModal';
 import AffiliateModal from './modals/AffiliateModal';
-import LegalModal from './modals/LegalModal';
 import BrokersModal from './modals/BrokersModal';
 import CommunityModal from './modals/CommunityModal';
 import EducationModal from './modals/EducationModal';
@@ -36,6 +36,10 @@ import CommunityPage from './pages/CommunityPage';
 import { useChatbotTriggers } from './hooks/useChatbotTriggers';
 import AiManualPage from './pages/AiManualPage';
 import LegalVerificationPage from './pages/LegalVerificationPage';
+import AvisoLegalRiesgoPage from './pages/LegalPage';
+import TerminosAcademiaPage from './pages/TerminosAcademiaPage';
+import PoliticaPrivacidadPage from './pages/PoliticaPrivacidadPage';
+import TransparenciaLegalPage from './pages/TransparenciaLegalPage';
 
 const App: React.FC = () => {
     const { path, navigate } = useRouter();
@@ -51,7 +55,7 @@ const App: React.FC = () => {
     useEffect(() => {
         const params = new URLSearchParams(path.split('?')[1] || '');
         const modalToOpen = params.get('open') as ModalType | null;
-        const validModals: ModalType[] = ['premium-courses', 'affiliate', 'legal', 'brokers', 'community', 'support', 'mentors'];
+        const validModals: ModalType[] = ['premium-courses', 'affiliate', 'brokers', 'community', 'support', 'mentors'];
 
         if (modalToOpen && validModals.includes(modalToOpen)) {
             setActiveModal(modalToOpen);
@@ -127,6 +131,14 @@ const App: React.FC = () => {
             currentPage = 'ia-manual';
         } else if (pathname === '/verificacion-legal') {
             currentPage = 'legal-verification';
+        } else if (pathname === '/aviso-legal-riesgo') {
+            currentPage = 'aviso-legal-riesgo';
+        } else if (pathname === '/terminos-academia') {
+            currentPage = 'terminos-academia';
+        } else if (pathname === '/politica-privacidad') {
+            currentPage = 'politica-privacidad';
+        } else if (pathname === '/transparencia-legal') {
+            currentPage = 'transparencia-legal';
         }
 
 
@@ -150,8 +162,6 @@ const App: React.FC = () => {
                 return <PremiumCoursesModal onClose={handleCloseModal} />;
             case 'affiliate':
                 return <AffiliateModal onClose={handleCloseModal} onOpenModal={handleOpenModal} />;
-            case 'legal':
-                return <LegalModal onClose={handleCloseModal} />;
             case 'brokers':
                 return <BrokersModal onClose={handleCloseModal} />;
             case 'community':
@@ -185,6 +195,10 @@ const App: React.FC = () => {
         '/comunidad': <CommunityPage onOpenModal={handleOpenModal} />,
         '/manual/ia-prompts': <AiManualPage />,
         '/verificacion-legal': <LegalVerificationPage onOpenModal={handleOpenModal} />,
+        '/aviso-legal-riesgo': <AvisoLegalRiesgoPage />,
+        '/terminos-academia': <TerminosAcademiaPage />,
+        '/politica-privacidad': <PoliticaPrivacidadPage />,
+        '/transparencia-legal': <TransparenciaLegalPage />,
     };
 
     return (

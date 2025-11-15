@@ -622,7 +622,6 @@ export const BLOG_POSTS: Post[] = [
             <p>Practicar en un entorno seguro, como la demo de $10,000 que ofrecen brokers como <a href="https://affiliate.iqoption.net/redir/?aff=753088&aff_model=revenue&afftrack=PaginaWeb" target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline">IQ Option</a> o <a href="https://exnova.org/es/?aff=753088&afftrack=PaginaWeb&aff_model=revenue" target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline">Exnova</a>, te permite cometer errores sin consecuencias financieras. Es la forma más barata de aprender.</p>
             <p>Una vez que tu estrategia demuestre ser rentable en la demo, puedes pasar lentamente a real. Tu confianza aumentará con cada operación ejecutada correctamente (siguiendo tu plan), sin importar si fue ganadora o perdedora.</p>
             <h2 class="text-2xl font-bold text-brand-primary dark:text-white mt-6 mb-3">Control Emocional: El Trabajo Real del Trader</h2>
-            <p>Las emociones son naturales cuando hay dinero en juego. El objetivo no es eliminarlas, sino aprender a gestionarlas.</p>
             <h3 class="text-xl font-bold text-brand-primary dark:text-white mt-4 mb-2">1. Apégate al Plan (Tu Única Ancla)</h3>
             <p>Tu <a href="#/blog/plan-de-trading" class="text-brand-accent hover:underline">Plan de Trading</a> es tu defensa contra el caos emocional. Una estrategia constante, disciplina y una mentalidad adecuada deben convertirse en hábitos. Apegarse al plan es la única forma de desvincularse del resultado de una sola operación. Acepta las pérdidas (que deben ser pequeñas y controladas) y sigue adelante.</p>
             <h3 class="text-xl font-bold text-brand-primary dark:text-white mt-4 mb-2">2. Descubre tus Fortalezas</h3>
@@ -1043,7 +1042,7 @@ export const MENTORS: Mentor[] = [
 
 export const LEGAL_TEXT = "Advertencia de Riesgo: El trading de instrumentos financieros conlleva un alto nivel de riesgo y puede no ser adecuado para todos. Existe la posibilidad de perder parte o la totalidad de su inversión inicial; no invierta dinero que no pueda permitirse perder. El contenido de TradeVision Latam es de carácter educativo y no constituye asesoramiento financiero. No nos hacemos responsables de pérdidas o ganancias. Para una divulgación de riesgos completa, consulte nuestra Información Legal.";
 
-export const IP_LEGAL_TEXT = `Todo el contenido de TradeVision Latam, incluyendo, pero no limitándose a, cursos de pago (Intermedio, Avanzado, Forex), videos, guías, Ebooks, metodologías (como el "Lenguaje del Precio" o el patrón "AMD") y scripts , es propiedad intelectual de la academia.
+export const IP_LEGAL_TEXT = `Todo el contenido de TradeVision Latam, incluyendo, pero no limitándose a, cursos de pago (Intermedio, Avanzado, Forex), videos, guías, Ebooks, metodologías (como el "Lenguaje del Precio" o el patrón "AMD") y scripts, es propiedad intelectual de la academia.
 
 Cualquier copia, reproducción, reventa, distribución o republicación no autorizada de este material en Internet o cualquier otro medio está estrictamente prohibida y será sancionada legalmente. El acceso a los cursos de pago es personal e intransferible.`;
 

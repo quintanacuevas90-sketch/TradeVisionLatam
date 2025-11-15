@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -9,6 +8,7 @@ import { ALL_BROKERS_AND_TOOLS, BROKER_CATEGORIES } from '../constants';
 import { ModalType, PartnerTool } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FiSearch, FiX, FiArrowLeft } from 'react-icons/fi';
+import PageBackButton from '../components/PageBackButton';
 
 interface BrokersPageProps {
     onOpenModal: (modal: ModalType) => void;
@@ -71,8 +71,11 @@ const BrokersPage: React.FC<BrokersPageProps> = ({ onOpenModal }) => {
             <main className="pt-20">
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="mb-8">
+                            <PageBackButton />
+                        </div>
                         <div className="text-center mb-12">
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Brokers y Herramientas</h1>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white"><span translate="no">Brokers</span> y Herramientas</h1>
                             <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto">
                                 La selección de plataformas y herramientas recomendadas por nuestro equipo para una operativa segura y eficiente.
                             </p>
@@ -102,15 +105,23 @@ const BrokersPage: React.FC<BrokersPageProps> = ({ onOpenModal }) => {
                                 >
                                     Todas
                                 </button>
-                                {Object.entries(BROKER_CATEGORIES).map(([key, value]) => (
-                                    <button
-                                        key={key}
-                                        onClick={() => setActiveCategory(key)}
-                                        className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeCategory === key ? 'bg-brand-accent text-brand-primary' : 'bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
-                                    >
-                                        {value}
-                                    </button>
-                                ))}
+                                {Object.entries(BROKER_CATEGORIES).map(([key, value]) => {
+                                    let label: React.ReactNode = value;
+                                    if (value.startsWith('Forex')) {
+                                        label = <><span translate="no">Forex</span> y Herramientas Premium</>;
+                                    } else if (value.startsWith('Wallets')) {
+                                        label = <><span translate="no">Wallets</span> (Gestión de Capital)</>;
+                                    }
+                                    return (
+                                        <button
+                                            key={key}
+                                            onClick={() => setActiveCategory(key)}
+                                            className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeCategory === key ? 'bg-brand-accent text-brand-primary' : 'bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+                                        >
+                                            {label}
+                                        </button>
+                                    );
+                                })}
                             </div>
                             <div className="flex flex-wrap justify-center gap-2 border-t border-gray-200 dark:border-white/10 pt-4">
                                 <button onClick={() => setActiveRegulation(null)} className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${!activeRegulation ? 'bg-brand-accent/80 text-brand-primary' : 'bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>Todos</button>
@@ -121,7 +132,7 @@ const BrokersPage: React.FC<BrokersPageProps> = ({ onOpenModal }) => {
 
                         {/* How to Start Section */}
                         <AnimatedSection className="my-12 p-8 bg-white dark:bg-gray-900/50 rounded-lg shadow-lg border border-gray-200 dark:border-white/10">
-                            <h2 className="text-3xl font-bold text-center mb-6 text-brand-primary dark:text-white">¿Cómo Empezar con tu Primer Broker?</h2>
+                            <h2 className="text-3xl font-bold text-center mb-6 text-brand-primary dark:text-white">¿Cómo Empezar con tu Primer <span translate="no">Broker</span>?</h2>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                                 <div className="flex flex-col items-center">
                                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent text-brand-primary text-2xl font-bold mb-4">1</div>
@@ -133,7 +144,7 @@ const BrokersPage: React.FC<BrokersPageProps> = ({ onOpenModal }) => {
                                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent text-brand-primary text-2xl font-bold mb-4">2</div>
                                     <h3 className="text-xl font-semibold mb-2">Elige tu Plataforma</h3>
                                     <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">Usa los filtros de arriba para comparar brokers. Prioriza las plataformas reguladas para mayor seguridad, especialmente para Forex.</p>
-                                    <button onClick={() => onOpenModal('legal')} className="font-bold text-brand-accent hover:underline text-sm">Leer Advertencia de Riesgo</button>
+                                    <button onClick={() => navigate('/aviso-legal-riesgo')} className="font-bold text-brand-accent hover:underline text-sm">Leer Advertencia de Riesgo</button>
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent text-brand-primary text-2xl font-bold mb-4">3</div>

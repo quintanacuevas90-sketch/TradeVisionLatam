@@ -7,6 +7,8 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { SOCIAL_LINKS } from '../constants';
 import { FaBook, FaGraduationCap, FaUsers, FaTelegram } from 'react-icons/fa';
+import PageBackButton from '../components/PageBackButton';
+import { FiArrowLeft } from 'react-icons/fi';
 
 interface CommunityPageProps {
     onOpenModal: (modal: ModalType) => void;
@@ -36,7 +38,10 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ onOpenModal }) => {
                 {/* Hero Section */}
                 <AnimatedSection className="relative min-h-[80vh] flex items-center justify-center text-center overflow-hidden bg-brand-primary">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20">
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">Bienvenido al Ecosistema Gratuito TradeVision</h1>
+                        <div className="absolute top-8 left-8">
+                           <PageBackButton variant="on-dark" />
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">Bienvenido al Ecosistema Gratuito <span translate="no">TradeVision</span></h1>
                         <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">"La disciplina y el conocimiento real no deberían ser un lujo. Te damos las herramientas, tú pones el trabajo."</p>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                             {valueProps.map(prop => (
@@ -54,7 +59,7 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ onOpenModal }) => {
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
                         <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Nuestra Misión: Educación, Ética y Compromiso</h2>
-                        <p className="mt-4 text-gray-600 dark:text-gray-300">TradeVision Latam, liderada por un equipo global (España, Brasil, Tailandia, Venezuela), fue fundada para combatir la desinformación. No vendemos 'sueños de millonario'. Enseñamos la Metodología de Lógica Institucional y el Lenguaje del Precio. Te enseñamos a ser un trader profesional, disciplinado y rentable.</p>
+                        <p className="mt-4 text-gray-600 dark:text-gray-300"><span translate="no">TradeVision Latam</span>, liderada por un equipo global (España, Brasil, Tailandia, Venezuela), fue fundada para combatir la desinformación. No vendemos 'sueños de millonario'. Enseñamos la Metodología de Lógica Institucional y el Lenguaje del Precio. Te enseñamos a ser un trader profesional, disciplinado y rentable.</p>
                         <div className="mt-8">
                             <h3 className="font-bold text-lg text-brand-primary dark:text-white mb-4">Nuestras Redes</h3>
                              <div className="flex justify-center flex-wrap gap-4">
@@ -88,12 +93,21 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ onOpenModal }) => {
                         <div className="mt-12 text-center text-sm">
                             <h4 className="font-bold text-red-500 uppercase">REGLAS DE LA COMUNIDAD (OBLIGATORIO LEER)</h4>
                             <p className="mt-2 text-gray-500 dark:text-gray-400 max-w-lg mx-auto">Nuestra comunidad gratuita es un entorno de disciplina y respeto profesional. No toleramos el spam, las faltas de respeto, el marketing no autorizado o la promoción de 'esquemas mágicos'. Debes cumplir las reglas del grupo. Si no lo haces, serás baneado permanentemente.</p>
-                            <button onClick={() => onOpenModal('legal')} className="mt-4 text-brand-accent hover:underline font-semibold">
+                            <button onClick={() => navigate('/aviso-legal-riesgo')} className="mt-4 text-brand-accent hover:underline font-semibold">
                                 Para más detalles, revisa nuestra Información Legal y Advertencia de Riesgo completa.
                             </button>
                         </div>
                     </div>
                 </AnimatedSection>
+
+                <div className="text-center py-12 bg-white dark:bg-brand-primary">
+                    <button
+                        onClick={() => navigate('/')}
+                        className="inline-flex items-center justify-center gap-2 bg-brand-primary dark:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg hover:bg-brand-accent hover:text-brand-primary transition-colors duration-300"
+                    >
+                        <FiArrowLeft /> Volver a la Página Principal
+                    </button>
+                </div>
 
             </main>
             <Footer onOpenModal={onOpenModal} />

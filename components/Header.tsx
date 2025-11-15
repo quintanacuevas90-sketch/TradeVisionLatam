@@ -79,7 +79,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 { label: 'Forma Parte de TradeVision', action: () => navigate('/colabora') },
                 { label: 'Programa de Afiliados', action: () => onOpenModal('affiliate') },
                 { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
-                { label: 'Información Legal', action: () => onOpenModal('legal') },
+                { label: 'Información Legal', action: () => navigate('/aviso-legal-riesgo') },
             ]
         }
     ];
@@ -106,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                             </button>
                             <button onClick={() => navigate('/')} className="flex items-center gap-3 text-2xl font-extrabold text-gray-900 dark:text-white">
                                 <Logo />
-                                <span>Trade<span className="text-brand-accent">Vision</span></span>
+                                <span translate="no">Trade<span className="text-brand-accent">Vision</span></span>
                             </button>
                         </div>
 
@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                     onClick={link.action}
                                     className="font-semibold text-gray-600 dark:text-gray-300 hover:text-brand-accent dark:hover:text-brand-accent transition-colors duration-300"
                                 >
-                                    {link.label}
+                                    {link.label === 'Brokers' ? <span translate="no">Brokers</span> : link.label}
                                 </button>
                             ))}
                         </nav>
@@ -184,7 +184,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                                     onClick={() => handleSideMenuClick(link.action)}
                                                     className="text-left text-base text-gray-800 dark:text-white hover:text-brand-accent transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10"
                                                 >
-                                                    {link.label}
+                                                    {link.label === 'Brokers' ? <span translate="no">Brokers</span> : link.label}
                                                 </button>
                                             ))}
                                         </div>

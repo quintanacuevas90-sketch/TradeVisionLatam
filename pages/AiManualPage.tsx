@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -7,6 +8,7 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FaWhatsapp } from 'react-icons/fa';
 import { FiBarChart2, FiShield, FiBookOpen, FiDollarSign, FiTool, FiCpu, FiArrowLeft } from 'react-icons/fi';
+import PageBackButton from '../components/PageBackButton';
 
 interface PromptRoleCardProps {
     icon: React.ReactNode;
@@ -60,79 +62,68 @@ const AiManualPage: React.FC = () => {
                         </svg>
                     </div>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-16 sm:py-20">
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">SALTO CUÁNTICO EN TU TRADING</h1>
-                        <p className="text-xl sm:text-2xl font-semibold text-gray-300 mb-6">ACCESO INMEDIATO A 10 ASESORES EXPERTOS</p>
-                        <h2 className="text-2xl sm:text-3xl text-brand-accent font-bold mb-8">MANUAL: INGENIERÍA DE PROMPTS PARA LA MENTE MAESTRA DEL TRADING (GPT/DEEPSEEK)</h2>
-                        <a href={manualPurchaseLink} target="_blank" rel="noopener noreferrer" className="inline-block bg-brand-accent text-brand-primary font-bold py-4 px-10 rounded-lg text-xl hover:bg-opacity-90 transition duration-300 transform hover:scale-105 shadow-lg shadow-brand-accent/30">
-                            Acceder al Manual ($15 USD)
+                         <div className="absolute top-8 left-8">
+                            <PageBackButton variant="on-dark" />
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">Manual de Ingeniería de Prompts para la Mente Maestra del Trading</h1>
+                        <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto mb-8">Reduce una década de aprendizaje a un año de automatización. Convierte a tu IA en un equipo de 10 asesores expertos que trabajan para ti 24/7.</p>
+                        <a href={manualPurchaseLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-105 shadow-lg shadow-brand-accent/30">
+                            Obtener el Manual Ahora ($15 USD)
                         </a>
                     </div>
                 </AnimatedSection>
 
-                {/* Body Content */}
-                <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl space-y-8 text-lg text-gray-700 dark:text-gray-300">
-                        <div className="text-center">
-                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">El Final de la Frustración: La Revolución de la Inteligencia Artificial en el Trading</h2>
-                        </div>
-                        <p>El tiempo de leer libros desordenados y depender de cursos desactualizados ha terminado. Esta es la revolución real: ¿Puedes imaginar un trader, ya sea principiante, avanzado o incluso un gran fondo de inversión, que no tenga integrado un sistema de inteligencia artificial para analizar, para la operativa o para la gestión automática? Es inimaginable en 2025. Esto es lo valioso de la IA: donde antes tenías que leer informes, artículos o ver videos desordenados, la Inteligencia Artificial ya es experta prácticamente en toda la información que hay en la red. Con este sistema, tienes el equivalente a 10 asesores de trading a primera mano que lo automatizan todo, permitiendo que tu enfoque sea únicamente la tutoría y el asesoramiento final. Este nivel 2025 de tecnología es un salto cuántico respecto al Day Trading de 2010. Lo que antes tardaba diez años en aprenderse, ahora puede reducirse a un año de aprendizaje disciplinado y automatización total con la Inteligencia Artificial.</p>
+                {/* What is it Section */}
+                <AnimatedSection className="py-20 bg-white dark:bg-brand-primary">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+                        <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Automatiza tu Análisis, No tu Disciplina</h2>
+                        <p className="mt-4 text-gray-600 dark:text-gray-300">"Desde 2022, la IA ha sido el pilar de nuestra estrategia interna en TradeVision. No es un 'bot mágico', es una herramienta de productividad extrema. Este manual no te enseña a hacer clic; te enseña a PENSAR y a darle a tu IA las instrucciones precisas para que se convierta en tu analista personal."</p>
+                        <p className="mt-4 font-bold text-gray-700 dark:text-gray-200">- José Quintana, Asesor Principal</p>
                     </div>
                 </AnimatedSection>
                 
-                <AnimatedSection className="py-20 bg-white dark:bg-brand-primary">
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl space-y-8 text-lg text-gray-700 dark:text-gray-300">
-                         <div className="text-center">
-                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Cómo Logramos la Automatización en TradeVision Latam</h2>
-                        </div>
-                        <p>La Inteligencia Artificial, que ha empoderado al mundo desde 2022, ha revolucionado nuestro Day Trading y nuestro Swing Trading en TradeVision Latam. Desde 2024, en nuestra academia hemos perfeccionado todas las ingenierías, técnicas y prácticas para utilizar esta tecnología en prácticamente todas las tareas que a diario tiene un Day Trader. La clave es la Ingeniería de Prompts: saber escribirle a la Inteligencia Artificial de forma categórica. Ella necesita los máximos datos posibles, especificados no solo en una narrativa, sino en categorías claras de roles, tareas y objetivos, para que pueda darte un output profesional.</p>
-                    </div>
-                </AnimatedSection>
-
+                {/* Prompts Section */}
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Los 6 Roles que Tendrá tu IA Personal (Tu Propia Mesa de Asesores)</h2>
-                            <p className="mt-4 text-gray-600 dark:text-gray-300">Este manual te entrega las fórmulas maestras, los prompts que hemos automatizado para cada rol vital de nuestras estrategias:</p>
+                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Los 6 Prompts Maestros que Transformarán tu Trading</h2>
+                            <p className="mt-4 text-gray-600 dark:text-gray-300">Cada prompt convierte a tu IA (GPT-4, Deepseek, Gemini) en un especialista diferente. Trabajan en conjunto para darte una visión 360° del mercado.</p>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {promptRoles.map(role => <PromptRoleCard key={role.title} {...role} />)}
                         </div>
                     </div>
                 </AnimatedSection>
                 
-                <AnimatedSection className="py-20 bg-white dark:bg-brand-primary">
-                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl space-y-8 text-lg text-gray-700 dark:text-gray-300">
-                        <div className="text-center">
-                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Tu Estrategia ya es Perfecta, Ahora Automatiza la Ejecución</h2>
-                        </div>
-                        <p>La imperfección humana no tiene cabida aquí. La IA, por más avanzada que sea, no es el estratega, tú lo eres. Ella es el automatizador perfecto de tu proceso. Con esta guía, obtendrás el copy exacto para entrenar a tus chats, como nuestro ejemplo con el Análisis Footprint en el Oro, donde la IA proyecta la dirección de largo, medio y corto plazo sin siquiera especificarle el activo o la temporalidad, detectando todos los detalles cruciales y hablando con la nomenclatura experta de Delta, Absorción de Ventas y Niveles Clave. Esto es para que tú converses con ella, resuelvas tus límites y mejores tu trading con la ayuda de 10 asesores expertos. Esto reduce el aprendizaje de una década a solo un año de automatización, dándote la verdadera ventaja competitiva en el mercado.</p>
-                    </div>
-                </AnimatedSection>
-
-                {/* Closing CTA */}
+                {/* CTA Section */}
                 <AnimatedSection className="py-24 bg-brand-primary text-center">
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
-                        <h2 className="text-4xl font-extrabold text-white">¡DOMINA EL JUEGO INSTITUCIONAL AHORA!</h2>
-                        <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">MANUAL COMPLETO DE INGENIERÍA DE PROMPTS</p>
-                        <p className="text-5xl font-black text-white mt-4">$15 <span className="text-2xl font-bold">USD</span></p>
-                        
-                        <div className="p-4 bg-red-900/20 border-t-2 border-b-2 border-red-500 text-red-300 text-xs text-left rounded-lg my-8">
-                           <p><strong>Advertencia de Riesgo Obligatoria:</strong> El trading de derivados y opciones conlleva un alto riesgo de pérdida de capital y puede no ser adecuado para todos los inversores. El capital invertido está en riesgo. Los resultados pasados no garantizan el rendimiento futuro. No garantizamos resultados ni ganancias, solo ofrecemos formación de alta calidad.</p>
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-4xl font-extrabold text-white">Tu Inversión Más Rentable.</h2>
+                        <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">Por menos de lo que arriesgas en una mala operación, obtén el sistema que automatizará tu análisis para siempre.</p>
+                        <div className="mt-8">
+                             <p className="text-lg text-gray-400">Precio de Lanzamiento (Tiempo Limitado)</p>
+                             <p className="text-5xl font-black text-white mt-2">$15 <span className="text-2xl font-bold">USD</span></p>
+                             <p className="text-sm font-bold text-gray-300">(Pago Único)</p>
                         </div>
-
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                             <a href={manualPurchaseLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105">
-                                Acceder al Manual ($15 USD)
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+                            <a href={manualPurchaseLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105">
+                                Comprar el Manual Ahora
                             </a>
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-green-600 transition duration-300 w-full sm:w-auto">
-                                <FaWhatsapp /> Soporte Vía WhatsApp
+                                <FaWhatsapp /> Pagar por Soporte Directo
                             </a>
                         </div>
-                        <button onClick={() => navigate('/premium-courses')} className="mt-6 text-gray-400 hover:text-white transition inline-flex items-center gap-2">
-                           <FiArrowLeft /> Volver a Cursos Premium
-                        </button>
+                         <div className="text-center mt-12">
+                            <button
+                                onClick={() => navigate('/premium-courses')}
+                                className="inline-flex items-center justify-center gap-2 text-gray-300 font-bold py-3 px-8 rounded-lg text-lg hover:text-white transition duration-300"
+                            >
+                                <FiArrowLeft /> Volver a Cursos Premium
+                            </button>
+                        </div>
                     </div>
                 </AnimatedSection>
+
             </main>
             <Footer onOpenModal={onOpenModal} />
             <ScrollToTopButton />

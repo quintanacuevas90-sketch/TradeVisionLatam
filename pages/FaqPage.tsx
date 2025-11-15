@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -9,6 +8,7 @@ import { COMPREHENSIVE_FAQS, COMPREHENSIVE_FAQ_CATEGORIES } from '../constants';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FiSearch, FiX, FiArrowLeft } from 'react-icons/fi';
+import PageBackButton from '../components/PageBackButton';
 
 interface FaqPageProps {
     onOpenModal: (modal: ModalType) => void;
@@ -60,10 +60,13 @@ const FaqPage: React.FC<FaqPageProps> = ({ onOpenModal }) => {
             <main className="pt-20">
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="mb-8">
+                            <PageBackButton />
+                        </div>
                         <div className="text-center mb-12">
                             <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Preguntas Frecuentes</h1>
                             <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto">
-                                Respuestas directas de nuestros expertos. En TradeVision Latam creemos en la transparencia total. Aquí no escondemos nada.
+                                Respuestas directas de nuestros expertos. En <span translate="no">TradeVision Latam</span> creemos en la transparencia total. Aquí no escondemos nada.
                             </p>
                         </div>
 

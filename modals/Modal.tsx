@@ -5,7 +5,7 @@ import { FiX } from 'react-icons/fi';
 interface ModalProps {
     onClose: () => void;
     children: React.ReactNode;
-    title: string;
+    title: React.ReactNode;
 }
 
 const Modal: React.FC<ModalProps> = ({ onClose, children, title }) => {

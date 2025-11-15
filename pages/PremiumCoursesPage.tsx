@@ -11,6 +11,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { PREMIUM_TESTIMONIALS } from '../constants';
 import CourseCard from '../components/CourseCard';
 import TestimonialCarousel from '../components/TestimonialCarousel';
+import PageBackButton from '../components/PageBackButton';
 
 // --- MAIN PAGE COMPONENT ---
 const PremiumCoursesPage: React.FC = () => {
@@ -69,6 +70,9 @@ const PremiumCoursesPage: React.FC = () => {
             <main className="pt-20 bg-gray-50 dark:bg-gray-800">
                 <AnimatedSection className="py-20">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                        <div className="mb-8">
+                            <PageBackButton />
+                        </div>
                         <section className="text-center p-6 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
                             <h1 className="text-3xl md:text-4xl font-extrabold text-brand-primary dark:text-white">ACCESO A LA ZONA DE DISCIPLINA</h1>
                             <p className="text-gray-700 dark:text-gray-300 mb-4 max-w-3xl mx-auto mt-4">Si has llegado hasta aquí, es porque entiendes que la suerte se acabó. La rentabilidad sostenida no es un golpe de fortuna; es el resultado de un <strong>sistema, disciplina y una ejecución impecable</strong>.</p>

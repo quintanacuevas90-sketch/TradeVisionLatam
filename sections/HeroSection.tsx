@@ -43,11 +43,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <AnimatedSection>
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">
-                        Bienvenido a la nueva era del trading <span className="text-brand-accent">profesional</span>.
+                        Bienvenido a la nueva era del <span translate="no">trading</span> <span className="text-brand-accent">profesional</span>.
                     </h1>
                     <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
                         <p>
-                            Una academia de trading para traders, con la misión de forjar la disciplina y la rentabilidad en Latinoamérica.
+                            Una academia de <span translate="no">trading</span> para <span translate="no">traders</span>, con la misión de forjar la disciplina y la rentabilidad en Latinoamérica.
                         </p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -6,8 +6,9 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FaUserGraduate, FaShieldAlt, FaCheckCircle } from 'react-icons/fa';
-import { FiTrendingUp, FiAlertTriangle, FiHome, FiSend } from 'react-icons/fi';
+import { FiTrendingUp, FiAlertTriangle, FiHome, FiSend, FiArrowLeft } from 'react-icons/fi';
 import CollaborationTermsModal from '../modals/CollaborationTermsModal';
+import PageBackButton from '../components/PageBackButton';
 
 interface CollaboratePageProps {
     onOpenModal: (modal: ModalType) => void;
@@ -223,7 +224,7 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
                         <FaCheckCircle className="text-green-500 text-5xl mx-auto mb-4" />
                         <h2 className="text-2xl font-bold text-brand-primary dark:text-white">¡Postulación Recibida!</h2>
                         <p className="mt-4 text-gray-600 dark:text-gray-300">
-                            Gracias por tu interés en unirte a TradeVision Latam. Hemos recibido tu postulación.
+                            Gracias por tu interés en unirte a <span translate="no">TradeVision Latam</span>. Hemos recibido tu postulación.
                         </p>
                         <div className="mt-4 text-left bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
                             <h3 className="font-bold text-brand-primary dark:text-white">Próximos Pasos:</h3>
@@ -249,6 +250,9 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
                     <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop')" }}></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/80 to-brand-primary"></div>
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                        <div className="absolute top-8 left-8">
+                            <PageBackButton variant="on-dark" />
+                        </div>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">Impulsa la Próxima Generación de Traders</h1>
                         <p className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-300">Buscamos líderes, mentores e influencers comprometidos con el trading ético y la disciplina. Esta no es una oferta de empleo; es una alianza estratégica para dominar el mercado latino.</p>
                     </div>
@@ -258,7 +262,7 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Crece, Innova y Triunfa con TradeVision</h2>
+                            <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">Crece, Innova y Triunfa con <span translate="no">TradeVision</span></h2>
                             <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Si tienes una comunidad (YouTube, Telegram, TikTok) o la pasión por enseñar, te proporcionamos las herramientas para crecer profesionalmente.</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -280,7 +284,7 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
                         <div className="space-y-8">
                             <ProfileCard title="Influencers y Youtubers (Líderes de Opinión)">Si ya tienes una audiencia (TikTok, YouTube, Instagram) y quieres monetizarla de forma ética y profesional, te damos la estructura, el compliance legal (Manual de Afiliados) y la autoridad de la marca.</ProfileCard>
                             <ProfileCard title="Gestores de Comunidad (Líderes de Telegram/Discord)">Si manejas grupos de trading y buscas dar el salto a una marca profesional, te damos el respaldo, el contenido de valor y la infraestructura tecnológica para escalar.</ProfileCard>
-                            <ProfileCard title="Nuevos Mentores (Jóvenes Talentos)">Si eres un trader rentable, disciplinado y tienes pasión por enseñar pero te falta la plataforma, te formamos gratis para convertirte en un Asesor oficial de TradeVision Latam.</ProfileCard>
+                            <ProfileCard title="Nuevos Mentores (Jóvenes Talentos)">Si eres un trader rentable, disciplinado y tienes pasión por enseñar pero te falta la plataforma, te formamos gratis para convertirte en un Asesor oficial de <span translate="no">TradeVision Latam</span>.</ProfileCard>
                         </div>
                     </div>
                 </AnimatedSection>
@@ -377,7 +381,7 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
                                         <button type="button" onClick={handleOpenLegalModal} className="text-brand-accent hover:underline font-semibold">
                                             Términos y Condiciones de Colaboración
                                         </button>
-                                        {' '}de TradeVision Latam.
+                                        {' '}de <span translate="no">TradeVision Latam</span>.
                                     </label>
                                 </div>
                                 {errors.terms && <p id="terms-error" className="text-red-500 text-sm mt-1">{errors.terms}</p>}

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -9,6 +8,7 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FaWhatsapp } from 'react-icons/fa';
 import { FiMail, FiAward, FiCode, FiUsers, FiCamera, FiEdit, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
+import PageBackButton from '../components/PageBackButton';
 
 // --- SUB-COMPONENTS ---
 const ServicePillar: React.FC<{ icon: React.ReactNode; title: string; description: string; }> = ({ icon, title, description }) => (
@@ -40,6 +40,9 @@ const ConsultancyPage: React.FC = () => {
             <main className="pt-20 bg-gray-50 dark:bg-gray-800">
                 <AnimatedSection className="py-20">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl space-y-8">
+                        <div className="mb-8">
+                            <PageBackButton />
+                        </div>
                         {/* Header */}
                         <header className="text-center">
                             <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Impulsa tu Visión: Consultoría Élite</h1>
