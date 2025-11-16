@@ -96,7 +96,7 @@ const ConsultancyPage: React.FC = () => {
                             <h3 className="text-xl font-bold mb-4">¿Listo para construir tu legado?</h3>
                             <div className="flex flex-col sm:flex-row justify-center gap-4">
                                 <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition"><FaWhatsapp /> Contactar por WhatsApp</a>
-                                <a href="mailto:tradevision2026@gmail.com" className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition"><FiMail /> Enviar un Correo</a>
+                                <button onClick={() => window.open('mailto:tradevision2026@gmail.com')} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition"><FiMail /> Enviar un Correo</button>
                             </div>
                         </section>
 

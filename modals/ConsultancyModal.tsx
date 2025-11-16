@@ -1,7 +1,8 @@
 
+
 import React from 'react';
 import Modal from './Modal';
-import Accordion from '../components/Accordion';
+import Accordion from './Accordion';
 import { FaWhatsapp } from 'react-icons/fa';
 import { FiMail, FiAward, FiCode, FiUsers, FiCamera, FiEdit, FiAlertTriangle } from 'react-icons/fi';
 
@@ -70,7 +71,7 @@ const ConsultancyModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                             <ol className="list-decimal list-inside space-y-2">
                                 <li><strong>Contacto Inicial:</strong> Envía la frase clave <strong>"CREAR COMUNIDAD"</strong> a nuestro Soporte de WhatsApp para iniciar el proceso.</li>
                                 <li><strong>Pre-Calificación Obligatoria:</strong> Para filtrar curiosos y asegurar el compromiso, se requiere un pedido mínimo de <strong>$20 USD</strong> para agendar la primera llamada. (Aceptamos Volet, Binance).</li>
-                                <li><strong>Verificación Legal:</strong> Nos reservamos el derecho a pedir información adicional y documentos legales para garantizar la legitimidad del proyecto.</li>
+                                <li><strong>Verificación Legal:</strong> Nos reservamos el derecho de pedir información adicional y documentos legales para garantizar la legitimidad del proyecto.</li>
                             </ol>
                         </div>
                     </Accordion>
@@ -83,9 +84,9 @@ const ConsultancyModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition">
                             <FaWhatsapp /> Contactar por WhatsApp
                         </a>
-                        <a href="mailto:tradevision2026@gmail.com" className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition">
+                        <button onClick={() => window.open('mailto:tradevision2026@gmail.com')} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition">
                             <FiMail /> Enviar un Correo
-                        </a>
+                        </button>
                     </div>
                 </section>
                 

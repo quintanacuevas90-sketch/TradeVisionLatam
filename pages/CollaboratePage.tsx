@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -7,7 +8,7 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FaUserGraduate, FaShieldAlt, FaCheckCircle, FaCopy } from 'react-icons/fa';
-import { FiTrendingUp, FiAlertTriangle, FiHome, FiSend, FiArrowLeft, FiCheck } from 'react-icons/fi';
+import { FiTrendingUp, FiAlertTriangle, FiHome, FiSend, FiArrowLeft, FiCheck, FiRefreshCw } from 'react-icons/fi';
 import CollaborationTermsModal from '../modals/CollaborationTermsModal';
 import PageBackButton from '../components/PageBackButton';
 
@@ -85,12 +86,9 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
     const { navigate } = useRouter();
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState<Partial<Record<keyof typeof formData | 'terms', string>>>({});
-    const [formStatus, setFormStatus] = useState<'idle' | 'submitting'>('idle');
+    const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showLegalModal, setShowLegalModal] = useState(false);
-    const [showCopyModal, setShowCopyModal] = useState(false);
-    const [emailContent, setEmailContent] = useState({ subject: '', body: '' });
-    const [copyStatus, setCopyStatus] = useState<'idle' | 'address' | 'body'>('idle');
 
     useEffect(() => {
         document.title = "Forma Parte de TradeVision | Colabora con Nosotros";
@@ -173,6 +171,10 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) {
+            const firstError = document.querySelector('[aria-invalid="true"]');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
             return;
         }
 
@@ -190,86 +192,28 @@ País de Residencia: ${country}
 Idiomas: ${languages}
 Posición de Interés: ${position}
 Red Social Principal: ${socialLink}
-Cómo nos conoció: ${source}
+Cómo nos conoció: ${source || 'No especificado'}
 --------------------------------------------------
 Biografía y Visión:
 ${bio}
 --------------------------------------------------
         `.trim();
+        
+        const mailtoLink = `mailto:tradevision2026@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        window.open(mailtoLink);
 
-        setEmailContent({ subject, body });
-        setShowCopyModal(true);
-        setFormStatus('idle');
-    };
-
-    const handleCloseCopyModal = () => {
-        setShowCopyModal(false);
-        setFormData(initialFormData);
-        setErrors({});
-        setTermsAccepted(false);
-        setFormStatus('idle');
-    };
-    
-    const handleCopyToClipboard = (text: string, type: 'address' | 'body') => {
-        navigator.clipboard.writeText(text).then(() => {
-            setCopyStatus(type);
-            setTimeout(() => setCopyStatus('idle'), 2000); // Reset after 2s
-        });
+        setTimeout(() => {
+            setFormStatus('success');
+        }, 150);
     };
 
     const inputClasses = (field: keyof typeof formData) => 
         `w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border ${errors[field] ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} focus:ring-2 focus:ring-brand-accent focus:outline-none transition-colors`;
-
-    const CopySubmissionModal = () => {
-        if (!showCopyModal) return null;
-        const emailAddress = "tradevision2026@gmail.com";
-        
-        return (
-            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" aria-modal="true" role="dialog">
-                <AnimatedSection className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-8 max-w-2xl w-full">
-                    <h2 className="text-2xl font-bold text-brand-primary dark:text-white">Completa el Envío de tu Postulación</h2>
-                    <p className="mt-2 text-gray-600 dark:text-gray-300">Para asegurar la entrega, necesitamos que envíes la postulación manualmente desde tu correo. ¡Sigue estos 3 sencillos pasos!</p>
-
-                    <div className="mt-6 space-y-4 text-left">
-                        <div>
-                            <label className="font-bold text-gray-700 dark:text-gray-200">Paso 1: Copia nuestra dirección de correo</label>
-                            <div className="flex gap-2 mt-1">
-                                <input type="text" readOnly value={emailAddress} className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 font-mono text-sm"/>
-                                <button onClick={() => handleCopyToClipboard(emailAddress, 'address')} className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 rounded-md font-semibold hover:bg-gray-300 dark:hover:bg-gray-500 transition">
-                                    {copyStatus === 'address' ? <><FiCheck className="text-green-500"/> ¡Copiado!</> : <><FaCopy /> Copiar</>}
-                                </button>
-                            </div>
-                        </div>
-                        <div>
-                            <label className="font-bold text-gray-700 dark:text-gray-200">Paso 2: Copia el cuerpo del mensaje</label>
-                            <div className="relative mt-1">
-                                <textarea readOnly value={emailContent.body} rows={8} className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 font-mono text-sm"/>
-                                <button onClick={() => handleCopyToClipboard(emailContent.body, 'body')} className="absolute bottom-2 right-2 flex items-center gap-2 px-3 py-1 bg-gray-200 dark:bg-gray-600 rounded-md font-semibold text-xs hover:bg-gray-300 dark:hover:bg-gray-500 transition">
-                                    {copyStatus === 'body' ? '¡Copiado!' : 'Copiar Mensaje'}
-                                </button>
-                            </div>
-                        </div>
-                        <div>
-                            <label className="font-bold text-gray-700 dark:text-gray-200">Paso 3: Envía el correo desde tu email</label>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                Abre tu cliente de correo (Gmail, Outlook, etc.), pega la dirección en "Para:", usa "<strong className="text-brand-accent">{emailContent.subject}</strong>" como asunto, pega el cuerpo del mensaje y ¡envíalo!
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="mt-6 text-center">
-                        <button onClick={handleCloseCopyModal} className="bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg">He enviado el correo / Cerrar</button>
-                    </div>
-                </AnimatedSection>
-            </div>
-        );
-    };
-
+    
     return (
         <>
             <Header onOpenModal={onOpenModal} />
-            
-            <CopySubmissionModal />
             
             {showLegalModal && <CollaborationTermsModal onClose={handleCloseLegalModal} />}
 
@@ -326,103 +270,125 @@ ${bio}
                             <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Completa el siguiente formulario (en español) y nuestro equipo de operaciones (liderado por Lucas Almeida) revisará tu perfil. Si cumples los requisitos, te contactaremos para una consulta.</p>
                         </div>
                         <form onSubmit={handleSubmit} noValidate className="bg-white dark:bg-gray-900/50 p-8 rounded-lg shadow-xl space-y-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <input type="text" name="firstName" placeholder="Nombre" onChange={handleChange} value={formData.firstName} required className={inputClasses('firstName')} aria-invalid={!!errors.firstName} aria-describedby="firstName-error" />
-                                    {errors.firstName && <p id="firstName-error" className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
-                                </div>
-                                <div>
-                                    <input type="text" name="lastName" placeholder="Apellido" onChange={handleChange} value={formData.lastName} required className={inputClasses('lastName')} aria-invalid={!!errors.lastName} aria-describedby="lastName-error" />
-                                    {errors.lastName && <p id="lastName-error" className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <input type="email" name="email" placeholder="Correo electrónico" onChange={handleChange} value={formData.email} required className={inputClasses('email')} aria-invalid={!!errors.email} aria-describedby="email-error" />
-                                    {errors.email && <p id="email-error" className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                                </div>
-                                <div>
-                                    <input type="tel" name="phone" placeholder="Número de teléfono (WhatsApp)" onChange={handleChange} value={formData.phone} required className={inputClasses('phone')} aria-invalid={!!errors.phone} aria-describedby="phone-error" />
-                                    {errors.phone && <p id="phone-error" className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-                                </div>
-                            </div>
-                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div>
-                                    <select
-                                        name="country"
-                                        onChange={handleChange}
-                                        value={formData.country}
-                                        required
-                                        className={inputClasses('country')}
-                                        aria-invalid={!!errors.country}
-                                        aria-describedby="country-error"
-                                    >
-                                        <option value="" disabled>Selecciona tu país...</option>
-                                        {countries.map(c =>
-                                            c === "---"
-                                            ? <option key="divider" disabled>──────────</option>
-                                            : <option key={c} value={c}>{c}</option>
-                                        )}
-                                    </select>
-                                    {errors.country && <p id="country-error" className="text-red-500 text-sm mt-1">{errors.country}</p>}
-                                </div>
-                                <div>
-                                    <input type="text" name="languages" placeholder="Idiomas que hablas" onChange={handleChange} value={formData.languages} required className={inputClasses('languages')} aria-invalid={!!errors.languages} aria-describedby="languages-error" />
-                                    {errors.languages && <p id="languages-error" className="text-red-500 text-sm mt-1">{errors.languages}</p>}
-                                </div>
-                            </div>
-                            <div>
-                                <select name="position" onChange={handleChange} value={formData.position} required className="w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-brand-accent focus:outline-none">
-                                    <option>Influencer/Youtuber</option>
-                                    <option>Gestor de Comunidad</option>
-                                    <option>Nuevo Mentor</option>
-                                </select>
-                            </div>
-                            <div>
-                                <input type="url" name="socialLink" placeholder="Enlace a tu Red Social Principal (TikTok, YouTube, etc.)" onChange={handleChange} value={formData.socialLink} required className={inputClasses('socialLink')} aria-invalid={!!errors.socialLink} aria-describedby="socialLink-error" />
-                                {errors.socialLink && <p id="socialLink-error" className="text-red-500 text-sm mt-1">{errors.socialLink}</p>}
-                            </div>
-                             <div>
-                                <input type="text" name="source" placeholder="¿Cómo supiste de TradeVision Latam?" onChange={handleChange} value={formData.source} className="w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-brand-accent focus:outline-none"/>
-                            </div>
-                            <div>
-                                <textarea name="bio" placeholder="Cuéntanos sobre ti y tu comunidad (Biografía breve / Visión)" rows={4} onChange={handleChange} value={formData.bio} required className={inputClasses('bio')} aria-invalid={!!errors.bio} aria-describedby="bio-error"></textarea>
-                                {errors.bio && <p id="bio-error" className="text-red-500 text-sm mt-1">{errors.bio}</p>}
-                            </div>
+                            {formStatus !== 'success' ? (
+                                <>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div>
+                                            <input type="text" name="firstName" placeholder="Nombre" onChange={handleChange} value={formData.firstName} required className={inputClasses('firstName')} aria-invalid={!!errors.firstName} aria-describedby="firstName-error" />
+                                            {errors.firstName && <p id="firstName-error" className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                                        </div>
+                                        <div>
+                                            <input type="text" name="lastName" placeholder="Apellido" onChange={handleChange} value={formData.lastName} required className={inputClasses('lastName')} aria-invalid={!!errors.lastName} aria-describedby="lastName-error" />
+                                            {errors.lastName && <p id="lastName-error" className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div>
+                                            <input type="email" name="email" placeholder="Correo electrónico" onChange={handleChange} value={formData.email} required className={inputClasses('email')} aria-invalid={!!errors.email} aria-describedby="email-error" />
+                                            {errors.email && <p id="email-error" className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                                        </div>
+                                        <div>
+                                            <input type="tel" name="phone" placeholder="Número de teléfono (WhatsApp)" onChange={handleChange} value={formData.phone} required className={inputClasses('phone')} aria-invalid={!!errors.phone} aria-describedby="phone-error" />
+                                            {errors.phone && <p id="phone-error" className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                                        </div>
+                                    </div>
+                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <div>
+                                            <select
+                                                name="country"
+                                                onChange={handleChange}
+                                                value={formData.country}
+                                                required
+                                                className={inputClasses('country')}
+                                                aria-invalid={!!errors.country}
+                                                aria-describedby="country-error"
+                                            >
+                                                <option value="" disabled>Selecciona tu país...</option>
+                                                {countries.map(c =>
+                                                    c === "---"
+                                                    ? <option key="divider" disabled>──────────</option>
+                                                    : <option key={c} value={c}>{c}</option>
+                                                )}
+                                            </select>
+                                            {errors.country && <p id="country-error" className="text-red-500 text-sm mt-1">{errors.country}</p>}
+                                        </div>
+                                        <div>
+                                            <input type="text" name="languages" placeholder="Idiomas que hablas" onChange={handleChange} value={formData.languages} required className={inputClasses('languages')} aria-invalid={!!errors.languages} aria-describedby="languages-error" />
+                                            {errors.languages && <p id="languages-error" className="text-red-500 text-sm mt-1">{errors.languages}</p>}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <select name="position" onChange={handleChange} value={formData.position} required className="w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-brand-accent focus:outline-none">
+                                            <option>Influencer/Youtuber</option>
+                                            <option>Gestor de Comunidad</option>
+                                            <option>Nuevo Mentor</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <input type="url" name="socialLink" placeholder="Enlace a tu Red Social Principal (TikTok, YouTube, etc.)" onChange={handleChange} value={formData.socialLink} required className={inputClasses('socialLink')} aria-invalid={!!errors.socialLink} aria-describedby="socialLink-error" />
+                                        {errors.socialLink && <p id="socialLink-error" className="text-red-500 text-sm mt-1">{errors.socialLink}</p>}
+                                    </div>
+                                     <div>
+                                        <input type="text" name="source" placeholder="¿Cómo supiste de TradeVision Latam?" onChange={handleChange} value={formData.source} className="w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-brand-accent focus:outline-none"/>
+                                    </div>
+                                    <div>
+                                        <textarea name="bio" placeholder="Cuéntanos sobre ti y tu comunidad (Biografía breve / Visión)" rows={4} onChange={handleChange} value={formData.bio} required className={inputClasses('bio')} aria-invalid={!!errors.bio} aria-describedby="bio-error"></textarea>
+                                        {errors.bio && <p id="bio-error" className="text-red-500 text-sm mt-1">{errors.bio}</p>}
+                                    </div>
 
-                            <div>
-                                <div className="flex items-start">
-                                    <input
-                                        id="terms"
-                                        name="terms"
-                                        type="checkbox"
-                                        checked={termsAccepted}
-                                        onChange={(e) => {
-                                            setTermsAccepted(e.target.checked);
-                                            if (errors.terms) setErrors(prev => ({...prev, terms: undefined}));
-                                        }}
-                                        required
-                                        className="h-4 w-4 text-brand-accent focus:ring-brand-accent border-gray-300 rounded mt-1"
-                                        aria-describedby="terms-error"
-                                    />
-                                    <label htmlFor="terms" className="ml-3 text-sm text-gray-600 dark:text-gray-400">
-                                        He leído y acepto los{' '}
-                                        <button type="button" onClick={handleOpenLegalModal} className="text-brand-accent hover:underline font-semibold">
-                                            Términos y Condiciones de Colaboración
+                                    <div>
+                                        <div className="flex items-start">
+                                            <input
+                                                id="terms"
+                                                name="terms"
+                                                type="checkbox"
+                                                checked={termsAccepted}
+                                                onChange={(e) => {
+                                                    setTermsAccepted(e.target.checked);
+                                                    if (errors.terms) setErrors(prev => ({...prev, terms: undefined}));
+                                                }}
+                                                required
+                                                className="h-4 w-4 text-brand-accent focus:ring-brand-accent border-gray-300 rounded mt-1"
+                                                aria-describedby="terms-error"
+                                            />
+                                            <label htmlFor="terms" className="ml-3 text-sm text-gray-600 dark:text-gray-400">
+                                                He leído y acepto los{' '}
+                                                <button type="button" onClick={handleOpenLegalModal} className="text-brand-accent hover:underline font-semibold">
+                                                    Términos y Condiciones de Colaboración
+                                                </button>
+                                                {' '}de <span translate="no">TradeVision Latam</span>.
+                                            </label>
+                                        </div>
+                                        {errors.terms && <p id="terms-error" className="text-red-500 text-sm mt-1">{errors.terms}</p>}
+                                    </div>
+
+                                    <div className="text-center">
+                                        <button type="submit" disabled={formStatus === 'submitting' || !termsAccepted} className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <FiSend /> {formStatus === 'submitting' ? 'Procesando...' : 'Enviar Aplicación'}
                                         </button>
-                                        {' '}de <span translate="no">TradeVision Latam</span>.
-                                    </label>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="text-center">
+                                    <div className="p-6 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-800 dark:text-green-200">
+                                        <FaCheckCircle className="text-4xl mx-auto mb-4" />
+                                        <h3 className="text-2xl font-bold">¡Gracias por tu postulación!</h3>
+                                        <p className="mt-2">Se está abriendo tu cliente de correo con la información pre-cargada. Por favor, revisa y envía el correo para completar el proceso.</p>
+                                        <p className="text-sm mt-2">Si no se abre automáticamente, puede que no tengas un cliente de correo configurado en tu navegador.</p>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setFormData(initialFormData);
+                                                setTermsAccepted(false);
+                                                setFormStatus('idle');
+                                            }}
+                                            className="mt-4 inline-flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-700 transition"
+                                        >
+                                            <FiRefreshCw /> Enviar otra postulación
+                                        </button>
+                                    </div>
                                 </div>
-                                {errors.terms && <p id="terms-error" className="text-red-500 text-sm mt-1">{errors.terms}</p>}
-                            </div>
-
-                            <div className="text-center">
-                                {formStatus !== 'success' && (
-                                    <button type="submit" disabled={formStatus === 'submitting' || !termsAccepted} className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                                        <FiSend /> {formStatus === 'submitting' ? 'Procesando...' : 'Enviar Aplicación'}
-                                    </button>
-                                )}
-                            </div>
+                            )}
                         </form>
                     </div>
                 </AnimatedSection>

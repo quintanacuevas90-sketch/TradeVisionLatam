@@ -63,8 +63,15 @@ const PoliticaPrivacidadPage: React.FC = () => {
                     <li><strong>Eliminar:</strong> Solicitar la eliminación de sus datos personales ("derecho al olvido").</li>
                     <li><strong>Oponerse:</strong> Oponerse al procesamiento de sus datos para fines de marketing directo.</li>
                 </ul>
-                Para ejercer estos derechos, contáctenos en <a href="mailto:tradevision2026@gmail.com" class="text-brand-accent">tradevision2026@gmail.com</a>.
-            `
+            `,
+            footer: (
+                <p>
+                    Para ejercer estos derechos, contáctenos en{' '}
+                    <button onClick={() => window.open('mailto:tradevision2026@gmail.com')} className="text-brand-accent hover:underline">
+                        tradevision2026@gmail.com
+                    </button>.
+                </p>
+            )
         },
         {
             title: "7. Política de Eliminación de Cuentas",
@@ -96,6 +103,8 @@ const PoliticaPrivacidadPage: React.FC = () => {
                                 <section key={section.title}>
                                     <h2 className="text-2xl font-bold text-brand-primary dark:text-white">{section.title}</h2>
                                     <div dangerouslySetInnerHTML={{ __html: section.content }} />
+                                    {/* @ts-ignore */}
+                                    {section.footer && <div className="not-prose mt-4 text-lg">{section.footer}</div>}
                                 </section>
                             ))}
                         </article>

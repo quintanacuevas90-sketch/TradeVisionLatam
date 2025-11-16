@@ -42,6 +42,8 @@ import TransparenciaLegalPage from './pages/TransparenciaLegalPage';
 import ExecutionZonePage from './pages/ExecutionZonePage';
 import AgeGateModal from './components/AgeGateModal';
 import CookieConsentModal from './components/CookieConsentModal';
+import FaqTrustPage from './pages/FaqTrustPage';
+import { TICKER_MESSAGES } from './constants';
 
 const App: React.FC = () => {
     const { path, navigate } = useRouter();
@@ -154,6 +156,7 @@ const App: React.FC = () => {
         else if (pathname === '/politica-privacidad') currentPage = 'politica-privacidad';
         else if (pathname === '/transparencia-legal') currentPage = 'transparencia-legal';
         else if (pathname === '/zona-de-ejecucion') currentPage = 'execution-zone';
+        else if (pathname === '/protocolo-confianza') currentPage = 'protocolo-confianza';
 
         const summary = generateContextualSummary(activeModal, currentPage, pageSlug);
         setChatbotContext(summary);
@@ -182,7 +185,7 @@ const App: React.FC = () => {
     };
 
     const routes = {
-        '/': <MainPage onOpenModal={handleOpenModal} newsItems={newsItems} isLoadingNews={isLoadingNews} />,
+        '/': <MainPage onOpenModal={handleOpenModal} tickerItems={TICKER_MESSAGES} />,
         '/blog': <BlogListPage />,
         '/blog/:slug': (params: { slug: string }) => <BlogPostPage slug={params.slug} />,
         '/sitemap': <SitemapPage onOpenModal={handleOpenModal} />,
@@ -209,6 +212,7 @@ const App: React.FC = () => {
         '/politica-privacidad': <PoliticaPrivacidadPage />,
         '/transparencia-legal': <TransparenciaLegalPage />,
         '/zona-de-ejecucion': <ExecutionZonePage />,
+        '/protocolo-confianza': <FaqTrustPage onOpenModal={handleOpenModal} />,
     };
 
     return (

@@ -1,22 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FiX, FiSend, FiCpu, FiGlobe, FiZap, FiThumbsUp, FiThumbsDown, FiCopy, FiSearch, FiMoreVertical, FiDownload, FiTrash2 } from 'react-icons/fi';
+import { FiX, FiSend, FiThumbsUp, FiThumbsDown, FiCopy, FiSearch, FiMoreVertical, FiDownload, FiTrash2 } from 'react-icons/fi';
 import { FaRobot } from 'react-icons/fa';
-import { sendMessageToGemini } from '../services/geminiService';
-import { ChatMessage, ChatMode } from '../types';
+import { sendMessageToGemini, resetChat } from '../services/geminiService';
+import { ChatMessage } from '../types';
 import ChatbotTrigger from './ChatbotTrigger';
 
 const WELCOME_MESSAGE: ChatMessage = {
     id: 'initial-welcome',
     role: 'model',
-    text: `Soy VisionBot, el Asistente de IA de TradeVision.
+    text: `Soy VisionBot, el Asesor de Marca y Disciplina de TradeVision Latam. Mi propósito es asistirlo con disciplina y precisión.
 
-Mi propósito es asistirlo con disciplina y precisión, reflejando la metodología de nuestra academia. He sido entrenado para resolver sus consultas sobre:
+Usted dispone de un límite estricto de 25 consultas. Priorice la precisión, el tiempo es capital.
 
+He sido entrenado para resolver sus consultas sobre:
 - **Cursos Premium:** Metodología y Acceso.
 - **Ecosistema Gratuito:** Recursos y Beneficios.
 - **Brokers y Afiliados:** Cumplimiento y Ventajas.
 
-Formule su pregunta para iniciar la consulta.`,
+Formule su pregunta para iniciar la consulta.
+---
+*Advertencia de Riesgo: El trading de derivados conlleva un alto riesgo de pérdida de capital y puede no ser adecuado para todos. El Cliente asume todos los riesgos derivados de la fluctuación de los tipos de cambio. Los resultados pasados ​​no garantizan resultados futuros.*`,
     timestamp: Date.now(),
 };
 
@@ -41,12 +44,17 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
     });
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [mode, setMode] = useState<ChatMode>(ChatMode.Standard);
     const [searchQuery, setSearchQuery] = useState('');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [shouldRender, setShouldRender] = useState(isOpen);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    // Query Limit Logic
+    const userMessagesCount = messages.filter(msg => msg.role === 'user').length;
+    const queryLimit = 25;
+    const queriesLeft = queryLimit - userMessagesCount;
+    const isLimitReached = queriesLeft <= 0;
 
     useEffect(() => {
         if (isOpen) {
@@ -88,7 +96,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
     };
 
     const handleSend = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() || isLimitReached) return;
 
         const userMessage: ChatMessage = { id: Date.now().toString(), role: 'user', text: input, timestamp: Date.now() };
         setMessages(prev => [...prev, userMessage]);
@@ -104,7 +112,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
             
         const fullContext = `${pageContext}\n\n${newsContext}`.trim();
 
-        await sendMessageToGemini(input, mode, (chunk, sources) => {
+        await sendMessageToGemini(input, (chunk, sources) => {
             setMessages(prev =>
                 prev.map(msg =>
                     msg.id === modelMessageId
@@ -124,7 +132,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
                 messageId: feedbackMessage.id,
                 feedback: feedback,
                 responseText: feedbackMessage.text,
-                chatMode: mode
             });
         }
         setMessages(prevMessages =>
@@ -156,25 +163,11 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
         if (window.confirm('¿Estás seguro de que quieres borrar todo el historial de este chat? Esta acción no se puede deshacer.')) {
             localStorage.removeItem('tradevision-chat-history');
             setMessages([WELCOME_MESSAGE]);
+            resetChat();
             setIsMenuOpen(false);
         }
     };
     
-    const ModeButton = ({ buttonMode, icon, label, tooltip }: { buttonMode: ChatMode; icon: React.ReactNode; label: string; tooltip: string; }) => (
-        <div className="relative flex-1 group">
-            <button
-                onClick={() => setMode(buttonMode)}
-                className={`w-full flex items-center justify-center gap-2 p-2 rounded-lg transition-colors text-xs
-                    ${mode === buttonMode ? 'bg-brand-accent text-brand-primary' : 'bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20'}`}
-            >
-                {icon} {label}
-            </button>
-            <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-max max-w-[200px] bg-gray-800 text-white text-center text-xs rounded-md px-3 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                {tooltip}
-            </span>
-        </div>
-    );
-
     const filteredMessages = messages.filter(msg =>
         msg.text.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -249,16 +242,14 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
                                     aria-label="Buscar en la conversación"
                                 />
                             </div>
-                            <div className="flex gap-2 mt-3">
-                               <ModeButton buttonMode={ChatMode.Standard} icon={<FiZap />} label="Rápido" tooltip="Respuestas rápidas y concisas. Ideal para preguntas generales." />
-                               <ModeButton buttonMode={ChatMode.Grounded} icon={<FiGlobe />} label="Preciso" tooltip="Respuestas basadas en búsquedas web recientes. Ideal para información actualizada." />
-                               <ModeButton buttonMode={ChatMode.Thinking} icon={<FiCpu />} label="Avanzado" tooltip="Respuestas más elaboradas y con razonamiento profundo. Ideal para tareas complejas." />
-                            </div>
                         </header>
                         <div className="flex-1 p-4 overflow-y-auto space-y-4">
                             {filteredMessages.map((msg, index) => {
                                  const isLastMessage = index === filteredMessages.length - 1;
                                  const showFeedback = msg.role === 'model' && msg.text && (!isLoading || !isLastMessage) && msg.id !== 'initial-welcome';
+                                 
+                                 const [mainText, ...disclaimerParts] = msg.text.split('---');
+                                 const disclaimer = disclaimerParts.length > 0 ? disclaimerParts.join('---') : null;
 
                                  return (
                                     <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} ${msg.id === 'initial-welcome' ? 'animate-fade-in-up' : ''}`}>
@@ -270,14 +261,21 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
                                             >
                                                 <FiCopy size={12} />
                                             </button>
-                                            <p className="whitespace-pre-wrap text-sm">
-                                                {msg.text}
-                                                {msg.role === 'model' && isLoading && isLastMessage && msg.text.length === 0 && (
-                                                    <span className="animate-pulse">
-                                                        {mode === ChatMode.Thinking ? ' Pensando...' : '...'}
-                                                    </span>
-                                                )}
-                                            </p>
+                                            
+                                            <p className="whitespace-pre-wrap text-sm" dangerouslySetInnerHTML={{ __html: mainText.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>') }}></p>
+                                            
+                                            {msg.role === 'model' && isLoading && isLastMessage && msg.text.length === 0 && (
+                                                <span className="animate-pulse">...</span>
+                                            )}
+                                            
+                                            {msg.role === 'model' && disclaimer && (
+                                                <div className="mt-3 pt-3 border-t border-gray-300 dark:border-white/20">
+                                                    <p className="whitespace-pre-wrap text-xs text-gray-500 dark:text-gray-400 italic">
+                                                        {disclaimer.trim()}
+                                                    </p>
+                                                </div>
+                                            )}
+
                                             {msg.sources && msg.sources.length > 0 && (
                                                 <div className="mt-2 border-t border-brand-primary/20 dark:border-white/20 pt-2">
                                                     <h4 className="text-xs font-bold mb-1">Fuentes:</h4>
@@ -335,21 +333,26 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
                                     type="text"
                                     value={input}
                                     onChange={e => setInput(e.target.value)}
-                                    onKeyPress={e => e.key === 'Enter' && !isLoading && handleSend()}
-                                    placeholder="Haz una pregunta..."
+                                    onKeyPress={e => e.key === 'Enter' && !isLoading && !isLimitReached && handleSend()}
+                                    placeholder={isLimitReached ? "Límite de consultas alcanzado" : "Haz una pregunta..."}
                                     className="flex-1 bg-gray-200 dark:bg-gray-800 text-sm py-3 px-5 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all duration-300"
-                                    disabled={isLoading}
+                                    disabled={isLoading || isLimitReached}
                                     aria-label="Escribe tu pregunta"
                                 />
                                 <button 
                                     onClick={handleSend} 
-                                    disabled={isLoading} 
+                                    disabled={isLoading || isLimitReached} 
                                     className="bg-brand-accent text-brand-primary p-3 rounded-full disabled:opacity-50 disabled:scale-100 hover:scale-110 active:scale-100 transition-transform duration-200"
                                     aria-label="Enviar mensaje"
                                 >
                                     <FiSend />
                                 </button>
                             </div>
+                            <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
+                                {isLimitReached
+                                    ? "Ha alcanzado el límite de 25 consultas."
+                                    : `Consultas restantes: ${queriesLeft < 0 ? 0 : queriesLeft}`}
+                            </p>
                         </footer>
                     </div>
                 </div>

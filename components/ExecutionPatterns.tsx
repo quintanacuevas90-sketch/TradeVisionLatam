@@ -9,7 +9,7 @@ const patterns = [
         description: 'Indica un posible cambio de dirección. Una vela alcista es envuelta completamente por una vela bajista.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <rect x="25" y="50" width="20" height="30" fill="#10B981" />
                 <rect x="55" y="20" width="25" height="80" fill="#EF4444" />
             </svg>
@@ -21,7 +21,7 @@ const patterns = [
         description: 'Posible reversión en un impulso alcista o continuidad en uno bajista. Marca agotamiento comprador.',
         effectiveness: 'Media-Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <line x1="50" y1="10" x2="50" y2="108" stroke="#EF4444" strokeWidth="4" />
                 <line x1="35" y1="110" x2="65" y2="110" stroke="#EF4444" strokeWidth="4" />
             </svg>
@@ -33,7 +33,7 @@ const patterns = [
         description: 'Aparece en una tendencia alcista. Su larga mecha inferior indica un rechazo de los precios bajos, pero la falta de continuación alcista sugiere debilidad.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <line x1="50" y1="30" x2="50" y2="110" stroke="#EF4444" strokeWidth="4" />
                 <rect x="40" y="10" width="20" height="20" fill="#EF4444" />
             </svg>
@@ -45,7 +45,7 @@ const patterns = [
         description: 'Aparece en una tendencia alcista. Su larga mecha superior indica un fuerte rechazo de los precios altos por parte de los vendedores.',
         effectiveness: 'Baja-Media',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <line x1="50" y1="10" x2="50" y2="90" stroke="#EF4444" strokeWidth="4" />
                 <rect x="40" y="90" width="20" height="20" fill="#EF4444" />
             </svg>
@@ -57,7 +57,7 @@ const patterns = [
         description: 'Patrón de tres velas de reversión. Una vela alcista grande, una pequeña vela de indecisión y una vela bajista que cierra por debajo del 50% de la primera.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="120" height="120" viewBox="0 0 120 120" className="mx-auto">
+            <svg width="120" height="120" viewBox="0 0 120 120" className="mx-auto holographic-pattern">
                 <rect x="10" y="40" width="25" height="70" fill="#10B981" />
                 <rect x="50" y="10" width="15" height="15" fill="currentColor" />
                 <rect x="80" y="30" width="25" height="70" fill="#EF4444" />
@@ -70,7 +70,7 @@ const patterns = [
         description: 'Tras una vela alcista, una vela bajista abre por encima pero cierra por debajo del 50% del cuerpo de la primera, mostrando un cambio de poder a los vendedores.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <rect x="20" y="30" width="25" height="80" fill="#10B981" />
                 <rect x="55" y="10" width="25" height="80" fill="#EF4444" />
             </svg>
@@ -82,7 +82,7 @@ const patterns = [
         description: 'Una pequeña vela bajista aparece contenida dentro del cuerpo de la gran vela alcista anterior, indicando una pérdida de impulso alcista.',
         effectiveness: 'Baja',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <rect x="20" y="20" width="30" height="80" fill="#10B981" />
                 <rect x="60" y="50" width="15" height="20" fill="#EF4444" />
             </svg>
@@ -94,7 +94,7 @@ const patterns = [
         description: 'Tres velas bajistas largas y consecutivas que cierran cada vez más bajo. Un fuerte indicador de reversión bajista.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="120" height="120" viewBox="0 0 120 120" className="mx-auto">
+            <svg width="120" height="120" viewBox="0 0 120 120" className="mx-auto holographic-pattern">
                 <rect x="10" y="10" width="20" height="50" fill="#EF4444" />
                 <rect x="45" y="30" width="20" height="50" fill="#EF4444" />
                 <rect x="80" y="50" width="20" height="50" fill="#EF4444" />
@@ -108,7 +108,7 @@ const patterns = [
         description: 'Indica un posible cambio de dirección. Una vela bajista es envuelta completamente por una vela alcista.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <rect x="25" y="50" width="20" height="30" fill="#EF4444" />
                 <rect x="55" y="20" width="25" height="80" fill="#10B981" />
             </svg>
@@ -120,7 +120,7 @@ const patterns = [
         description: 'Probable reversión en un impulso bajista o continuidad en uno alcista. Marca un fuerte rechazo de precios bajos.',
         effectiveness: 'Media-Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <line x1="50" y1="12" x2="50" y2="110" stroke="#10B981" strokeWidth="4" />
                 <line x1="35" y1="10" x2="65" y2="10" stroke="#10B981" strokeWidth="4" />
             </svg>
@@ -132,7 +132,7 @@ const patterns = [
         description: 'Aparece en una tendencia bajista. Su larga mecha inferior indica un rechazo de los precios bajos por parte de los compradores.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <line x1="50" y1="30" x2="50" y2="110" stroke="#10B981" strokeWidth="4" />
                 <rect x="40" y="10" width="20" height="20" fill="#10B981" />
             </svg>
@@ -144,7 +144,7 @@ const patterns = [
         description: 'Aparece en una tendencia bajista. Aunque los vendedores empujaron el precio hacia abajo, la incapacidad de mantener los mínimos sugiere agotamiento vendedor.',
         effectiveness: 'Baja-Media',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <line x1="50" y1="10" x2="50" y2="90" stroke="#10B981" strokeWidth="4" />
                 <rect x="40" y="90" width="20" height="20" fill="#10B981" />
             </svg>
@@ -156,7 +156,7 @@ const patterns = [
         description: 'Patrón de tres velas de reversión. Una vela bajista grande, una pequeña vela de indecisión y una vela alcista que cierra por encima del 50% de la primera.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="120" height="120" viewBox="0 0 120 120" className="mx-auto">
+            <svg width="120" height="120" viewBox="0 0 120 120" className="mx-auto holographic-pattern">
                 <rect x="10" y="10" width="25" height="70" fill="#EF4444" />
                 <rect x="50" y="95" width="15" height="15" fill="currentColor" />
                 <rect x="80" y="20" width="25" height="70" fill="#10B981" />
@@ -169,7 +169,7 @@ const patterns = [
         description: 'Tras una vela bajista, una vela alcista abre por debajo pero cierra por encima del 50% del cuerpo de la primera, mostrando un fuerte cambio de poder a los compradores.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <rect x="20" y="10" width="25" height="80" fill="#EF4444" />
                 <rect x="55" y="30" width="25" height="80" fill="#10B981" />
             </svg>
@@ -181,7 +181,7 @@ const patterns = [
         description: 'Una pequeña vela alcista aparece contenida dentro del cuerpo de la gran vela bajista anterior, indicando una pérdida de impulso bajista.',
         effectiveness: 'Baja',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <rect x="20" y="20" width="30" height="80" fill="#EF4444" />
                 <rect x="60" y="50" width="15" height="20" fill="#10B981" />
             </svg>
@@ -193,7 +193,7 @@ const patterns = [
         description: 'Tres velas alcistas largas y consecutivas que cierran cada vez más alto. Un fuerte indicador de reversión alcista.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="120" height="120" viewBox="0 0 120 120" className="mx-auto">
+            <svg width="120" height="120" viewBox="0 0 120 120" className="mx-auto holographic-pattern">
                 <rect x="10" y="50" width="20" height="50" fill="#10B981" />
                 <rect x="45" y="30" width="20" height="50" fill="#10B981" />
                 <rect x="80" y="10" width="20" height="50" fill="#10B981" />
@@ -207,7 +207,7 @@ const patterns = [
         description: 'Indica indecisión y equilibrio entre compradores y vendedores. El precio de apertura y cierre son casi idénticos. No se recomienda operar sin experiencia.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <line x1="50" y1="20" x2="50" y2="100" stroke="currentColor" strokeWidth="4" />
                 <line x1="30" y1="60" x2="70" y2="60" stroke="currentColor" strokeWidth="4" />
             </svg>
@@ -219,7 +219,7 @@ const patterns = [
         description: 'Similar al DOJI, pero con mechas de gran tamaño que indican una gran volatilidad además de indecisión. Máxima alerta en el mercado.',
         effectiveness: 'Alta',
         svg: (
-            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto">
+            <svg width="100" height="120" viewBox="0 0 100 120" className="mx-auto holographic-pattern">
                 <line x1="50" y1="5" x2="50" y2="115" stroke="currentColor" strokeWidth="4" />
                 <line x1="30" y1="60" x2="70" y2="60" stroke="currentColor" strokeWidth="4" />
             </svg>
@@ -255,12 +255,8 @@ const ExecutionPatterns: React.FC = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-brand-primary p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-white/10">
+        <div className="bg-white dark:bg-brand-primary/50 p-4 sm:p-8 rounded-xl">
             <div className="text-center">
-                <div className="inline-flex items-center gap-2 bg-brand-primary text-white px-3 py-1 rounded-full text-sm font-bold mb-2">NIVEL 2</div>
-                <h2 className="text-4xl font-extrabold text-brand-primary dark:text-white flex items-center justify-center gap-3">
-                    <FiEye /> Entrenamiento de Patrones de Ejecución
-                </h2>
                 <p className="mt-2 text-gray-600 dark:text-gray-400">Refuerza tu visión con el entrenamiento repetitivo. Como un atleta de élite, la maestría se logra a través de la práctica constante.</p>
             </div>
 

@@ -3,7 +3,7 @@
 
 export type ModalType = 'premium-courses' | 'affiliate' | 'brokers' | 'community' | 'support' | 'mentors';
 
-export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora' | 'forex-elite' | 'binarias-pro-c90' | 'binarias-intermedio' | 'comunidad' | 'ia-manual' | 'legal-verification' | 'aviso-legal-riesgo' | 'terminos-academia' | 'politica-privacidad' | 'transparencia-legal' | 'execution-zone';
+export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora' | 'forex-elite' | 'binarias-pro-c90' | 'binarias-intermedio' | 'comunidad' | 'ia-manual' | 'legal-verification' | 'aviso-legal-riesgo' | 'terminos-academia' | 'politica-privacidad' | 'transparencia-legal' | 'execution-zone' | 'protocolo-confianza';
 
 export interface Testimonial {
     name: string;
@@ -54,12 +54,6 @@ export interface ChatMessage {
 export interface GroundingSource {
     uri: string;
     title: string;
-}
-
-export enum ChatMode {
-    Standard = 'Standard',
-    Thinking = 'Thinking',
-    Grounded = 'Grounded'
 }
 
 export type SearchResultItem =

@@ -4,11 +4,27 @@ import Modal from './Modal';
 import { BINARY_BROKERS, FOREX_BROKERS, DIGITAL_WALLETS } from '../constants';
 import BrokerCard from '../components/BrokerCard';
 import { FaCheckCircle, FaClipboardList, FaRocket } from 'react-icons/fa';
+import { FiShield } from 'react-icons/fi';
 
 const BrokersModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     return (
         <Modal onClose={onClose} title="Brokers y Herramientas Recomendadas">
             <div className="space-y-12">
+
+                <section className="p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 text-blue-800 dark:text-blue-300 rounded-r-lg">
+                    <div className="flex items-start">
+                        <FiShield className="h-6 w-6 mr-3 mt-1 text-blue-500 flex-shrink-0" />
+                        <div>
+                            <h3 className="font-extrabold text-lg">Ética de Afiliados y Fondos: Nuestra Transparencia</h3>
+                            <ul className="mt-2 text-sm space-y-2">
+                                <li><strong>Declaración de Comisión:</strong> Al registrarse con nuestro enlace, TRADEVISION Latam recibe una comisión. Esta comisión se reinvierte íntegramente en la mejora de nuestra plataforma educativa (Zona de Ejecución) y en la creación de contenido de valor, no en incentivos de alto riesgo.</li>
+                                <li><strong>Descarga de Responsabilidad de Fondos:</strong> Debe entender que TRADEVISION no gestiona su capital ni sus retiros. Somos una entidad de formación. No somos responsables de los fondos depositados, los tiempos de retiro o los problemas técnicos del broker.</li>
+                                <li><strong>Prohibición Ética:</strong> Nuestro enfoque es la disciplina. Nunca fomentaremos el exceso de depósito o el uso de estrategias de alto riesgo para cumplir volumen de bonos.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Opciones Binarias Section */}
                 <div>
                     <h3 className="text-2xl font-bold mb-4 text-brand-primary dark:text-white border-b-2 border-brand-accent pb-2">Opciones Binarias</h3>

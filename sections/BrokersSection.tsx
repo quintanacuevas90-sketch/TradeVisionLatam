@@ -5,12 +5,12 @@ import { FEATURED_BROKERS } from '../constants';
 import BrokerCard from '../components/BrokerCard';
 import { PartnerTool } from '../types';
 import { useRouter } from '../hooks/useRouter';
-import { FiArrowRight } from 'react-icons/fi';
+import { FiArrowRight, FiAlertCircle } from 'react-icons/fi';
 
 const BrokersSection: React.FC = () => {
     const { navigate } = useRouter();
 
-    const title = <><span translate="no">Brokers</span> <span className="text-brand-accent">Recomendados</span></>;
+    const title = <>Brokers <span className="text-brand-accent">Recomendados</span></>;
     const subtitle = "Plataformas para practicar (Demo) y herramientas para operar profesionalmente (Regulados).";
     const brokers: PartnerTool[] = FEATURED_BROKERS;
 
@@ -18,7 +18,15 @@ const BrokersSection: React.FC = () => {
         <AnimatedSection className="py-20 bg-gray-100 dark:bg-white/5">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-center text-3xl md:text-4xl font-bold mb-4">{title}</h2>
-                <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-3xl mx-auto">{subtitle}</p>
+                <p className="text-center text-gray-500 dark:text-gray-400 mb-8 max-w-3xl mx-auto">{subtitle}</p>
+                
+                <div className="max-w-3xl mx-auto mb-8 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700/50 text-center">
+                    <p className="text-xs text-blue-800 dark:text-blue-300">
+                        <FiAlertCircle className="inline-block mr-2" />
+                        <strong>Nota de Transparencia:</strong> Al usar nuestros enlaces de afiliados, apoyas la creación de contenido gratuito. No gestionamos tus fondos. <button onClick={() => navigate('/brokers')} className="underline font-bold">Leer más</button>
+                    </p>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {brokers.map((broker) => (
                         <BrokerCard key={broker.name} broker={broker} />

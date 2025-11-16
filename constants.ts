@@ -3,6 +3,16 @@ import { FaTelegram, FaInstagram, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import { FiMail } from 'react-icons/fi';
 
+export const TICKER_MESSAGES: string[] = [
+    "🎓 Nivel PRO | Forex Privado: Domina el mercado regulado con nuestro curso premium. ¡Aprende la disciplina del trading institucional!",
+    "🧠 Zona de Ejecución Activa: Entrena tu mente con el Simulador de Disciplina y los quizzes de Psicología. ¡Mejora tu Psicotrading hoy!",
+    "📚 Manuales Gratuitos: Descarga la Guía de Patrones de Velas y el resumen clave de Trading en la Zona. ¡Conocimiento sólido para tu estrategia!",
+    "✅ Comunidad Gratuita: Únete a nuestro canal de Telegram para tips de disciplina y actualizaciones. ¡Cero scammers, solo traders serios!",
+    "🛠️ Control de Riesgo: Usa la Calculadora Binaria para simular riesgos (1% a 3% máximo). ¡La disciplina es el único edge!",
+    "🌟 Afiliados Transparentes: Registra tu cuenta broker con TRADEVISION y apoya nuestra plataforma educativa. ¡Transparencia total!",
+    "📈 Metodología C90trade: Descubre el régimen de 90 días que convierte la teoría en ejecución consistente. ¡El camino hacia la maestría!",
+];
+
 export const TESTIMONIALS: Testimonial[] = [
     {
         name: "João Silva",

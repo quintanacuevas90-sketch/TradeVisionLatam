@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaBrain } from 'react-icons/fa';
+import React, { useState, useRef } from 'react';
+import { FaBrain, FaShareAlt } from 'react-icons/fa';
 import { FiChevronRight, FiRefreshCw } from 'react-icons/fi';
 
 const quizzes = [
@@ -300,32 +300,52 @@ const QuizContent: React.FC<{
     onNext: () => void,
     onRestart: () => void,
 }> = ({ quiz, progress, onAnswer, onNext, onRestart }) => {
+    const [shareFeedback, setShareFeedback] = useState('');
+
+    const handleShare = () => {
+        const score = progress.score;
+        const total = quiz.questions.length;
+        const link = window.location.origin + window.location.pathname + '#/zona-de-ejecucion';
+        const message = `¡He completado la Evaluación de Psicología en TRADEVISION con ${score}/${total}! Este simulador de Cyber-Discipline es brutal. ¡Te reto a evaluar tu mente! 🚀 ${link}`;
+        navigator.clipboard.writeText(message);
+        setShareFeedback('¡Mensaje copiado! Pégalo en tu red social.');
+        setTimeout(() => setShareFeedback(''), 3000);
+    };
     
     if (progress.quizCompleted) {
-        const consistencyLevel = (progress.score / quiz.questions.length) * 100;
-        const isDisciplineHigh = progress.score >= 8; // 80% for 10 questions
+        const adherenceScore = (progress.score / quiz.questions.length) * 100;
+        const isDisciplineHigh = progress.score >= 8;
+        
+        let rank = 'Recluta';
+        let rankColor = 'text-red-500';
+        if (adherenceScore >= 90) { rank = 'Ejecutor de Élite'; rankColor = 'text-glow-turq'; }
+        else if (adherenceScore >= 70) { rank = 'Operador Disciplinado'; rankColor = 'text-green-400'; }
+        else if (adherenceScore >= 50) { rank = 'Aspirante Inconsistente'; rankColor = 'text-yellow-400'; }
+
         const recommendationText = isDisciplineHigh 
-            ? "Tu mentalidad muestra una base sólida de disciplina. Sigue reforzando estos hábitos para alcanzar la maestría."
-            : "Tu adicción a las recompensas aleatorias es alta. Tu próximo paso es asumir la responsabilidad y fortalecer tu disciplina. La rentabilidad está en el proceso, no en el resultado de una sola operación.";
+            ? "Tu sistema operativo mental muestra una base sólida de disciplina. Sigue reforzando estos protocolos para alcanzar el estado de ejecutor de élite."
+            : "ALERTA: Tu adicción a las recompensas aleatorias es alta. Tu próximo objetivo es asumir la responsabilidad y fortalecer tu disciplina. La rentabilidad está en el proceso, no en el resultado de una sola operación.";
 
         return (
             <div className="text-center animate-fade-in-up">
-                <h3 className="text-2xl font-bold text-brand-primary dark:text-white">Resultado de la Evaluación</h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">Tu nivel de consistencia en <strong>"{quiz.title}"</strong> es:</p>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-10 my-4 overflow-hidden border border-gray-300 dark:border-gray-600">
-                    <div
-                        className="bg-brand-accent h-full flex items-center justify-center text-brand-primary font-bold text-lg transition-all duration-500"
-                        style={{ width: `${consistencyLevel}%` }}
-                    >
-                        {progress.score}/{quiz.questions.length}
-                    </div>
-                </div>
+                <h3 className="text-2xl font-bold text-brand-primary dark:text-white">Análisis de Ejecución Psicológica</h3>
+                <p className="mt-4 text-gray-600 dark:text-gray-400">Puntuación de Adhesión:</p>
+                <p className={`text-6xl font-black ${rankColor} my-2`}>{adherenceScore.toFixed(0)}%</p>
+                <p className="font-bold text-xl">Rango Asignado: <span className={rankColor}>{rank}</span></p>
+                
                 <div className={`p-4 rounded-lg mt-6 ${isDisciplineHigh ? 'bg-green-100 dark:bg-green-900/20 border-green-500 text-green-800 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/20 border-red-500 text-red-800 dark:text-red-300'} border-l-4`}>
-                    <p className="font-semibold text-lg">{recommendationText}</p>
+                    <p className="font-semibold">{recommendationText}</p>
                 </div>
-                <button onClick={onRestart} className="mt-8 inline-flex items-center gap-2 bg-gray-200 dark:bg-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition text-lg">
-                    <FiRefreshCw /> Repetir Evaluación
-                </button>
+
+                <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                    <button onClick={onRestart} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition">
+                        <FiRefreshCw /> Repetir Evaluación
+                    </button>
+                    <button onClick={handleShare} className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary px-6 py-3 rounded-lg font-bold hover:bg-opacity-80 transition">
+                        <FaShareAlt /> Compartir Desafío
+                    </button>
+                </div>
+                {shareFeedback && <p className="text-green-400 text-sm mt-4">{shareFeedback}</p>}
             </div>
         );
     }
@@ -383,6 +403,68 @@ const MindsetQuiz: React.FC = () => {
         }))
     );
     
+    const audioCtxRef = useRef<AudioContext | null>(null);
+
+    const playSound = (type: 'correct' | 'incorrect' | 'finish-good' | 'finish-bad') => {
+        if (!audioCtxRef.current) {
+            try {
+                audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+            } catch (e) {
+                console.error("Web Audio API is not supported in this browser.");
+                return;
+            }
+        }
+        const audioCtx = audioCtxRef.current;
+
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+
+        switch (type) {
+            case 'correct':
+                oscillator.type = 'sine';
+                gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.01);
+                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+                break;
+            case 'incorrect':
+                oscillator.type = 'square';
+                gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.01);
+                oscillator.frequency.setValueAtTime(200, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.15);
+                break;
+            case 'finish-good':
+                oscillator.type = 'triangle';
+                gainNode.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.01);
+                oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime + 0.2);
+                oscillator.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+                break;
+            case 'finish-bad':
+                oscillator.type = 'sawtooth';
+                gainNode.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.01);
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
+                gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(220, audioCtx.currentTime + 0.1); // A3
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+                break;
+        }
+
+        oscillator.start(audioCtx.currentTime);
+        oscillator.stop(audioCtx.currentTime + 0.5);
+    };
+
     const updateProgress = (index: number, newProgress: Partial<typeof quizProgress[0]>) => {
         setQuizProgress(prev => {
             const newTotalProgress = [...prev];
@@ -393,6 +475,7 @@ const MindsetQuiz: React.FC = () => {
 
     const handleAnswer = (optionIndex: number, isCorrect: boolean) => {
         if (quizProgress[activeQuizIndex].isAnswered) return;
+        playSound(isCorrect ? 'correct' : 'incorrect');
         const newScore = isCorrect ? quizProgress[activeQuizIndex].score + 1 : quizProgress[activeQuizIndex].score;
         updateProgress(activeQuizIndex, {
             selectedAnswer: optionIndex,
@@ -412,6 +495,12 @@ const MindsetQuiz: React.FC = () => {
             });
         } else {
             updateProgress(activeQuizIndex, { quizCompleted: true });
+            const adherenceScore = (currentProgress.score / currentQuiz.questions.length) * 100;
+            if (adherenceScore >= 70) {
+                playSound('finish-good');
+            } else {
+                playSound('finish-bad');
+            }
         }
     };
     
@@ -426,13 +515,9 @@ const MindsetQuiz: React.FC = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-brand-primary p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-white/10">
+        <div className="bg-white dark:bg-brand-primary/50 p-4 sm:p-8 rounded-xl">
             <div className="text-center">
-                <div className="inline-flex items-center gap-2 bg-brand-primary text-white px-3 py-1 rounded-full text-sm font-bold mb-2">NIVEL 1</div>
-                <h2 className="text-4xl font-extrabold text-brand-primary dark:text-white flex items-center justify-center gap-3">
-                    <FaBrain /> Evalúa tu Psicología
-                </h2>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">El 80% del éxito en el trading es mental. Responde con honestidad para medir tu disciplina en cada pilar fundamental.</p>
+                <p className="mt-2 text-gray-600 dark:text-gray-400 text-glow-violet">El 80% del éxito en el trading es mental. Responde con honestidad para medir tu disciplina en cada pilar fundamental.</p>
             </div>
             
             <div className="my-8 border-b border-gray-200 dark:border-white/10 flex justify-center">
@@ -453,7 +538,7 @@ const MindsetQuiz: React.FC = () => {
             
             <div className="mt-8">
                  <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold text-brand-primary dark:text-white">{quizzes[activeQuizIndex].title}</h3>
+                    <h3 className="text-2xl font-bold text-brand-primary dark:text-white text-glow-violet">{quizzes[activeQuizIndex].title}</h3>
                     <p className="text-gray-500 dark:text-gray-400">{quizzes[activeQuizIndex].description}</p>
                 </div>
                 <QuizContent 

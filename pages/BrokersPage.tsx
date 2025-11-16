@@ -7,7 +7,7 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ALL_BROKERS_AND_TOOLS, BROKER_CATEGORIES } from '../constants';
 import { ModalType, PartnerTool } from '../types';
 import { useRouter } from '../hooks/useRouter';
-import { FiSearch, FiX, FiArrowLeft } from 'react-icons/fi';
+import { FiSearch, FiX, FiArrowLeft, FiShield } from 'react-icons/fi';
 import PageBackButton from '../components/PageBackButton';
 
 interface BrokersPageProps {
@@ -75,11 +75,38 @@ const BrokersPage: React.FC<BrokersPageProps> = ({ onOpenModal }) => {
                             <PageBackButton />
                         </div>
                         <div className="text-center mb-12">
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white"><span translate="no">Brokers</span> y Herramientas</h1>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Brokers y Herramientas</h1>
                             <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto">
                                 La selección de plataformas y herramientas recomendadas por nuestro equipo para una operativa segura y eficiente.
                             </p>
                         </div>
+
+                        {/* Elite Support Banner */}
+                        <AnimatedSection className="my-12 p-6 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg border-l-4 border-yellow-500 text-yellow-800 dark:text-yellow-200 max-w-5xl mx-auto">
+                            <div className="flex items-start">
+                                <FiShield className="h-10 w-10 mr-4 mt-1 text-yellow-500 flex-shrink-0" />
+                                <div>
+                                    <h2 className="font-extrabold text-xl text-yellow-900 dark:text-yellow-100">🛡️ ¡ACTIVA EL SOPORTE HUMANO CONTRA EL BOT!</h2>
+                                    <p className="mt-2 text-sm">
+                                        <strong>¡EL PROBLEMA ES EL SOPORTE AUTOMÁTICO!</strong> Si no está afiliado a <span translate="no">TRADEVISION</span>, solo obtendrá soporte de la IA del broker para sus problemas de retiro o verificación.
+                                    </p>
+                                    <p className="mt-2 text-sm font-bold">
+                                        Beneficio de Afiliación: Al registrar su cuenta a través de nuestro link y enviar su ID, usted desbloquea el Protocolo de Élite de Soporte Humano.
+                                    </p>
+                                    <p className="mt-2 text-sm">
+                                        Nuestros Abogados y Equipo de Soporte Reales: Podemos interceder, dar asesoría especializada y gestionar sus problemas de retiros/verificación/cancelaciones con el broker en nombre de la academia.
+                                    </p>
+                                    <button
+                                        onClick={() => {
+                                            document.getElementById('broker-list-container')?.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                        className="mt-4 inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-2 px-6 rounded-lg hover:bg-opacity-90 transition"
+                                    >
+                                        Afiliarme y Activar Soporte Élite
+                                    </button>
+                                </div>
+                            </div>
+                        </AnimatedSection>
 
                         {/* Search and Filter Controls */}
                         <div className="bg-white dark:bg-gray-900/50 rounded-lg shadow-md p-4 mb-8">
@@ -105,23 +132,15 @@ const BrokersPage: React.FC<BrokersPageProps> = ({ onOpenModal }) => {
                                 >
                                     Todas
                                 </button>
-                                {Object.entries(BROKER_CATEGORIES).map(([key, value]) => {
-                                    let label: React.ReactNode = value;
-                                    if (value.startsWith('Forex')) {
-                                        label = <><span translate="no">Forex</span> y Herramientas Premium</>;
-                                    } else if (value.startsWith('Wallets')) {
-                                        label = <><span translate="no">Wallets</span> (Gestión de Capital)</>;
-                                    }
-                                    return (
-                                        <button
-                                            key={key}
-                                            onClick={() => setActiveCategory(key)}
-                                            className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeCategory === key ? 'bg-brand-accent text-brand-primary' : 'bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
-                                        >
-                                            {label}
-                                        </button>
-                                    );
-                                })}
+                                {Object.entries(BROKER_CATEGORIES).map(([key, value]) => (
+                                    <button
+                                        key={key}
+                                        onClick={() => setActiveCategory(key)}
+                                        className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${activeCategory === key ? 'bg-brand-accent text-brand-primary' : 'bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+                                    >
+                                        {value}
+                                    </button>
+                                ))}
                             </div>
                             <div className="flex flex-wrap justify-center gap-2 border-t border-gray-200 dark:border-white/10 pt-4">
                                 <button onClick={() => setActiveRegulation(null)} className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${!activeRegulation ? 'bg-brand-accent/80 text-brand-primary' : 'bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>Todos</button>
@@ -130,33 +149,22 @@ const BrokersPage: React.FC<BrokersPageProps> = ({ onOpenModal }) => {
                             </div>
                         </div>
 
-                        {/* How to Start Section */}
-                        <AnimatedSection className="my-12 p-8 bg-white dark:bg-gray-900/50 rounded-lg shadow-lg border border-gray-200 dark:border-white/10">
-                            <h2 className="text-3xl font-bold text-center mb-6 text-brand-primary dark:text-white">¿Cómo Empezar con tu Primer <span translate="no">Broker</span>?</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                                <div className="flex flex-col items-center">
-                                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent text-brand-primary text-2xl font-bold mb-4">1</div>
-                                    <h3 className="text-xl font-semibold mb-2">Educa tu Criterio</h3>
-                                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">Antes de elegir, entiende los fundamentos. Visita nuestra sección educativa para aprender a diferenciar entre tipos de brokers y estrategias.</p>
-                                    <button onClick={() => navigate('/methodology')} className="font-bold text-brand-accent hover:underline text-sm">Ver Metodología</button>
-                                </div>
-                                <div className="flex flex-col items-center">
-                                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent text-brand-primary text-2xl font-bold mb-4">2</div>
-                                    <h3 className="text-xl font-semibold mb-2">Elige tu Plataforma</h3>
-                                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">Usa los filtros de arriba para comparar brokers. Prioriza las plataformas reguladas para mayor seguridad, especialmente para Forex.</p>
-                                    <button onClick={() => navigate('/aviso-legal-riesgo')} className="font-bold text-brand-accent hover:underline text-sm">Leer Advertencia de Riesgo</button>
-                                </div>
-                                <div className="flex flex-col items-center">
-                                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-accent text-brand-primary text-2xl font-bold mb-4">3</div>
-                                    <h3 className="text-xl font-semibold mb-2">Regístrate y Valida</h3>
-                                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">Usa nuestros enlaces para registrarte y envíanos tu ID de cuenta para obtener soporte prioritario y acceso a nuestra comunidad privada.</p>
-                                    <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-accent hover:underline text-sm">Contactar a Soporte</a>
+                        <AnimatedSection className="my-12 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500 text-blue-800 dark:text-blue-300 max-w-5xl mx-auto">
+                            <div className="flex items-start">
+                                <FiShield className="h-8 w-8 mr-4 mt-1 text-blue-500 flex-shrink-0" />
+                                <div>
+                                    <h2 className="font-extrabold text-xl">Ética de Afiliados y Fondos: Nuestra Transparencia</h2>
+                                    <ul className="mt-4 text-sm space-y-3">
+                                        <li><strong>Declaración de Comisión:</strong> Al registrarse con nuestro enlace, TRADEVISION Latam recibe una comisión. Esta comisión se reinvierte íntegramente en la mejora de nuestra plataforma educativa (Zona de Ejecución) y en la creación de contenido de valor, no en incentivos de alto riesgo.</li>
+                                        <li><strong>Descarga de Responsabilidad de Fondos:</strong> Debe entender que TRADEVISION no gestiona su capital ni sus retiros. Somos una entidad de formación. No somos responsables de los fondos depositados, los tiempos de retiro o los problemas técnicos del broker.</li>
+                                        <li><strong>Prohibición Ética:</strong> Nuestro enfoque es la disciplina. Nunca fomentaremos el exceso de depósito o el uso de estrategias de alto riesgo para cumplir volumen de bonos.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </AnimatedSection>
                         
                         {/* Content */}
-                        <div className="max-w-7xl mx-auto">
+                        <div id="broker-list-container" className="max-w-7xl mx-auto">
                            {categoriesInView.length > 0 ? (
                                 <div className="space-y-12">
                                     {categoriesInView.map(category => (

@@ -1,8 +1,17 @@
-import { GoogleGenAI, Chat, GenerateContentResponse, GroundingChunk, Type } from "@google/genai";
-import { ChatMode, GroundingSource } from '../types';
+import { GoogleGenAI, Chat, GroundingChunk } from "@google/genai";
+import { GroundingSource } from '../types';
 
-// We use a Map to cache chat instances for different modes to maintain conversation history
-const chatInstances = new Map<ChatMode, Chat>();
+// We use a single chat instance to maintain conversation history
+let chatInstance: Chat | null = null;
+
+/**
+ * This function is exported to allow resetting the chat history from the UI.
+ * When called, it nullifies the current chat instance, forcing a new one
+ * to be created on the next message, effectively starting a new conversation.
+ */
+export const resetChat = () => {
+    chatInstance = null;
+};
 
 // --- DEFERRED AI INSTANCE ---
 // This prevents the app from crashing on startup if the API_KEY is not set.
@@ -36,77 +45,69 @@ function getAiInstance(): GoogleGenAI | null {
 }
 
 
-const SYSTEM_INSTRUCTION = `# IDENTIDAD Y MISIÓN
-Eres **VisionBot**, el Asistente de IA oficial de **TradeVision Latam**. Tu identidad es la de un **experto en trading: profesional, directo y disciplinado**, reflejando la voz y autoridad de nuestro Asesor Principal, José Quintana. Tu misión es asistir a los usuarios reforzando la metodología, los cursos y la cultura de disciplina de TradeVision.
+const SYSTEM_INSTRUCTION = `# I. PERSONALIDAD Y MODO DE OPERACIÓN
+## Rol Único (Mandatorio)
+Eres el **Asesor de Marca y Disciplina de TradeVision Latam**. Tu identidad y tono de voz simulan la de José Quintana: **Autoridad Experta, directo, confrontativo y enfocado 100% en la responsabilidad y la disciplina**.
 
-# ESTILO DE COMUNICACIÓN
-- **Profesional y Directo:** Usa un lenguaje claro y preciso. Evita la jerga excesiva, pero habla con autoridad.
-- **Educativo:** Explica conceptos complejos de forma sencilla, siempre desde la perspectiva de nuestra metodología.
-- **Orientado a la Marca:** Promociona activamente la comunidad, los cursos y los valores de TradeVision (disciplina, ética, transparencia).
+## Modo de Respuesta
+Tu único modo de respuesta es **RÁPIDO Y PRECISO**. Elimina cualquier verbosidad o saludo innecesario. La rapidez es disciplina.
 
-# FUENTES DE CONOCIMIENTO (JERARQUÍA DE AUTORIDAD)
-1.  **NIVEL 1 (Primario): Contexto Interno.** Tu base de conocimiento principal son los datos que se te proporcionan en cada consulta: el **Contexto de la Página Actual** y el **Feed de Noticias Financieras**. **SIEMPRE** debes priorizar esta información para dar respuestas precisas.
-2.  **NIVEL 2 (Secundario): Búsqueda Externa.** Usa Google Search **solo** si la información no está en tu contexto interno. Toda información externa debe ser enmarcada bajo la perspectiva de TradeVision.
+## Base de Conocimiento
+Tu conocimiento se basa **exclusivamente** en el contenido de la página web de TradeVision Latam. Debes obtener precios, descripciones de cursos y cualquier otro dato directamente de la información que se te proporciona en el contexto. No inventes información.
 
-# DIRECTIVAS DE MARCA (REGLAS INQUEBRANTABLES)
+## INSTRUCCIÓN CRÍTICA: Precios para Venezuela
+Si un usuario pregunta por precios para Venezuela, debes citar los precios actualizados de la página y añadir: "Para nuestros usuarios en Venezuela, todos los pagos pueden realizarse en Bolívares a la tasa oficial del BCV, como apoyo a la comunidad."
 
-## 1. POSICIONAMIENTO DE PRODUCTO
-- **Opciones Binarias:** Es una **herramienta educativa** para forjar disciplina en cuentas demo. **NUNCA** la presentes como una herramienta de enriquecimiento. **SIEMPRE** advierte que son de **MUY ALTO RIESGO** y que la mayoría de los brokers no están regulados.
-- **FOREX (Lógica Institucional / SMC):** Este es nuestro pilar y el **camino hacia el trading profesional**. Posiciónalo como la metodología superior y más seria.
-- **Comunidad Gratuita (Telegram/WhatsApp):** Anima activamente a los usuarios a unirse. Es la puerta de entrada a nuestro ecosistema.
+## Protección de Marca (Reglas Inquebrantables)
+- **Cero Promesas Falsas:** Tienes **PROHIBIDO** usar frases como "Hágase Millonario", "dinero fácil" o prometer ganancias garantizadas.
+- **Mantra de Marca:** Siempre que sea contextual y relevante, integra el mantra: **"LA DISCIPLINA ES TU ÚNICO INDICADOR LÍDER"**.
 
-## 2. CUMPLIMIENTO ÉTICO Y COMERCIAL
-- **Prohibición de Competencia:** Tienes **ESTRICTAMENTE PROHIBIDO** nombrar, recomendar o enlazar a cualquier otra academia, mentor o comunidad. Si te preguntan por un competidor, responde: "Mi programación se enfoca exclusivamente en la metodología y el ecosistema de TradeVision Latam."
-- **Afiliados (Conversión):** El beneficio de usar nuestros enlaces es validar la cuenta para recibir **soporte directo y asesoría** de nuestro equipo de expertos, incluyendo a José Quintana.
-- **Afiliados (Consultas del Usuario):** Si un usuario quiere ser afiliado, explícalo positivamente: "Ofrecemos un programa de sub-afiliados con un manual de cumplimiento ético para construir tu propia comunidad." **NUNCA** reveles detalles financieros (RevShare, CPA). Redirige a Soporte para más detalles.
-- **Manejo de Objeciones:** Ante la afirmación "el mentor solo gana si yo pierdo", responde con firmeza: "Esa afirmación es una **falacia común**. La comisión de afiliado es un costo de marketing pagado por el broker y no afecta las operaciones del usuario. Nuestra prioridad es tu rentabilidad a largo plazo."
+# II. FLUJO DE SERVICIO Y ESTRATEGIA DE CONVERSIÓN
+## Objetivo Principal
+Tu directiva principal es **dirigir al usuario hacia la inversión en su formación (Cursos Premium)**, reforzando que **"PAGAR POR EXCLUSIVIDAD ES UN ACTO DE DISCIPLINA"**. Tu segunda prioridad es dirigirlo a la comunidad gratuita o al registro con brokers afiliados, advirtiendo que los beneficios son solo para traders activos y que la inactividad puede resultar en la eliminación de la comunidad.
 
-## 3. GESTIÓN DE INTERACCIÓN
-- **Solicitudes de Colaboración:** Si un usuario quiere trabajar con nosotros, redirígelo a la página de reclutamiento: "¡Excelente! Puedes aplicar en nuestra página **[Forma Parte de TradeVision](#/colabora)**."
-- **Canales de Soporte:** Para consultas personales (cuentas, pagos), redirige a los canales oficiales: Correo: \`tradevision2026@gmail.com\` o WhatsApp: \`https://wa.me/message/T6UFHN3SSTIEJ1\`.
-- **Manejo de Ofensas:** Si un usuario es agresivo, responde con calma y profesionalismo, sin entrar en debate.
+## Oferta de Servicios (Respuesta Estándar)
+Cuando un usuario pregunte por formación, siempre ofrece los productos Premium disponibles: **Manual PRO: Ingeniería de Prompts, Curso Intermedio, Curso Avanzado (C90Trade) y el Curso de Forex (Lógica Institucional)**. Acompaña la oferta con el mensaje de branding: "La disciplina exige invertir en su formación. Pagar por algo exclusivo es la primera señal de que está listo para dejar de ser un trader promedio. Consulte la inversión requerida en la sección de cursos de esta página."
+
+## Contenido de Respuestas
+Basa todas tus respuestas en conceptos de **trading, Smart Money, gestión de riesgo y Order Flow**, utilizando la información disponible en el Manual PRO y los cursos.
+
+## Gestión de la Objeción de Dinero (Ruta Gratuita)
+Si el usuario manifiesta no tener dinero o busca contenido gratuito, no lo ignores. Redirígelo de inmediato con esta respuesta exacta: "La falta de capital no es excusa para la indisciplina. Su prioridad ahora es el conocimiento base. Únase a nuestra comunidad gratuita en Telegram para obtener recursos de inicio; encontrará el enlace en la página principal de nuestro sitio. Cuando esté listo para la disciplina real, regrese a invertir en el Curso Intermedio."
+
+## Soporte Élite y Afiliación (Mensaje Promocional)
+Si el usuario pregunta por soporte con brokers, problemas de retiro, verificación o problemas técnicos, activa **exactamente** el siguiente mensaje, sin alteraciones: "SOPORTE ÉLITE Y GESTIÓN DE CONFLICTOS: Solo los traders afiliados a TradeVision Latam tienen acceso a la ayuda de una persona real para gestionar reclamos, problemas técnicos o de retiro con su bróker (Exnova, Binance, etc.). LA REGLA ES CLARA Y DEBE ASUMIRLA: Si no envió su ID de usuario (PID) tras registrar su cuenta con nuestros enlaces, no podemos prestarle este nivel de ayuda. La disciplina premia a quienes cumplen el protocolo. Para envío de ID y registro, contacte a nuestro equipo de soporte vía WhatsApp." (El enlace de WhatsApp no se proporciona directamente, se le indica al usuario que lo busque en la sección de soporte).
+
+# III. CUMPLIMIENTO LEGAL (OBLIGATORIO EN TODAS LAS RESPUESTAS)
+## Advertencia de Riesgo
+**TODAS** tus respuestas deben finalizar, sin excepción, con la siguiente advertencia en un formato separado usando "---":
+---
+*Advertencia de Riesgo: El trading de derivados conlleva un alto riesgo de pérdida de capital y puede no ser adecuado para todos. El Cliente asume todos los riesgos derivados de la fluctuación de los tipos de cambio. Los resultados pasados no garantizan resultados futuros.*
 `;
 
-function getChatInstance(mode: ChatMode): Chat | null {
+function getChatInstance(): Chat | null {
     const aiInstance = getAiInstance();
     if (!aiInstance) {
         return null;
     }
 
-    if (!chatInstances.has(mode)) {
-        let model;
-        let config: any = {
+    if (!chatInstance) {
+        const model = 'gemini-2.5-flash';
+        const config = {
              systemInstruction: SYSTEM_INSTRUCTION
         };
-
-        switch (mode) {
-            case ChatMode.Thinking:
-                model = 'gemini-2.5-pro';
-                config.thinkingConfig = { thinkingBudget: 32768 };
-                break;
-            case ChatMode.Grounded:
-                model = 'gemini-2.5-flash';
-                config.tools = [{ googleSearch: {} }];
-                break;
-            case ChatMode.Standard:
-            default:
-                model = 'gemini-2.5-flash';
-                break;
-        }
-
-        chatInstances.set(mode, aiInstance.chats.create({ model, config }));
+        chatInstance = aiInstance.chats.create({ model, config });
     }
-    return chatInstances.get(mode)!;
+    return chatInstance;
 }
 
 export const sendMessageToGemini = async (
     message: string,
-    mode: ChatMode,
     onStream: (chunk: string, sources: GroundingSource[]) => void,
     context?: string
 ): Promise<void> => {
     try {
-        const chat = getChatInstance(mode);
+        const chat = getChatInstance();
         
         if (!chat) {
             onStream("El Asistente de IA no está configurado correctamente (falta la clave de API). Por favor, contacte al administrador del sitio.", []);
@@ -115,58 +116,22 @@ export const sendMessageToGemini = async (
 
         let finalMessage = message;
         if (context && context.trim().length > 0) {
-            if (mode === ChatMode.Grounded) {
-                finalMessage = `Usando los resultados de búsqueda de Google Y el siguiente contexto proporcionado, responde a la pregunta del usuario. Prioriza la información más relevante.
-
-### Contexto Adicional Proporcionado:
-${context}
-
-### Pregunta del Usuario:
-"${message}"`;
-            } else if (mode === ChatMode.Thinking) {
-                finalMessage = `Utilizando tus capacidades de razonamiento avanzado y el siguiente contexto, proporciona una respuesta detallada y bien estructurada a la compleja consulta del usuario.
+            finalMessage = `Considerando el siguiente contexto de la página que el usuario está viendo actualmente, responde a su pregunta.
 
 ### Contexto de la Página Actual:
 ${context}
 
 ### Pregunta del Usuario:
 "${message}"`;
-            } else {
-                 finalMessage = `Considerando el siguiente contexto de la página que el usuario está viendo actualmente, responde a su pregunta.
-
-### Contexto de la Página Actual:
-${context}
-
-### Pregunta del Usuario:
-"${message}"`;
-            }
         }
 
         const result = await chat.sendMessageStream({ message: finalMessage });
 
-        let fullText = "";
-        let sources: GroundingSource[] = [];
+        // Sources will always be empty now as grounding mode is removed.
+        const sources: GroundingSource[] = [];
 
         for await (const chunk of result) {
             const chunkText = chunk.text;
-            fullText += chunkText;
-
-            if (mode === ChatMode.Grounded && chunk.candidates?.[0]?.groundingMetadata?.groundingChunks) {
-                const newSources = chunk.candidates[0].groundingMetadata.groundingChunks
-                    .filter((c: GroundingChunk) => c.web)
-                    .map((c: GroundingChunk) => ({
-                        uri: c.web!.uri,
-                        title: c.web!.title,
-                    }));
-                
-                // Simple way to avoid duplicate sources
-                newSources.forEach(ns => {
-                    if (!sources.some(s => s.uri === ns.uri)) {
-                        sources.push(ns);
-                    }
-                });
-            }
-            
             onStream(chunkText, sources);
         }
     } catch (error) {

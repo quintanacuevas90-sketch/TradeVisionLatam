@@ -34,6 +34,9 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
             const faqSample = COMPREHENSIVE_FAQS.slice(0, 2).map(f => f.question).join('; ');
             context += `\nEstá en la página de Preguntas Frecuentes. Algunos temas cubiertos son: "${faqSample}".`;
             break;
+        case 'protocolo-confianza':
+            context += `\nEstá en la página 'FAQ & Protocolo de Confianza'. Esta página aborda las dudas más críticas de la comunidad sobre seguridad de fondos, retiros, bonos, y la diferencia entre binarias y Forex.`;
+            break;
         case 'brokers':
             const brokerSample = BINARY_BROKERS.slice(0, 2).map(b => b.name).join(', ');
             context += `\nEstá en la página de Brokers Recomendados. Se listan brokers para Binarias, Forex y Wallets. Algunos ejemplos son: ${brokerSample}.`;

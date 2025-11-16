@@ -54,6 +54,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
         { label: 'Cursos', action: () => navigate('/premium-courses') },
         { label: 'Comunidad', action: () => navigate('/comunidad') },
         { label: 'Blog', action: () => navigate('/blog') },
+        { label: 'Soporte', action: () => onOpenModal('support') },
     ];
 
     // Restructured navigation links for the side menu with clear grouping
@@ -66,11 +67,13 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 { label: 'Brokers', action: () => navigate('/brokers') },
                 { label: 'Blog', action: () => navigate('/blog') },
                 { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
+                { label: 'Soporte 24/7', action: () => onOpenModal('support') },
             ]
         },
         {
             title: 'Contenido y Recursos',
             links: [
+                { label: 'Protocolo de Confianza', action: () => navigate('/protocolo-confianza') },
                 { label: 'Zona de Ejecución', action: () => navigate('/zona-de-ejecucion') },
                 { label: 'Nuestra Metodología', action: () => navigate('/methodology') },
                 { label: 'Conoce a los Mentores', action: () => onOpenModal('mentors') },
@@ -119,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                     onClick={link.action}
                                     className="font-semibold text-gray-600 dark:text-gray-300 hover:text-brand-accent dark:hover:text-brand-accent transition-colors duration-300"
                                 >
-                                    {link.label === 'Brokers' ? <span translate="no">Brokers</span> : link.label}
+                                    {link.label}
                                 </button>
                             ))}
                         </nav>
@@ -185,7 +188,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                                     onClick={() => handleSideMenuClick(link.action)}
                                                     className="text-left text-base text-gray-800 dark:text-white hover:text-brand-accent transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10"
                                                 >
-                                                    {link.label === 'Brokers' ? <span translate="no">Brokers</span> : link.label}
+                                                    {link.label}
                                                 </button>
                                             ))}
                                         </div>

@@ -79,20 +79,16 @@ const AdvancedMindset: React.FC = () => {
     }
 
     return (
-        <div className="bg-brand-primary text-white p-8 rounded-xl shadow-2xl border border-brand-accent/30 relative overflow-hidden">
+        <div className="bg-brand-primary/50 text-white p-4 sm:p-8 rounded-xl relative overflow-hidden">
             <div className="absolute inset-0 bg-grid-pattern opacity-20"></div>
             <div className="relative z-10">
                 <div className="text-center">
-                    <div className="inline-flex items-center gap-2 bg-brand-accent text-brand-primary px-3 py-1 rounded-full text-sm font-bold mb-2">NIVEL 4</div>
-                    <h2 className="text-4xl font-extrabold flex items-center justify-center gap-3">
-                        <FiCpu /> Mentalidad Avanzada: Reprogramación
-                    </h2>
-                    <p className="mt-2 text-gray-400">50 diapositivas de disciplina para eliminar el pensamiento de "apuesta" y forjar la mente de un ejecutor profesional.</p>
+                    <p className="mt-2 text-gray-400 text-glow-violet">50 diapositivas de disciplina para eliminar el pensamiento de "apuesta" y forjar la mente de un ejecutor profesional.</p>
                 </div>
 
                 <div className="relative mt-8 h-80 flex flex-col items-center justify-center bg-black/20 rounded-lg p-6">
                     <p className="absolute top-4 left-4 text-xs font-bold uppercase tracking-wider text-brand-accent">{categoryName}</p>
-                    <blockquote className="text-3xl font-semibold text-center italic">
+                    <blockquote className="text-3xl font-semibold text-center italic text-glow-violet">
                         "{currentQuote.text}"
                     </blockquote>
                     

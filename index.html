@@ -29,7 +29,7 @@
         animation-play-state: paused;
       }
       .animate-ticker-scroll {
-        animation: infinite-scroll 20s linear infinite;
+        animation: infinite-scroll 14s linear infinite;
       }
       .group:hover .animate-ticker-scroll {
         animation-play-state: paused;
@@ -122,6 +122,71 @@
       }
       .animate-flash-red-fast {
         animation: flash-red-fast 0.7s infinite;
+      }
+
+      /* --- Cyber-Discipline 2.0 Theme Styles --- */
+      .cyber-module {
+        background-color: rgba(10, 25, 49, 0.6); /* brand-primary with transparency */
+        border: 1px solid #40E0D0;
+        box-shadow: 0 0 10px rgba(64, 224, 208, 0.2), inset 0 0 15px rgba(64, 224, 208, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+      }
+      .module-header {
+        background: linear-gradient(90deg, rgba(64, 224, 208, 0.2) 0%, rgba(64, 224, 208, 0) 100%);
+        border-bottom: 1px solid #40E0D0;
+        clip-path: polygon(0 0, 95% 0, 100% 100%, 0% 100%);
+      }
+      .text-glow-turq { text-shadow: 0 0 5px #40E0D0, 0 0 10px #40E0D0, 0 0 15px #40E0D0; }
+      .text-glow-green { text-shadow: 0 0 4px #10B981, 0 0 8px #10B981, 0 0 12px #34D399; }
+      .text-glow-red { text-shadow: 0 0 4px #EF4444, 0 0 8px #EF4444, 0 0 12px #F87171; }
+      .text-glow-violet { text-shadow: 0 0 4px #8B5CF6, 0 0 8px #A78BFA; }
+      .holographic-pattern { filter: drop-shadow(0 0 5px #40E0D0) drop-shadow(0 0 10px #40E0D0); }
+
+      .hud-border {
+        border: 2px solid #40E0D0;
+        box-shadow: 0 0 15px rgba(64, 224, 208, 0.5), inset 0 0 15px rgba(64, 224, 208, 0.3);
+        background-color: rgba(64, 224, 208, 0.05);
+      }
+
+      /* Risk Slider Customization */
+      input[type="range"].risk-slider { height: 16px; }
+      input[type="range"].risk-slider::-webkit-slider-runnable-track { height: 16px; border-radius: 8px; transition: background-color 0.3s ease; }
+      input[type="range"].risk-slider::-moz-range-track { height: 16px; border-radius: 8px; transition: background-color 0.3s ease; }
+      @keyframes pulse-green { 50% { filter: brightness(1.5); } }
+      @keyframes pulse-red { 50% { filter: brightness(1.8); } }
+      input[type="range"].risk-slider.risk-safe-track::-webkit-slider-runnable-track { background-color: #34D399; animation: pulse-green 2s infinite; }
+      input[type="range"].risk-slider.risk-medium-track::-webkit-slider-runnable-track { background-color: #FBBF24; }
+      input[type="range"].risk-slider.risk-extreme-track::-webkit-slider-runnable-track { background-color: #EF4444; animation: pulse-red 1s infinite; }
+      input[type="range"].risk-slider.risk-safe-track::-moz-range-track { background-color: #34D399; animation: pulse-green 2s infinite; }
+      input[type="range"].risk-slider.risk-medium-track::-moz-range-track { background-color: #FBBF24; }
+      input[type="range"].risk-slider.risk-extreme-track::-moz-range-track { background-color: #EF4444; animation: pulse-red 1s infinite; }
+
+      /* Streak Counter Animations */
+      @keyframes glow-up {
+        from { text-shadow: none; transform: scale(1); }
+        to { text-shadow: 0 0 15px #40E0D0, 0 0 25px #40E0D0; transform: scale(1.2); }
+      }
+      .animate-glow-up { animation: glow-up 0.5s ease-out alternate 2; }
+
+      @keyframes system-error-glitch {
+        2%, 64% { transform: translate(2px, 0) skew(0deg); }
+        4%, 60% { transform: translate(-2px, 0) skew(0deg); }
+        62% { transform: translate(0, 0) skew(5deg); }
+      }
+      .animate-system-error { animation: system-error-glitch 1s linear infinite; color: #EF4444; text-shadow: 0 0 10px #EF4444; }
+
+      /* Button Flash */
+      @keyframes flash-turq-bg { 50% { background-color: #40E0D0; color: #0A1931; } }
+      .animate-flash-turq-bg { animation: flash-turq-bg 0.5s ease-out; }
+
+      /* Wipeout Animation */
+      @keyframes fast-flash-red {
+        0%, 100% { background-color: rgba(239, 68, 68, 0.7); box-shadow: 0 0 50px rgba(239, 68, 68, 0.8); }
+        50% { background-color: rgba(0,0,0,0.9); box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+      }
+      .animate-fast-flash-red {
+          animation: fast-flash-red 0.5s linear infinite;
       }
     </style>
     <script>

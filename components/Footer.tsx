@@ -38,6 +38,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
         {
             title: 'Legal',
             links: [
+                { label: 'Protocolo de Confianza', action: () => navigate('/protocolo-confianza') },
                 { label: 'Aviso Legal y Riesgo', action: () => navigate('/aviso-legal-riesgo') },
                 { label: 'Términos de la Academia', action: () => navigate('/terminos-academia') },
                 { label: 'Política de Privacidad', action: () => navigate('/politica-privacidad') },
@@ -53,8 +54,13 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
     const ipLegalParts = IP_LEGAL_TEXT.split('TradeVision Latam');
 
     return (
-        <footer className="bg-gray-100 dark:bg-brand-primary py-12">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <footer className="bg-gray-100 dark:bg-brand-primary">
+            <div className="bg-yellow-500/90 dark:bg-yellow-600/90 text-black py-2 px-4 text-xs font-bold text-center tracking-wide">
+                <p>
+                    <span className="font-extrabold">❗ LEYENDA CLAVE: SOPORTE DE ÉLITE.</span> Si no está afiliado a <span translate="no">TRADEVISION</span> (con ID registrado), NO podemos prestar asistencia ni gestión en problemas de broker o retiros. El soporte es un beneficio exclusivo para la comunidad activa.
+                </p>
+            </div>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
                     <div className="lg:col-span-2">
                         <h3 className="text-xl font-extrabold mb-4" translate="no">Trade<span className="text-brand-accent">Vision</span></h3>
@@ -62,15 +68,27 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                         <div className="flex space-x-4 mt-6">
                             {SOCIAL_LINKS.map((link) => {
                                 const isMail = link.href.startsWith('mailto:');
-                                const props = {
-                                    key: link.name,
-                                    href: link.href,
-                                    className: `transition text-2xl hover:opacity-80 ${link.colorClass}`,
-                                    'aria-label': link.name,
-                                    ...(!isMail && { target: '_blank', rel: 'noopener noreferrer' })
-                                };
+                                if (isMail) {
+                                    return (
+                                        <button
+                                            key={link.name}
+                                            onClick={() => { window.open(link.href); }}
+                                            className={`transition text-2xl hover:opacity-80 ${link.colorClass}`}
+                                            aria-label={link.name}
+                                        >
+                                            {React.createElement(link.icon)}
+                                        </button>
+                                    );
+                                }
                                 return (
-                                    <a {...props}>
+                                    <a
+                                        key={link.name}
+                                        href={link.href}
+                                        className={`transition text-2xl hover:opacity-80 ${link.colorClass}`}
+                                        aria-label={link.name}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         {React.createElement(link.icon)}
                                     </a>
                                 );
