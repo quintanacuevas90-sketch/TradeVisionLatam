@@ -1,10 +1,9 @@
-
-
 import React from 'react';
 import { ModalType } from '../types';
 import { LEGAL_TEXT, IP_LEGAL_TEXT, SOCIAL_LINKS } from '../constants';
 import { useRouter } from '../hooks/useRouter';
 import VerifiedBadge from './VerifiedBadge';
+import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 
 interface FooterProps {
     onOpenModal: (modal: ModalType) => void;
@@ -72,9 +71,10 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                                     return (
                                         <button
                                             key={link.name}
-                                            onClick={() => { window.open(link.href); }}
+                                            onClick={handleEmailClick}
                                             className={`transition text-2xl hover:opacity-80 ${link.colorClass}`}
                                             aria-label={link.name}
+                                            title={EMAIL_TOOLTIP}
                                         >
                                             {React.createElement(link.icon)}
                                         </button>

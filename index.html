@@ -19,17 +19,23 @@
         user-select: none; /* Standard syntax */
       }
       @keyframes infinite-scroll {
-        from { transform: translateX(0); }
-        to { transform: translateX(-50%); }
+        0% { transform: translate3d(0, 0, 0); }
+        100% { transform: translate3d(-50%, 0, 0); }
       }
       .animate-infinite-scroll {
-        animation: infinite-scroll 32s linear infinite;
+        animation: infinite-scroll 60s linear infinite;
+        will-change: transform;
+        backface-visibility: hidden;
+        perspective: 1000px;
       }
       .group:hover .animate-infinite-scroll {
         animation-play-state: paused;
       }
       .animate-ticker-scroll {
-        animation: infinite-scroll 14s linear infinite;
+        animation: infinite-scroll 45s linear infinite;
+        will-change: transform;
+        backface-visibility: hidden;
+        perspective: 1000px;
       }
       .group:hover .animate-ticker-scroll {
         animation-play-state: paused;

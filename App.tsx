@@ -43,6 +43,7 @@ import ExecutionZonePage from './pages/ExecutionZonePage';
 import AgeGateModal from './components/AgeGateModal';
 import CookieConsentModal from './components/CookieConsentModal';
 import FaqTrustPage from './pages/FaqTrustPage';
+import EmailCopyModal from './modals/EmailCopyModal';
 import { TICKER_MESSAGES } from './constants';
 
 const App: React.FC = () => {
@@ -55,6 +56,7 @@ const App: React.FC = () => {
     const { triggerText, closeTrigger } = useChatbotTriggers(activeModal, isChatOpen);
     const [showAgeGate, setShowAgeGate] = useState(false);
     const [showCookieConsent, setShowCookieConsent] = useState(false);
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
     // Age Gate & Cookie Consent logic
     useEffect(() => {
@@ -70,9 +72,9 @@ const App: React.FC = () => {
 
     // Effect to manage body scroll for all modals
     useEffect(() => {
-        const isModalOpen = showAgeGate || showCookieConsent;
+        const isModalOpen = showAgeGate || showCookieConsent || isEmailModalOpen;
         document.body.style.overflow = isModalOpen ? 'hidden' : 'auto';
-    }, [showAgeGate, showCookieConsent]);
+    }, [showAgeGate, showCookieConsent, isEmailModalOpen]);
 
     const handleAcceptAgeGate = () => {
         localStorage.setItem('ageGateAccepted', 'true');
@@ -116,6 +118,13 @@ const App: React.FC = () => {
         };
         window.addEventListener('open-chatbot', handleOpenChat);
         return () => window.removeEventListener('open-chatbot', handleOpenChat);
+    }, []);
+
+    // Listener for custom event to open Email Modal
+    useEffect(() => {
+        const handleOpenEmail = () => setIsEmailModalOpen(true);
+        window.addEventListener('open-email-modal', handleOpenEmail);
+        return () => window.removeEventListener('open-email-modal', handleOpenEmail);
     }, []);
 
     useEffect(() => {
@@ -197,15 +206,12 @@ const App: React.FC = () => {
         '/acerca-de': <AboutPage onOpenModal={handleOpenModal} />,
         '/responsabilidad': <ResponsibilityPage onOpenModal={handleOpenModal} />,
         '/impacto-social': <SocialImpactPage />,
-        // FIX: Corrected undefined 'onOpenModal' to 'handleOpenModal'
         '/colabora': <CollaboratePage onOpenModal={handleOpenModal} />,
         '/cursos/forex-elite': <ForexElitePage />,
         '/cursos/binarias-pro-c90': <BinariasProPage />,
         '/cursos/binarias-intermedio': <BinariasIntermedioPage />,
-        // FIX: Corrected undefined 'onOpenModal' to 'handleOpenModal'
         '/comunidad': <CommunityPage onOpenModal={handleOpenModal} />,
         '/manual/ia-prompts': <AiManualPage />,
-        // FIX: Corrected undefined 'onOpenModal' to 'handleOpenModal'
         '/verificacion-legal': <LegalVerificationPage onOpenModal={handleOpenModal} />,
         '/aviso-legal-riesgo': <AvisoLegalRiesgoPage />,
         '/terminos-academia': <TerminosAcademiaPage />,
@@ -219,6 +225,8 @@ const App: React.FC = () => {
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
             {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={handleViewPolicy} />}
             {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
+            {isEmailModalOpen && <EmailCopyModal onClose={() => setIsEmailModalOpen(false)} />}
+            
             <Router routes={routes} />
             {renderModal()}
             <Chatbot

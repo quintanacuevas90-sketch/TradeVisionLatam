@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -13,33 +14,74 @@ import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FiArrowRight, FiBookOpen, FiUsers, FiMail, FiEye, FiCpu } from 'react-icons/fi';
 import { FaBrain, FaShieldAlt, FaCalculator } from 'react-icons/fa';
+import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 
-const ModuleWrapper: React.FC<{ level: number; title: string; icon: React.ReactNode; children: React.ReactNode; }> = ({ level, title, icon, children }) => (
-    <div className="cyber-module rounded-xl overflow-hidden">
-        <div className="module-header p-4 flex items-center gap-4">
-            <span className="text-brand-accent font-mono font-black text-xl bg-black/50 px-3 py-1">NIVEL {level}</span>
-            <div className="flex items-center gap-3 text-white">
-                {icon}
-                <h2 className="text-xl font-extrabold tracking-wider">{title}</h2>
+const ModuleWrapper: React.FC<{ 
+    level: number; 
+    title: string; 
+    icon: React.ReactNode; 
+    children: React.ReactNode; 
+    imageUrl: string 
+}> = ({ level, title, icon, children, imageUrl }) => (
+    <div className="cyber-module rounded-xl overflow-hidden group border border-brand-accent/30 hover:border-brand-accent transition-all duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(64,224,208,0.2)] flex flex-col">
+        {/* Cinematic Header Banner - Height increased significantly to show more image */}
+        <div className="relative h-80 sm:h-96 overflow-hidden shrink-0">
+            <div className="absolute inset-0 bg-black">
+                <img 
+                    src={imageUrl} 
+                    alt={`Fondo Nivel ${level}`} 
+                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                />
+                {/* Gradient Overlays - Adjusted to be less intrusive on the image center */}
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-primary via-transparent to-transparent opacity-90"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-brand-primary via-brand-primary/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/80 via-transparent to-transparent opacity-70"></div>
+            </div>
+            
+            <div className="relative z-10 h-full p-6 sm:p-8 flex flex-col justify-end">
+                <div className="flex items-center gap-3 mb-2 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+                     <span className="text-brand-primary font-mono font-black text-xs bg-brand-accent px-2 py-1 rounded shadow-[0_0_10px_rgba(64,224,208,0.6)] tracking-widest uppercase">
+                        Acceso Nivel {level}
+                    </span>
+                    <div className="h-px w-16 bg-brand-accent/50"></div>
+                </div>
+               
+                <div className="flex items-end gap-5 text-white">
+                    <div className="p-4 bg-black/60 rounded-full backdrop-blur-md border border-brand-accent/30 text-brand-accent shadow-lg group-hover:scale-110 group-hover:border-brand-accent transition-all duration-300">
+                        {React.cloneElement(icon as React.ReactElement, { size: 32 })}
+                    </div>
+                    <div className="pb-1">
+                        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-wide text-white drop-shadow-lg leading-none uppercase mb-2 group-hover:text-glow-turq transition-all duration-300 text-shadow-md">
+                            {title}
+                        </h2>
+                        <div className="h-1 w-12 group-hover:w-full bg-brand-accent rounded-full transition-all duration-700 ease-out"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div className="p-4 sm:p-8">
+
+        {/* Content Body */}
+        <div className="p-4 sm:p-8 bg-brand-primary/40 backdrop-blur-md relative border-t border-brand-accent/20 flex-grow">
             {children}
         </div>
     </div>
 );
 
-const MissionBriefing: React.FC<{ icon: React.ReactNode; title: string; buttonText: string; buttonAction: () => void; children: React.ReactNode; }> = ({ icon, title, buttonText, buttonAction, children }) => (
-     <div className="cyber-module rounded-xl p-8 text-center">
-        <div className="text-4xl text-brand-accent mx-auto mb-4">{icon}</div>
-        <h3 className="text-2xl font-bold text-white">{title}</h3>
-        <p className="mt-2 text-gray-400 max-w-2xl mx-auto">{children}</p>
-        <button
-            onClick={buttonAction}
-            className="mt-6 inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition"
-        >
-            {buttonText} <FiArrowRight />
-        </button>
+const MissionBriefing: React.FC<{ icon: React.ReactNode; title: string; buttonText: string; buttonAction: () => void; children: React.ReactNode; titleTooltip?: string }> = ({ icon, title, buttonText, buttonAction, children, titleTooltip }) => (
+     <div className="cyber-module rounded-xl p-8 text-center bg-gradient-to-b from-gray-900/80 to-brand-primary/80 border border-white/5 backdrop-blur-sm relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
+        <div className="relative z-10">
+            <div className="text-4xl text-brand-accent mx-auto mb-4 animate-pulse">{icon}</div>
+            <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
+            <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">{children}</p>
+            <button
+                onClick={buttonAction}
+                title={titleTooltip}
+                className="mt-8 inline-flex items-center justify-center gap-2 bg-transparent border-2 border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-brand-primary font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-[0_0_15px_rgba(64,224,208,0.1)] hover:shadow-[0_0_20px_rgba(64,224,208,0.4)]"
+            >
+                {buttonText} <FiArrowRight />
+            </button>
+        </div>
     </div>
 );
 
@@ -58,29 +100,41 @@ const ExecutionZonePage: React.FC = () => {
     return (
         <>
             <Header onOpenModal={onOpenModal} />
-            <main className="pt-20 bg-brand-primary">
+            <main className="pt-20 bg-brand-primary min-h-screen">
                 {/* Hero */}
-                <AnimatedSection className="relative bg-brand-primary text-white py-24 sm:py-32">
-                    <div className="absolute inset-0 z-0 opacity-10 mix-blend-soft-light pointer-events-none bg-grid-pattern"></div>
-                    <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/50 to-brand-primary"></div>
+                <AnimatedSection className="relative bg-brand-primary text-white py-24 sm:py-32 overflow-hidden">
+                    <div className="absolute inset-0 z-0 opacity-20 mix-blend-soft-light pointer-events-none bg-grid-pattern"></div>
+                     <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/50 via-brand-primary/80 to-brand-primary"></div>
                     
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                         <div className="absolute top-8 left-8">
                             <PageBackButton variant="on-dark" />
                         </div>
                         <div className="pt-12 sm:pt-0">
-                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-glow-turq">ZONA DE EJECUCIÓN: CIBERDISCIPLINA</h1>
-                            <p className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-300">
-                                La teoría se acabó. Aquí es donde forjas la disciplina, la mentalidad y la precisión de un trader profesional. Completa los 5 niveles para evaluar tu preparación.
+                            <div className="inline-block mb-4 px-4 py-1 rounded-full border border-brand-accent/30 bg-brand-accent/10 text-brand-accent text-sm font-mono tracking-widest animate-pulse">
+                                SYSTEM STATUS: ONLINE
+                            </div>
+                            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-[0_0_25px_rgba(64,224,208,0.3)]">
+                                ZONA DE <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-blue-500">EJECUCIÓN</span>
+                            </h1>
+                            <p className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-400 border-l-2 border-brand-accent pl-6 text-left italic">
+                                "La teoría se acabó. Aquí es donde forjas la disciplina, la mentalidad y la precisión de un trader profesional. Completa los 5 niveles para evaluar tu preparación."
                             </p>
                         </div>
                     </div>
                 </AnimatedSection>
 
                 {/* Modules Section */}
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16 max-w-5xl">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24 max-w-5xl relative z-10">
+                    
+                    {/* NIVEL 1: EVALUACIÓN PSICOLÓGICA */}
                     <AnimatedSection id="module-1">
-                        <ModuleWrapper level={1} title="Evaluación Psicológica" icon={<FaBrain size={24} />}>
+                        <ModuleWrapper 
+                            level={1} 
+                            title="Evaluación Psicológica" 
+                            icon={<FaBrain />}
+                            imageUrl="https://i.pinimg.com/1200x/28/27/03/2827035b814c84f6596a533b8f142b76.jpg"
+                        >
                             <MindsetQuiz />
                         </ModuleWrapper>
                     </AnimatedSection>
@@ -96,8 +150,14 @@ const ExecutionZonePage: React.FC = () => {
                         </MissionBriefing>
                     </AnimatedSection>
                     
+                    {/* NIVEL 2: ENTRENAMIENTO DE PATRONES */}
                     <AnimatedSection id="module-2">
-                        <ModuleWrapper level={2} title="Entrenamiento de Patrones" icon={<FiEye size={24} />}>
+                        <ModuleWrapper 
+                            level={2} 
+                            title="Entrenamiento de Patrones" 
+                            icon={<FiEye />}
+                            imageUrl="https://i.pinimg.com/1200x/20/de/61/20de61b6a5276bcf5988b46805b8ffad.jpg"
+                        >
                             <ExecutionPatterns />
                         </ModuleWrapper>
                     </AnimatedSection>
@@ -113,20 +173,38 @@ const ExecutionZonePage: React.FC = () => {
                         </MissionBriefing>
                     </AnimatedSection>
 
+                    {/* NIVEL 3: SIMULADOR DE DISCIPLINA */}
                     <AnimatedSection id="module-3">
-                        <ModuleWrapper level={3} title="Simulador de Disciplina" icon={<FaShieldAlt size={24} />}>
+                        <ModuleWrapper 
+                            level={3} 
+                            title="Simulador de Disciplina" 
+                            icon={<FaShieldAlt />}
+                            imageUrl="https://i.pinimg.com/1200x/68/5a/14/685a1402457de41d3dd410e733bad8a3.jpg"
+                        >
                             <BinaryExecutionControl />
                         </ModuleWrapper>
                     </AnimatedSection>
                     
+                    {/* NIVEL 4: REPROGRAMACIÓN MENTAL */}
                     <AnimatedSection id="module-4">
-                        <ModuleWrapper level={4} title="Reprogramación Mental" icon={<FiCpu size={24} />}>
+                        <ModuleWrapper 
+                            level={4} 
+                            title="Reprogramación Mental" 
+                            icon={<FiCpu />}
+                            imageUrl="https://i.pinimg.com/1200x/98/59/d3/9859d3374c8de660a04f52cf276132c6.jpg"
+                        >
                             <AdvancedMindset />
                         </ModuleWrapper>
                     </AnimatedSection>
 
+                    {/* NIVEL 5: CÁLCULO DE ALTO RIESGO */}
                     <AnimatedSection id="module-5">
-                         <ModuleWrapper level={5} title="Cálculo de Alto Riesgo" icon={<FaCalculator size={24} />}>
+                         <ModuleWrapper 
+                            level={5} 
+                            title="Cálculo de Alto Riesgo" 
+                            icon={<FaCalculator />}
+                            imageUrl="https://i.pinimg.com/1200x/4e/d1/40/4ed140f9e51ef33678afa4ec9b6577f8.jpg"
+                        >
                             <HighRiskCalculator />
                         </ModuleWrapper>
                     </AnimatedSection>
@@ -136,7 +214,8 @@ const ExecutionZonePage: React.FC = () => {
                             icon={<FiMail />}
                             title="Participa en la Evolución"
                             buttonText="Sugerir Cambios"
-                            buttonAction={() => window.open("mailto:tradevision2026@gmail.com?subject=Sugerencia%20para%20la%20Zona%20de%20Ejecuci%C3%B3n")}
+                            titleTooltip={EMAIL_TOOLTIP}
+                            buttonAction={handleEmailClick}
                         >
                              Si deseas sugerir mejoras para la "Zona de Ejecución", te invitamos a ser parte de nuestra mejora continua. Envíanos tu propuesta para que sea evaluada.
                         </MissionBriefing>
@@ -144,13 +223,14 @@ const ExecutionZonePage: React.FC = () => {
                 </div>
 
                 {/* Final CTA */}
-                <AnimatedSection className="py-24 bg-brand-primary text-center border-t border-brand-accent/20">
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <AnimatedSection className="py-24 bg-brand-primary text-center border-t border-brand-accent/20 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-brand-accent/5 mix-blend-overlay"></div>
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <h2 className="text-4xl font-extrabold text-white text-glow-turq">¿LISTO PARA LA EJECUCIÓN REAL?</h2>
                         <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto mb-8">Has completado el entrenamiento. El siguiente paso es el sistema completo.</p>
                         <button
                             onClick={() => navigate('/cursos/binarias-pro-c90')}
-                            className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-105 animate-pulse-glow"
+                            className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-4 px-10 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-105 animate-pulse-glow shadow-[0_0_20px_rgba(64,224,208,0.4)]"
                         >
                             Acceder a la Capacitación C90trade <FiArrowRight />
                         </button>

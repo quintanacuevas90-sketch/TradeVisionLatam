@@ -9,6 +9,7 @@ import { SOCIAL_LINKS } from '../constants';
 import { FaBook, FaGraduationCap, FaUsers, FaTelegram } from 'react-icons/fa';
 import PageBackButton from '../components/PageBackButton';
 import { FiArrowLeft } from 'react-icons/fi';
+import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 
 interface CommunityPageProps {
     onOpenModal: (modal: ModalType) => void;
@@ -63,12 +64,28 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ onOpenModal }) => {
                         <div className="mt-8">
                             <h3 className="font-bold text-lg text-brand-primary dark:text-white mb-4">Nuestras Redes</h3>
                              <div className="flex justify-center flex-wrap gap-4">
-                                {SOCIAL_LINKS.map((link) => (
-                                    <a key={link.name} href={link.href} className="flex items-center gap-2 bg-white dark:bg-gray-700 py-2 px-4 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition" target="_blank" rel="noopener noreferrer">
-                                        {React.createElement(link.icon, { className: link.colorClass })}
-                                        <span className="font-semibold">{link.name}</span>
-                                    </a>
-                                ))}
+                                {SOCIAL_LINKS.map((link) => {
+                                    const isMail = link.href.startsWith('mailto:');
+                                    if (isMail) {
+                                        return (
+                                            <button
+                                                key={link.name}
+                                                onClick={handleEmailClick}
+                                                className="flex items-center gap-2 bg-white dark:bg-gray-700 py-2 px-4 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition"
+                                                title={EMAIL_TOOLTIP}
+                                            >
+                                                {React.createElement(link.icon, { className: link.colorClass })}
+                                                <span className="font-semibold">{link.name}</span>
+                                            </button>
+                                        );
+                                    }
+                                    return (
+                                        <a key={link.name} href={link.href} className="flex items-center gap-2 bg-white dark:bg-gray-700 py-2 px-4 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition" target="_blank" rel="noopener noreferrer">
+                                            {React.createElement(link.icon, { className: link.colorClass })}
+                                            <span className="font-semibold">{link.name}</span>
+                                        </a>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
@@ -87,7 +104,7 @@ const CommunityPage: React.FC<CommunityPageProps> = ({ onOpenModal }) => {
                                 className="inline-flex items-center justify-center gap-3 bg-brand-accent text-brand-primary font-extrabold py-5 px-12 rounded-xl text-2xl transform hover:scale-110 transition duration-300 shadow-lg shadow-brand-accent/50 animate-pulse"
                             >
                                 <FaTelegram size={32} />
-                                ACCEDER A LA COMUNIDAD GRATUITA
+                                ACCEDER LA COMUNIDAD GRATUITA
                             </a>
                         </div>
                         <div className="mt-12 text-center text-sm">

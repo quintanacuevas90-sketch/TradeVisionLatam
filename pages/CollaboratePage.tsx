@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -7,10 +5,11 @@ import AnimatedSection from '../components/AnimatedSection';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
-import { FaUserGraduate, FaShieldAlt, FaCheckCircle, FaCopy } from 'react-icons/fa';
-import { FiTrendingUp, FiAlertTriangle, FiHome, FiSend, FiArrowLeft, FiCheck, FiRefreshCw } from 'react-icons/fi';
+import { FaUserGraduate, FaShieldAlt, FaCheckCircle, FaClipboardList } from 'react-icons/fa';
+import { FiTrendingUp, FiAlertTriangle, FiHome, FiArrowLeft, FiMail, FiCopy, FiCheck } from 'react-icons/fi';
 import CollaborationTermsModal from '../modals/CollaborationTermsModal';
 import PageBackButton from '../components/PageBackButton';
+import { EMAIL_ADDRESS } from '../utils/emailHandler';
 
 interface CollaboratePageProps {
     onOpenModal: (modal: ModalType) => void;
@@ -31,64 +30,18 @@ const ProfileCard: React.FC<{ title: string; children: React.ReactNode; }> = ({ 
     </div>
 );
 
-const initialFormData = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    country: '',
-    languages: '',
-    position: 'Influencer/Youtuber',
-    socialLink: '',
-    source: '',
-    bio: ''
-};
-
-const countries = [
-  "Argentina", "Bolivia", "Chile", "Colombia", "Costa Rica", "Cuba",
-  "Ecuador", "El Salvador", "España", "Guatemala", "Honduras",
-  "México", "Nicaragua", "Panamá", "Paraguay", "Perú",
-  "Puerto Rico", "República Dominicana", "Uruguay", "Venezuela",
-  "---",
-  "Afganistán", "Albania", "Alemania", "Andorra", "Angola", "Antigua y Barbuda",
-  "Arabia Saudita", "Argelia", "Armenia", "Australia", "Austria", "Azerbaiyán",
-  "Bahamas", "Bangladés", "Barbados", "Baréin", "Bélgica", "Belice", "Benín",
-  "Bielorrusia", "Birmania", "Botsuana", "Brasil", "Brunéi", "Bulgaria",
-  "Burkina Faso", "Burundi", "Bután", "Cabo Verde", "Camboya", "Camerún",
-  "Canadá", "Catar", "Chad", "China", "Chipre", "Ciudad del Vaticano",
-  "Comoras", "Corea del Norte", "Corea del Sur", "Costa de Marfil", "Croacia",
-  "Dinamarca", "Dominica", "Egipto", "Emiratos Árabes Unidos", "Eritrea",
-  "Eslovaquia", "Eslovenia", "Estados Unidos", "Estonia", "Etiopía",
-  "Filipinas", "Finlandia", "Fiyi", "Francia", "Gabón", "Gambia", "Georgia",
-  "Ghana", "Granada", "Grecia", "Guinea", "Guinea-Bisáu", "Guinea Ecuatorial",
-  "Guyana", "Haití", "Hungría", "India", "Indonesia", "Irak", "Irán", "Irlanda",
-  "Islandia", "Islas Marshall", "Islas Salomón", "Israel", "Italia", "Jamaica",
-  "Japón", "Jordania", "Kazajistán", "Kenia", "Kirguistán", "Kiribati", "Kuwait",
-  "Laos", "Lesoto", "Letonia", "Líbano", "Liberia", "Libia", "Liechtenstein",
-  "Lituania", "Luxemburgo", "Madagascar", "Malasia", "Malaui", "Maldivas", "Malí",
-  "Malta", "Marruecos", "Mauricio", "Mauritania", "Micronesia", "Moldavia",
-  "Mónaco", "Mongolia", "Montenegro", "Mozambique", "Namibia", "Nauru", "Nepal",
-  "Níger", "Nigeria", "Noruega", "Nueva Zelanda", "Omán", "Países Bajos",
-  "Pakistán", "Palaos", "Papúa Nueva Guinea", "Polonia", "Portugal", "Reino Unido",
-  "República Centroafricana", "República Checa", "República de Macedonia",
-  "República del Congo", "República Democrática del Congo", "Ruanda", "Rumanía",
-  "Rusia", "Samoa", "San Cristóbal y Nieves", "San Marino", "San Vicente y las Granadinas",
-  "Santa Lucía", "Santo Tomé y Príncipe", "Senegal", "Serbia", "Seychelles",
-  "Sierra Leona", "Singapur", "Siria", "Somalia", "Sri Lanka", "Suazilandia",
-  "Sudáfrica", "Sudán", "Sudán del Sur", "Suecia", "Suiza", "Surinam",
-  "Tailandia", "Tanzania", "Tayikistán", "Timor Oriental", "Togo", "Tonga",
-  "Trinidad y Tobago", "Túnez", "Turkmenistán", "Turquía", "Tuvalu", "Ucrania",
-  "Uganda", "Uzbekistán", "Vanuatu", "Vietnam", "Yemen", "Yibuti", "Zambia",
-  "Zimbabue"
-];
+const RequirementItem: React.FC<{ text: string }> = ({ text }) => (
+    <li className="flex items-start gap-3 text-gray-700 dark:text-gray-300">
+        <FaCheckCircle className="text-brand-accent mt-1 flex-shrink-0" />
+        <span>{text}</span>
+    </li>
+);
 
 const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
     const { navigate } = useRouter();
-    const [formData, setFormData] = useState(initialFormData);
-    const [errors, setErrors] = useState<Partial<Record<keyof typeof formData | 'terms', string>>>({});
-    const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showLegalModal, setShowLegalModal] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         document.title = "Forma Parte de TradeVision | Colabora con Nosotros";
@@ -107,109 +60,13 @@ const CollaboratePage: React.FC<CollaboratePageProps> = ({ onOpenModal }) => {
         setShowLegalModal(false);
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-        if (errors[name as keyof typeof formData]) {
-            setErrors(prev => ({ ...prev, [name]: undefined }));
+    const handleCopyEmail = () => {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(EMAIL_ADDRESS);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
         }
     };
-
-    const validateForm = (): boolean => {
-        const newErrors: Partial<Record<keyof typeof formData | 'terms', string>> = {};
-        const { firstName, lastName, email, phone, country, languages, socialLink, bio } = formData;
-
-        const nameRegex = /^[\p{L}\s'-]+$/u;
-    
-        if (!firstName.trim()) newErrors.firstName = 'Por favor, introduce tu nombre.';
-        else if (!nameRegex.test(firstName)) newErrors.firstName = 'El nombre solo puede contener letras y espacios.';
-
-        if (!lastName.trim()) newErrors.lastName = 'Por favor, introduce tu apellido.';
-        else if (!nameRegex.test(lastName)) newErrors.lastName = 'El apellido solo puede contener letras y espacios.';
-        
-        if (!email.trim()) {
-            newErrors.email = 'Necesitamos tu correo electrónico para contactarte.';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            newErrors.email = 'Por favor, revisa el formato de tu correo (ej. tu@dominio.com).';
-        }
-        if (!phone.trim()) {
-            newErrors.phone = 'Por favor, introduce un número de teléfono.';
-        } else if (!/^\+?[0-9\s-()]{7,}$/.test(phone)) {
-            newErrors.phone = 'Introduce un número de teléfono válido, incluyendo el código de país.';
-        }
-        if (!country) newErrors.country = 'Por favor, selecciona tu país de residencia.';
-
-        if (!languages.trim()) newErrors.languages = 'Indica los idiomas que dominas.';
-        else if (!/^[\p{L}\s',-]+$/u.test(languages)) newErrors.languages = 'Los idiomas solo pueden contener letras, comas y espacios.';
-
-        if (!socialLink.trim()) {
-            newErrors.socialLink = 'El enlace a tu red social principal es necesario.';
-        } else {
-            try {
-                const url = new URL(socialLink);
-                if (!['http:', 'https:'].includes(url.protocol)) {
-                     throw new Error('Invalid protocol');
-                }
-            } catch (_) {
-                newErrors.socialLink = "El enlace no es una URL válida. Asegúrate de que empiece con 'https://' o 'http://'.";
-            }
-        }
-        if (!bio.trim()) {
-            newErrors.bio = 'Cuéntanos un poco sobre ti y tu visión.';
-        } else if (bio.trim().length < 50) {
-            newErrors.bio = `Tu biografía es muy corta. Por favor, proporciona más detalles (mínimo 50 caracteres, actual: ${bio.trim().length}).`;
-        }
-
-        if (!termsAccepted) {
-            newErrors.terms = 'Debes aceptar los términos y condiciones para continuar.';
-        }
-    
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!validateForm()) {
-            const firstError = document.querySelector('[aria-invalid="true"]');
-            if (firstError) {
-                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            return;
-        }
-
-        setFormStatus('submitting');
-        const { firstName, lastName, email, phone, country, languages, position, socialLink, source, bio } = formData;
-        
-        const subject = `Nueva Aplicación de Colaboración: ${position} - ${firstName} ${lastName}`;
-        const body = `
-Nueva aplicación recibida desde la página "Forma Parte de TradeVision":
---------------------------------------------------
-Nombre: ${firstName} ${lastName}
-Correo Electrónico: ${email}
-Teléfono (WhatsApp): ${phone}
-País de Residencia: ${country}
-Idiomas: ${languages}
-Posición de Interés: ${position}
-Red Social Principal: ${socialLink}
-Cómo nos conoció: ${source || 'No especificado'}
---------------------------------------------------
-Biografía y Visión:
-${bio}
---------------------------------------------------
-        `.trim();
-        
-        const mailtoLink = `mailto:tradevision2026@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        
-        window.open(mailtoLink);
-
-        setTimeout(() => {
-            setFormStatus('success');
-        }, 150);
-    };
-
-    const inputClasses = (field: keyof typeof formData) => 
-        `w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border ${errors[field] ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} focus:ring-2 focus:ring-brand-accent focus:outline-none transition-colors`;
     
     return (
         <>
@@ -262,134 +119,89 @@ ${bio}
                     </div>
                 </AnimatedSection>
 
-                {/* Application Form */}
+                {/* Application Guidelines */}
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white">¡Conectemos!</h2>
-                            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Completa el siguiente formulario (en español) y nuestro equipo de operaciones (liderado por Lucas Almeida) revisará tu perfil. Si cumples los requisitos, te contactaremos para una consulta.</p>
+                            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">Nuestro proceso de selección es riguroso. Para obtener el contacto de aplicación, debes confirmar que has leído las pautas y aceptado nuestro código de ética.</p>
                         </div>
-                        <form onSubmit={handleSubmit} noValidate className="bg-white dark:bg-gray-900/50 p-8 rounded-lg shadow-xl space-y-6">
-                            {formStatus !== 'success' ? (
-                                <>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                        <div>
-                                            <input type="text" name="firstName" placeholder="Nombre" onChange={handleChange} value={formData.firstName} required className={inputClasses('firstName')} aria-invalid={!!errors.firstName} aria-describedby="firstName-error" />
-                                            {errors.firstName && <p id="firstName-error" className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
-                                        </div>
-                                        <div>
-                                            <input type="text" name="lastName" placeholder="Apellido" onChange={handleChange} value={formData.lastName} required className={inputClasses('lastName')} aria-invalid={!!errors.lastName} aria-describedby="lastName-error" />
-                                            {errors.lastName && <p id="lastName-error" className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                        <div>
-                                            <input type="email" name="email" placeholder="Correo electrónico" onChange={handleChange} value={formData.email} required className={inputClasses('email')} aria-invalid={!!errors.email} aria-describedby="email-error" />
-                                            {errors.email && <p id="email-error" className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                                        </div>
-                                        <div>
-                                            <input type="tel" name="phone" placeholder="Número de teléfono (WhatsApp)" onChange={handleChange} value={formData.phone} required className={inputClasses('phone')} aria-invalid={!!errors.phone} aria-describedby="phone-error" />
-                                            {errors.phone && <p id="phone-error" className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-                                        </div>
-                                    </div>
-                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                        <div>
-                                            <select
-                                                name="country"
-                                                onChange={handleChange}
-                                                value={formData.country}
-                                                required
-                                                className={inputClasses('country')}
-                                                aria-invalid={!!errors.country}
-                                                aria-describedby="country-error"
-                                            >
-                                                <option value="" disabled>Selecciona tu país...</option>
-                                                {countries.map(c =>
-                                                    c === "---"
-                                                    ? <option key="divider" disabled>──────────</option>
-                                                    : <option key={c} value={c}>{c}</option>
-                                                )}
-                                            </select>
-                                            {errors.country && <p id="country-error" className="text-red-500 text-sm mt-1">{errors.country}</p>}
-                                        </div>
-                                        <div>
-                                            <input type="text" name="languages" placeholder="Idiomas que hablas" onChange={handleChange} value={formData.languages} required className={inputClasses('languages')} aria-invalid={!!errors.languages} aria-describedby="languages-error" />
-                                            {errors.languages && <p id="languages-error" className="text-red-500 text-sm mt-1">{errors.languages}</p>}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <select name="position" onChange={handleChange} value={formData.position} required className="w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-brand-accent focus:outline-none">
-                                            <option>Influencer/Youtuber</option>
-                                            <option>Gestor de Comunidad</option>
-                                            <option>Nuevo Mentor</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <input type="url" name="socialLink" placeholder="Enlace a tu Red Social Principal (TikTok, YouTube, etc.)" onChange={handleChange} value={formData.socialLink} required className={inputClasses('socialLink')} aria-invalid={!!errors.socialLink} aria-describedby="socialLink-error" />
-                                        {errors.socialLink && <p id="socialLink-error" className="text-red-500 text-sm mt-1">{errors.socialLink}</p>}
-                                    </div>
-                                     <div>
-                                        <input type="text" name="source" placeholder="¿Cómo supiste de TradeVision Latam?" onChange={handleChange} value={formData.source} className="w-full p-3 bg-gray-100 dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-brand-accent focus:outline-none"/>
-                                    </div>
-                                    <div>
-                                        <textarea name="bio" placeholder="Cuéntanos sobre ti y tu comunidad (Biografía breve / Visión)" rows={4} onChange={handleChange} value={formData.bio} required className={inputClasses('bio')} aria-invalid={!!errors.bio} aria-describedby="bio-error"></textarea>
-                                        {errors.bio && <p id="bio-error" className="text-red-500 text-sm mt-1">{errors.bio}</p>}
-                                    </div>
+                        
+                        <div className="bg-white dark:bg-gray-900/50 p-8 rounded-lg shadow-xl border border-gray-200 dark:border-white/10">
+                            <h3 className="text-xl font-bold text-brand-primary dark:text-white mb-6 flex items-center gap-2">
+                                <FaClipboardList className="text-brand-accent" />
+                                Checklist de Requisitos
+                            </h3>
+                            
+                            <div className="space-y-6 mb-8">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">Al escribirnos, asegúrate de incluir la siguiente información en el cuerpo del correo:</p>
+                                <ul className="space-y-3 pl-2">
+                                    <RequirementItem text="Nombre Completo y País de Residencia." />
+                                    <RequirementItem text="Número de contacto (WhatsApp)." />
+                                    <RequirementItem text="Enlace directo a tu Red Social Principal (donde tienes tu audiencia)." />
+                                    <RequirementItem text="Rol al que aplicas (Influencer, Gestor, Mentor)." />
+                                    <RequirementItem text="Breve biografía y visión: ¿Por qué TradeVision?" />
+                                </ul>
+                            </div>
 
-                                    <div>
-                                        <div className="flex items-start">
-                                            <input
-                                                id="terms"
-                                                name="terms"
-                                                type="checkbox"
-                                                checked={termsAccepted}
-                                                onChange={(e) => {
-                                                    setTermsAccepted(e.target.checked);
-                                                    if (errors.terms) setErrors(prev => ({...prev, terms: undefined}));
-                                                }}
-                                                required
-                                                className="h-4 w-4 text-brand-accent focus:ring-brand-accent border-gray-300 rounded mt-1"
-                                                aria-describedby="terms-error"
-                                            />
-                                            <label htmlFor="terms" className="ml-3 text-sm text-gray-600 dark:text-gray-400">
-                                                He leído y acepto los{' '}
-                                                <button type="button" onClick={handleOpenLegalModal} className="text-brand-accent hover:underline font-semibold">
-                                                    Términos y Condiciones de Colaboración
-                                                </button>
-                                                {' '}de <span translate="no">TradeVision Latam</span>.
-                                            </label>
-                                        </div>
-                                        {errors.terms && <p id="terms-error" className="text-red-500 text-sm mt-1">{errors.terms}</p>}
-                                    </div>
-
-                                    <div className="text-center">
-                                        <button type="submit" disabled={formStatus === 'submitting' || !termsAccepted} className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                                            <FiSend /> {formStatus === 'submitting' ? 'Procesando...' : 'Enviar Aplicación'}
+                            <div className="p-4 bg-brand-accent/10 rounded-lg border border-brand-accent/20 mb-8">
+                                <div className="flex items-start">
+                                    <input
+                                        id="terms"
+                                        name="terms"
+                                        type="checkbox"
+                                        checked={termsAccepted}
+                                        onChange={(e) => setTermsAccepted(e.target.checked)}
+                                        className="h-5 w-5 mt-1 text-brand-accent focus:ring-brand-accent border-gray-300 rounded cursor-pointer"
+                                    />
+                                    <label htmlFor="terms" className="ml-3 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+                                        Certifico que he leído y acepto los{' '}
+                                        <button type="button" onClick={handleOpenLegalModal} className="text-brand-accent hover:underline font-bold">
+                                            Términos y Condiciones de Colaboración
                                         </button>
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="text-center">
-                                    <div className="p-6 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-800 dark:text-green-200">
-                                        <FaCheckCircle className="text-4xl mx-auto mb-4" />
-                                        <h3 className="text-2xl font-bold">¡Gracias por tu postulación!</h3>
-                                        <p className="mt-2">Se está abriendo tu cliente de correo con la información pre-cargada. Por favor, revisa y envía el correo para completar el proceso.</p>
-                                        <p className="text-sm mt-2">Si no se abre automáticamente, puede que no tengas un cliente de correo configurado en tu navegador.</p>
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setFormData(initialFormData);
-                                                setTermsAccepted(false);
-                                                setFormStatus('idle');
-                                            }}
-                                            className="mt-4 inline-flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-700 transition"
+                                        {' '}de <span translate="no">TradeVision Latam</span>, incluyendo el compromiso de ética y transparencia.
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Email Display Section */}
+                            <div className={`transition-all duration-500 ${termsAccepted ? 'opacity-100 translate-y-0' : 'opacity-50 grayscale pointer-events-none translate-y-2'}`}>
+                                <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 text-center">
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 font-bold uppercase tracking-wide">Enviar Solicitud A:</p>
+                                    
+                                    <div className="flex flex-col items-center justify-center gap-4 mb-6">
+                                        <div className="flex items-center gap-3 text-lg sm:text-xl md:text-2xl font-mono font-bold text-brand-primary dark:text-white bg-white dark:bg-black/30 px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 select-all break-all">
+                                            <FiMail className="text-brand-accent flex-shrink-0" />
+                                            <span>{EMAIL_ADDRESS}</span>
+                                        </div>
+                                        <button 
+                                            onClick={handleCopyEmail}
+                                            className="flex items-center gap-2 bg-brand-accent text-brand-primary font-bold py-2 px-6 rounded-lg hover:bg-opacity-90 transition shadow-md text-sm uppercase tracking-wider"
+                                            title="Copiar al portapapeles"
+                                            disabled={!termsAccepted}
                                         >
-                                            <FiRefreshCw /> Enviar otra postulación
+                                            {copied ? <FiCheck size={18} /> : <FiCopy size={18} />}
+                                            {copied ? 'Copiado' : 'Copiar'}
                                         </button>
+                                    </div>
+
+                                    <div className="text-left max-w-lg mx-auto bg-white dark:bg-gray-900 p-4 rounded border-l-4 border-brand-accent shadow-sm">
+                                        <p className="text-xs font-bold text-gray-500 uppercase mb-2">❗ Instrucción Obligatoria:</p>
+                                        <p className="text-gray-700 dark:text-gray-300 text-sm mb-2">
+                                            Debes enviar el correo con el siguiente <strong>Asunto exacto</strong> para que sea filtrado por nuestro equipo de reclutamiento:
+                                        </p>
+                                        <p className="font-mono font-bold text-brand-primary dark:text-white bg-gray-100 dark:bg-gray-800 p-2 rounded border border-gray-200 dark:border-gray-700 select-all text-center">
+                                            Solicitud de Alianza Estratégica
+                                        </p>
                                     </div>
                                 </div>
-                            )}
-                        </form>
+                                {!termsAccepted && (
+                                    <p className="mt-2 text-xs text-center text-red-500 font-semibold animate-pulse">
+                                        * Debes aceptar los términos para ver el contacto.
+                                    </p>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </AnimatedSection>
 
@@ -403,7 +215,7 @@ ${bio}
                         </button>
                      </div>
                 </AnimatedSection>
-                
+
                 <div className="text-center py-12 bg-gray-50 dark:bg-gray-800">
                     <button onClick={() => navigate('/')} className="inline-flex items-center justify-center gap-2 bg-brand-primary dark:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg hover:bg-brand-accent hover:text-brand-primary transition-colors duration-300">
                         <FiHome /> Volver a la Página Principal

@@ -1,9 +1,8 @@
-
-
 import React from 'react';
 import Modal from './Modal';
 import { FaWhatsapp, FaUniversity } from 'react-icons/fa';
 import { FiMail, FiHelpCircle, FiThumbsUp } from 'react-icons/fi';
+import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 
 const SupportModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     return (
@@ -43,10 +42,10 @@ const SupportModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         </ul>
                          <p className="text-xs mt-4 font-semibold">Nuestro equipo te dará soporte personalizado en <strong className="text-brand-accent">24-48 horas</strong>.</p>
                          <div className="flex flex-col gap-2 mt-4">
-                            <button onClick={() => window.open('mailto:tradevision2026@gmail.com')} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm">
+                            <button onClick={handleEmailClick} title={EMAIL_TOOLTIP} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm hover:bg-gray-700 transition">
                                 <FiMail /> Enviar Correo a Soporte
                             </button>
-                            <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-2 px-4 rounded-lg text-sm">
+                            <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-2 px-4 rounded-lg text-sm hover:bg-green-600 transition">
                                 <FaWhatsapp /> Contactar por WhatsApp
                             </a>
                          </div>

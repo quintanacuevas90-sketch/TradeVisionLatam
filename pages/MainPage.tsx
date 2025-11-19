@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Header from '../components/Header';
 import NewsTicker from '../components/NewsTicker';
@@ -47,8 +48,8 @@ const MainPage: React.FC<MainPageProps> = ({ onOpenModal, tickerItems }) => {
             </div>
             <main>
                 <HeroSection onOpenModal={onOpenModal} />
-                <DisciplineCtaSection />
                 <FreeCommunityCtaSection />
+                <DisciplineCtaSection />
                 <MentorsSection />
                 <MethodologySection />
                 <BrokersSection />

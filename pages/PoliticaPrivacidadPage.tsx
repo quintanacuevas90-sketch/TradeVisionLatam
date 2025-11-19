@@ -6,6 +6,7 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
 import { FiArrowLeft } from 'react-icons/fi';
+import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 
 const PoliticaPrivacidadPage: React.FC = () => {
     const { navigate } = useRouter();
@@ -67,7 +68,7 @@ const PoliticaPrivacidadPage: React.FC = () => {
             footer: (
                 <p>
                     Para ejercer estos derechos, contáctenos en{' '}
-                    <button onClick={() => window.open('mailto:tradevision2026@gmail.com')} className="text-brand-accent hover:underline">
+                    <button onClick={handleEmailClick} className="text-brand-accent hover:underline" title={EMAIL_TOOLTIP}>
                         tradevision2026@gmail.com
                     </button>.
                 </p>

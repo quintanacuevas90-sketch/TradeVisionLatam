@@ -1,10 +1,9 @@
-
-
 import React from 'react';
 import Modal from './Modal';
-import Accordion from './Accordion';
+import Accordion from '../components/Accordion';
 import { FaWhatsapp } from 'react-icons/fa';
 import { FiMail, FiAward, FiCode, FiUsers, FiCamera, FiEdit, FiAlertTriangle } from 'react-icons/fi';
+import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 
 const ServicePillar: React.FC<{ icon: React.ReactNode; title: string; description: string; }> = ({ icon, title, description }) => (
     <div className="flex items-start gap-3 p-2">
@@ -84,7 +83,7 @@ const ConsultancyModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition">
                             <FaWhatsapp /> Contactar por WhatsApp
                         </a>
-                        <button onClick={() => window.open('mailto:tradevision2026@gmail.com')} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition">
+                        <button onClick={handleEmailClick} title={EMAIL_TOOLTIP} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition">
                             <FiMail /> Enviar un Correo
                         </button>
                     </div>

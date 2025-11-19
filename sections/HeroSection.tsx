@@ -11,7 +11,7 @@ interface HeroSectionProps {
 const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
     const { navigate } = useRouter();
     return (
-        <div className="relative text-center overflow-hidden bg-brand-primary py-24 md:py-32">
+        <AnimatedSection className="relative text-center overflow-hidden bg-brand-primary py-24 md:py-32">
             <div className="absolute inset-0 bg-gradient-to-t from-brand-primary via-brand-primary/90 to-brand-primary z-0"></div>
 
              {/* Subtle trading graph background */}
@@ -41,34 +41,32 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
 
             {/* Content Container */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <AnimatedSection>
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">
-                        Bienvenido a la nueva era del <span translate="no">trading</span> <span className="text-brand-accent">profesional</span>.
-                    </h1>
-                    <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-                        <p>
-                            Una academia de <span translate="no">trading</span> para <span translate="no">traders</span>, con la misión de forjar la disciplina y la rentabilidad en Latinoamérica.
-                        </p>
-                    </div>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <button
-                            onClick={() => navigate('/premium-courses')}
-                            className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg"
-                        >
-                            Cursos Premium
-                        </button>
-                        <a
-                            href="https://wa.me/message/T6UFHN3SSTIEJ1?text=Hola,%20quisiera%20recibir%20la%20guía%20gratuita%20de%20Patrones%20de%20Velas."
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-brand-accent text-brand-accent font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-accent hover:text-brand-primary transition duration-300 w-full sm:w-auto"
-                        >
-                            Descargar Guía Exclusiva
-                        </a>
-                    </div>
-                </AnimatedSection>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">
+                    Bienvenido a la nueva era del <span translate="no">trading</span> <span className="text-brand-accent">profesional</span>.
+                </h1>
+                <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    <p>
+                        Una academia de <span translate="no">trading</span> para <span translate="no">traders</span>, con la misión de forjar la disciplina y la rentabilidad en Latinoamérica.
+                    </p>
+                </div>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button
+                        onClick={() => navigate('/premium-courses')}
+                        className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg"
+                    >
+                        Cursos Premium
+                    </button>
+                    <a
+                        href="https://wa.me/message/T6UFHN3SSTIEJ1?text=Hola,%20quisiera%20recibir%20la%20guía%20gratuita%20de%20Patrones%20de%20Velas."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-brand-accent text-brand-accent font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-accent hover:text-brand-primary transition duration-300 w-full sm:w-auto"
+                    >
+                        Descargar Guía Exclusiva
+                    </a>
+                </div>
             </div>
-        </div>
+        </AnimatedSection>
     );
 };
 
