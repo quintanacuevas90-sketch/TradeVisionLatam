@@ -368,7 +368,7 @@ Adhesión al Plan: ${adherenceScore}/10`.trim().replace(/^\s+/gm, '');
                                 <ul className="list-disc list-inside pl-4 mt-2">
                                     <li><span className="font-bold text-green-400">Zona Profesional (1-3%):</span> Estás operando con disciplina. El medidor brilla en verde.</li>
                                     <li><span className="font-bold text-yellow-400">Zona de Alerta (3.1-20%):</span> Estás asumiendo un riesgo elevado.</li>
-                                    <li><span className="font-bold text-red-500">Zona de Juego/Gambling (>20%):</span> Estás apostando. El medidor pulsa en rojo como una advertencia crítica.</li>
+                                    <li><span className="font-bold text-red-500">Zona de Juego/Gambling (&gt;20%):</span> Estás apostando. El medidor pulsa en rojo como una advertencia crítica.</li>
                                 </ul>
                             </li>
                             <li><strong>Pago del Broker:</strong> El porcentaje de retorno que ofrece el broker en una operación ganadora.</li>

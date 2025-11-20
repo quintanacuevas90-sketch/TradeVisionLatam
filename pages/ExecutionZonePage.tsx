@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -24,37 +23,37 @@ const ModuleWrapper: React.FC<{
     imageUrl: string 
 }> = ({ level, title, icon, children, imageUrl }) => (
     <div className="cyber-module rounded-xl overflow-hidden group border border-brand-accent/30 hover:border-brand-accent transition-all duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(64,224,208,0.2)] flex flex-col">
-        {/* Cinematic Header Banner - Height increased significantly to show more image */}
-        <div className="relative h-80 sm:h-96 overflow-hidden shrink-0">
+        {/* Cinematic Header Banner - Height Maximized for Prominence */}
+        <div className="relative h-[32rem] sm:h-[36rem] overflow-hidden shrink-0">
             <div className="absolute inset-0 bg-black">
                 <img 
                     src={imageUrl} 
                     alt={`Fondo Nivel ${level}`} 
-                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 opacity-90 group-hover:opacity-100"
                 />
-                {/* Gradient Overlays - Adjusted to be less intrusive on the image center */}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-primary via-transparent to-transparent opacity-90"></div>
-                <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-brand-primary via-brand-primary/60 to-transparent"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/80 via-transparent to-transparent opacity-70"></div>
+                {/* Gradient Overlays - Reduced opacity for better image visibility */}
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-primary via-transparent to-transparent opacity-60"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-brand-primary via-brand-primary/50 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/70 via-transparent to-transparent opacity-50"></div>
             </div>
             
-            <div className="relative z-10 h-full p-6 sm:p-8 flex flex-col justify-end">
-                <div className="flex items-center gap-3 mb-2 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+            <div className="relative z-10 h-full p-6 sm:p-10 flex flex-col justify-end">
+                <div className="flex items-center gap-3 mb-3 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
                      <span className="text-brand-primary font-mono font-black text-xs bg-brand-accent px-2 py-1 rounded shadow-[0_0_10px_rgba(64,224,208,0.6)] tracking-widest uppercase">
                         Acceso Nivel {level}
                     </span>
                     <div className="h-px w-16 bg-brand-accent/50"></div>
                 </div>
                
-                <div className="flex items-end gap-5 text-white">
-                    <div className="p-4 bg-black/60 rounded-full backdrop-blur-md border border-brand-accent/30 text-brand-accent shadow-lg group-hover:scale-110 group-hover:border-brand-accent transition-all duration-300">
-                        {React.cloneElement(icon as React.ReactElement, { size: 32 })}
+                <div className="flex items-end gap-6 text-white">
+                    <div className="p-5 bg-black/70 rounded-full backdrop-blur-md border border-brand-accent/30 text-brand-accent shadow-lg group-hover:scale-110 group-hover:border-brand-accent transition-all duration-300">
+                        {React.cloneElement(icon as React.ReactElement, { size: 40 })}
                     </div>
-                    <div className="pb-1">
-                        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-wide text-white drop-shadow-lg leading-none uppercase mb-2 group-hover:text-glow-turq transition-all duration-300 text-shadow-md">
+                    <div className="pb-2">
+                        <h2 className="text-4xl sm:text-6xl font-extrabold tracking-wide text-white drop-shadow-lg leading-none uppercase mb-2 group-hover:text-glow-turq transition-all duration-300 text-shadow-md">
                             {title}
                         </h2>
-                        <div className="h-1 w-12 group-hover:w-full bg-brand-accent rounded-full transition-all duration-700 ease-out"></div>
+                        <div className="h-1 w-16 group-hover:w-full bg-brand-accent rounded-full transition-all duration-700 ease-out"></div>
                     </div>
                 </div>
             </div>
