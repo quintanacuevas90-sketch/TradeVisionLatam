@@ -241,20 +241,20 @@ Adhesión al Plan: ${adherenceScore}/10`.trim().replace(/^\s+/gm, '');
     const isWipedOut = sessionStatus === 'wiped_out';
 
     return (
-        <div className="bg-brand-primary text-white p-8 rounded-xl shadow-2xl border-2 border-brand-accent/30 relative overflow-hidden bg-grid-pattern">
+        <div className="bg-brand-primary text-white p-4 md:p-8 rounded-xl shadow-2xl border-2 border-brand-accent/30 relative overflow-hidden bg-grid-pattern">
             {(cooldown > 0 || isWipedOut) && (
                 <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center z-20 p-4 text-center backdrop-blur-sm">
                     {isWipedOut ? (
                         <>
-                            <h3 className="text-4xl font-extrabold text-red-500 animate-pulse">CUENTA QUEMADA</h3>
-                            <p className="mt-4 text-lg">Protocolo de Retirada Activo. Trabaja en tus impulsos y mentalidad.</p>
+                            <h3 className="text-3xl md:text-4xl font-extrabold text-red-500 animate-pulse">CUENTA QUEMADA</h3>
+                            <p className="mt-4 text-base md:text-lg">Protocolo de Retirada Activo. Trabaja en tus impulsos y mentalidad.</p>
                         </>
                     ) : (
                          <>
-                            <FiPauseCircle className="text-6xl text-yellow-400 mb-4" />
-                            <h3 className="text-3xl font-extrabold text-yellow-400">PROTOCOLO DE RETIRADA ACTIVO</h3>
-                            <p className="mt-2 text-lg">Enfriamiento Mental Obligatorio.</p>
-                            <p className="text-6xl font-mono font-bold my-4">{cooldown}</p>
+                            <FiPauseCircle className="text-5xl md:text-6xl text-yellow-400 mb-4" />
+                            <h3 className="text-2xl md:text-3xl font-extrabold text-yellow-400">PROTOCOLO DE RETIRADA ACTIVO</h3>
+                            <p className="mt-2 text-base md:text-lg">Enfriamiento Mental Obligatorio.</p>
+                            <p className="text-5xl md:text-6xl font-mono font-bold my-4">{cooldown}</p>
                             <p>Reinicia tu mente. La disciplina exige un alto.</p>
                         </>
                     )}
@@ -266,8 +266,8 @@ Adhesión al Plan: ${adherenceScore}/10`.trim().replace(/^\s+/gm, '');
              {showPatternPopup && (
                 <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-20 p-4 text-center backdrop-blur-sm">
                     <FiAlertTriangle className="text-5xl text-red-500 mb-4" />
-                    <h3 className="text-3xl font-extrabold text-red-500">ERROR DE EJECUCIÓN DETECTADO</h3>
-                    <p className="mt-2 text-lg">Una pérdida es una oportunidad de aprendizaje. Revisa tu análisis y la estructura del mercado.</p>
+                    <h3 className="text-2xl md:text-3xl font-extrabold text-red-500">ERROR DE EJECUCIÓN DETECTADO</h3>
+                    <p className="mt-2 text-base md:text-lg">Una pérdida es una oportunidad de aprendizaje. Revisa tu análisis y la estructura del mercado.</p>
                     <button
                         onClick={() => {
                             document.getElementById('module-2')?.scrollIntoView({ behavior: 'smooth' });
@@ -283,16 +283,16 @@ Adhesión al Plan: ${adherenceScore}/10`.trim().replace(/^\s+/gm, '');
             <div className="relative z-10">
                 <div className="text-center">
                     <div className="inline-flex items-center gap-2 bg-brand-accent text-brand-primary px-3 py-1 rounded-full text-sm font-bold mb-2">NIVEL 3</div>
-                    <h2 className="text-4xl font-extrabold flex items-center justify-center gap-3 text-glow-turq">
+                    <h2 className="text-3xl md:text-4xl font-extrabold flex items-center justify-center gap-3 text-glow-turq">
                         <FaShieldAlt /> Simulador Ejecutor 2.0
                     </h2>
                     <p className="mt-2 text-gray-400">Consola de Entrenamiento: Cyber-Discipline</p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mt-8 items-start">
                     {/* LEFT PANEL */}
                     <div className="space-y-6">
-                        <h3 className="font-bold text-xl border-b-2 border-brand-accent/50 pb-2 text-glow-turq">I. PARÁMETROS DE SESIÓN</h3>
+                        <h3 className="font-bold text-lg md:text-xl border-b-2 border-brand-accent/50 pb-2 text-glow-turq">I. PARÁMETROS DE SESIÓN</h3>
                         <div>
                             <label className="block text-sm font-bold mb-1">Capital de Inicio: <span className="text-brand-accent font-mono">${config.capital.toLocaleString('en-US')}</span></label>
                             <input type="range" name="capital" min="10" max="10000" step="10" value={config.capital} onChange={handleConfigChange} className="risk-slider" />
@@ -309,11 +309,11 @@ Adhesión al Plan: ${adherenceScore}/10`.trim().replace(/^\s+/gm, '');
 
                     {/* RIGHT PANEL */}
                     <div className="space-y-4">
-                        <h3 className="font-bold text-xl border-b-2 border-brand-accent/50 pb-2 text-glow-turq">II. MONITOR DE EJECUCIÓN</h3>
+                        <h3 className="font-bold text-lg md:text-xl border-b-2 border-brand-accent/50 pb-2 text-glow-turq">II. MONITOR DE EJECUCIÓN</h3>
                         {/* Balance HUD */}
                         <div className="p-4 rounded-lg hud-border text-center">
                             <p className="text-sm text-brand-accent uppercase tracking-widest">Balance Neto</p>
-                            <p className="font-mono text-5xl font-bold text-white text-glow-turq">${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                            <p className="font-mono text-3xl sm:text-4xl md:text-5xl font-bold text-white text-glow-turq">${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                             <div className="flex justify-between items-center mt-2 text-xs text-gray-400">
                                 <span>Trades: {session.tradeCount}</span>
                                 <span>W: {session.winCount} / L: {session.lossCount}</span>
@@ -323,26 +323,26 @@ Adhesión al Plan: ${adherenceScore}/10`.trim().replace(/^\s+/gm, '');
 
                         {/* Streak Counter */}
                         {session.consecutiveWins > 0 && (
-                            <div className={`text-center font-bold text-2xl text-brand-accent ${winStreakClass}`}>
+                            <div className={`text-center font-bold text-xl md:text-2xl text-brand-accent ${winStreakClass}`}>
                                 🔥 RACHA DE {session.consecutiveWins} VICTORIAS
                             </div>
                         )}
                         
                         {/* Trade Buttons */}
                         <div className="flex gap-4 pt-2">
-                             <button onClick={() => handleTradeResult('win')} disabled={isWipedOut || cooldown > 0} className={`w-full flex items-center justify-center gap-2 bg-green-600 text-white font-bold py-4 rounded-lg transition hover:bg-green-500 text-lg disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-400 shadow-[0_0_15px_rgba(52,211,153,0.5)] ${winFlash ? 'animate-flash-turq-bg' : ''}`}>
-                                <FiTrendingUp/> Ganó Operación
+                             <button onClick={() => handleTradeResult('win')} disabled={isWipedOut || cooldown > 0} className={`w-full flex items-center justify-center gap-2 bg-green-600 text-white font-bold py-3 md:py-4 rounded-lg transition hover:bg-green-500 text-base md:text-lg disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-green-400 shadow-[0_0_15px_rgba(52,211,153,0.5)] ${winFlash ? 'animate-flash-turq-bg' : ''}`}>
+                                <FiTrendingUp/> Win
                             </button>
-                             <button onClick={() => handleTradeResult('loss')} disabled={isWipedOut || cooldown > 0} className="w-full flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-4 rounded-lg transition hover:bg-red-500 text-lg disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-red-400 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
-                                <FiTrendingDown/> Perdió Operación
+                             <button onClick={() => handleTradeResult('loss')} disabled={isWipedOut || cooldown > 0} className="w-full flex items-center justify-center gap-2 bg-red-600 text-white font-bold py-3 md:py-4 rounded-lg transition hover:bg-red-500 text-base md:text-lg disabled:bg-gray-600 disabled:cursor-not-allowed border-2 border-red-400 shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+                                <FiTrendingDown/> Loss
                             </button>
                         </div>
                         <div className="flex gap-2">
-                            <button onClick={() => handleReset(true)} className="w-1/2 flex items-center justify-center gap-2 bg-gray-700 text-white font-bold py-2 rounded-lg transition hover:bg-gray-600 text-sm">
-                                <FiRefreshCw/> Reiniciar Sesión
+                            <button onClick={() => handleReset(true)} className="w-1/2 flex items-center justify-center gap-2 bg-gray-700 text-white font-bold py-2 rounded-lg transition hover:bg-gray-600 text-xs md:text-sm">
+                                <FiRefreshCw/> Reiniciar
                             </button>
-                            <button onClick={handleCopyLog} className="w-1/2 flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-2 rounded-lg transition hover:bg-opacity-80 text-sm" disabled={session.tradeCount === 0}>
-                                {copyStatus ? '¡Resumen Copiado!' : <><FaCopy /> Copiar Bitácora</>}
+                            <button onClick={handleCopyLog} className="w-1/2 flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-2 rounded-lg transition hover:bg-opacity-80 text-xs md:text-sm" disabled={session.tradeCount === 0}>
+                                {copyStatus ? '¡Copiado!' : <><FaCopy /> Copiar Log</>}
                             </button>
                         </div>
                     </div>
@@ -368,7 +368,7 @@ Adhesión al Plan: ${adherenceScore}/10`.trim().replace(/^\s+/gm, '');
                                 <ul className="list-disc list-inside pl-4 mt-2">
                                     <li><span className="font-bold text-green-400">Zona Profesional (1-3%):</span> Estás operando con disciplina. El medidor brilla en verde.</li>
                                     <li><span className="font-bold text-yellow-400">Zona de Alerta (3.1-20%):</span> Estás asumiendo un riesgo elevado.</li>
-                                    <li><span className="font-bold text-red-500">Zona de Juego/Gambling ({'>'}20%):</span> Estás apostando. El medidor pulsa en rojo como una advertencia crítica.</li>
+                                    <li><span className="font-bold text-red-500">Zona de Juego/Gambling (&gt;20%):</span> Estás apostando. El medidor pulsa en rojo como una advertencia crítica.</li>
                                 </ul>
                             </li>
                             <li><strong>Pago del Broker:</strong> El porcentaje de retorno que ofrece el broker en una operación ganadora.</li>

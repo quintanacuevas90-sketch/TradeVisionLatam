@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { FiAlertTriangle, FiChevronsUp, FiList, FiRefreshCw } from 'react-icons/fi';
 import { FaCalculator } from 'react-icons/fa';
@@ -132,8 +133,8 @@ const HighRiskCalculator: React.FC = () => {
                 {/* Main Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
                     {/* Panel A */}
-                    <div className="space-y-4 p-6 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
-                        <h3 className="text-2xl font-bold flex items-center gap-2 text-brand-primary dark:text-white"><FiChevronsUp/> Sistema de Ganancias Dobles</h3>
+                    <div className="space-y-4 p-4 md:p-6 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
+                        <h3 className="text-xl md:text-2xl font-bold flex items-center gap-2 text-brand-primary dark:text-white"><FiChevronsUp/> Sistema de Ganancias Dobles</h3>
                         {/* Inputs A */}
                         <div>
                             <label className="block text-sm font-bold text-gray-800 dark:text-white">Capital de Inicio: <span className="text-brand-accent">${panelA.capital.toLocaleString('en-US')}</span></label>
@@ -174,8 +175,8 @@ const HighRiskCalculator: React.FC = () => {
                         </div>
                     </div>
                     {/* Panel B */}
-                    <div className="space-y-4 p-6 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
-                        <h3 className="text-2xl font-bold flex items-center gap-2 text-brand-primary dark:text-white"><FiList/> Sistema de Progresión por Porcentaje</h3>
+                    <div className="space-y-4 p-4 md:p-6 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
+                        <h3 className="text-xl md:text-2xl font-bold flex items-center gap-2 text-brand-primary dark:text-white"><FiList/> Sistema de Progresión por Porcentaje</h3>
                         {/* Inputs B */}
                         <div>
                             <label className="block text-sm font-bold text-gray-800 dark:text-white">Monto de Inicio: <span className="text-brand-accent">${panelB.startAmount}</span></label>

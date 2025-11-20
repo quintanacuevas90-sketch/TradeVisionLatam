@@ -8,7 +8,6 @@ interface BrokerCardProps {
 
 const regulationStyles: { [key: string]: { text: string; classes: string } } = {
     regulated: { text: 'Regulado', classes: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' },
-    unregulated: { text: 'No Regulado', classes: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' },
     tool_platform: { text: 'Plataforma', classes: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' },
     crypto_exchange: { text: 'Exchange Cripto', classes: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' },
 };
@@ -33,7 +32,7 @@ const BrokerCard: React.FC<BrokerCardProps> = ({ broker }) => {
                     </span>
                 )}
             </div>
-            <div className="p-6 flex flex-col flex-grow">
+            <div className="p-5 md:p-6 flex flex-col flex-grow">
                 <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm flex-grow">{broker.description}</p>
                 
                 <ul className="space-y-2 mb-6">

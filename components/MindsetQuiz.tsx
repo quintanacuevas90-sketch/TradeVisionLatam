@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { FaBrain, FaShareAlt } from 'react-icons/fa';
 import { FiChevronRight, FiRefreshCw } from 'react-icons/fi';
@@ -515,7 +516,7 @@ const MindsetQuiz: React.FC = () => {
     };
 
     return (
-        <div className="bg-white dark:bg-brand-primary/50 p-4 sm:p-8 rounded-xl">
+        <div className="bg-white dark:bg-brand-primary/50 p-4 md:p-8 rounded-xl">
             <div className="text-center">
                 <p className="mt-2 text-gray-600 dark:text-gray-400 text-glow-violet">El 80% del éxito en el trading es mental. Responde con honestidad para medir tu disciplina en cada pilar fundamental.</p>
             </div>

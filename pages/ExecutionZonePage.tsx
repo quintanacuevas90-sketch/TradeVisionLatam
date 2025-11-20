@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -23,8 +24,8 @@ const ModuleWrapper: React.FC<{
     imageUrl: string 
 }> = ({ level, title, icon, children, imageUrl }) => (
     <div className="cyber-module rounded-xl overflow-hidden group border border-brand-accent/30 hover:border-brand-accent transition-all duration-500 shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:shadow-[0_0_25px_rgba(64,224,208,0.2)] flex flex-col">
-        {/* Cinematic Header Banner - Height Maximized for Prominence */}
-        <div className="relative h-[32rem] sm:h-[36rem] overflow-hidden shrink-0">
+        {/* Cinematic Header Banner - Optimized height for mobile */}
+        <div className="relative h-64 sm:h-[36rem] overflow-hidden shrink-0">
             <div className="absolute inset-0 bg-black">
                 <img 
                     src={imageUrl} 
@@ -46,11 +47,11 @@ const ModuleWrapper: React.FC<{
                 </div>
                
                 <div className="flex items-end gap-6 text-white">
-                    <div className="p-5 bg-black/70 rounded-full backdrop-blur-md border border-brand-accent/30 text-brand-accent shadow-lg group-hover:scale-110 group-hover:border-brand-accent transition-all duration-300">
-                        {React.cloneElement(icon as React.ReactElement, { size: 40 })}
+                    <div className="p-4 sm:p-5 bg-black/70 rounded-full backdrop-blur-md border border-brand-accent/30 text-brand-accent shadow-lg group-hover:scale-110 group-hover:border-brand-accent transition-all duration-300">
+                        {React.cloneElement(icon as React.ReactElement, { size: 32 })}
                     </div>
                     <div className="pb-2">
-                        <h2 className="text-4xl sm:text-6xl font-extrabold tracking-wide text-white drop-shadow-lg leading-none uppercase mb-2 group-hover:text-glow-turq transition-all duration-300 text-shadow-md">
+                        <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-wide text-white drop-shadow-lg leading-none uppercase mb-2 group-hover:text-glow-turq transition-all duration-300 text-shadow-md">
                             {title}
                         </h2>
                         <div className="h-1 w-16 group-hover:w-full bg-brand-accent rounded-full transition-all duration-700 ease-out"></div>
@@ -67,7 +68,7 @@ const ModuleWrapper: React.FC<{
 );
 
 const MissionBriefing: React.FC<{ icon: React.ReactNode; title: string; buttonText: string; buttonAction: () => void; children: React.ReactNode; titleTooltip?: string }> = ({ icon, title, buttonText, buttonAction, children, titleTooltip }) => (
-     <div className="cyber-module rounded-xl p-8 text-center bg-gradient-to-b from-gray-900/80 to-brand-primary/80 border border-white/5 backdrop-blur-sm relative overflow-hidden">
+     <div className="cyber-module rounded-xl p-6 md:p-8 text-center bg-gradient-to-b from-gray-900/80 to-brand-primary/80 border border-white/5 backdrop-blur-sm relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
         <div className="relative z-10">
             <div className="text-4xl text-brand-accent mx-auto mb-4 animate-pulse">{icon}</div>

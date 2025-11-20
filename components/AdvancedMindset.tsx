@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FiChevronLeft, FiChevronRight, FiCpu } from 'react-icons/fi';
 
@@ -86,23 +87,23 @@ const AdvancedMindset: React.FC = () => {
                     <p className="mt-2 text-gray-400 text-glow-violet">50 diapositivas de disciplina para eliminar el pensamiento de "apuesta" y forjar la mente de un ejecutor profesional.</p>
                 </div>
 
-                <div className="relative mt-8 h-80 flex flex-col items-center justify-center bg-black/20 rounded-lg p-6">
+                <div className="relative mt-8 min-h-[24rem] h-auto flex flex-col items-center justify-center bg-black/20 rounded-lg p-6 md:p-12">
                     <p className="absolute top-4 left-4 text-xs font-bold uppercase tracking-wider text-brand-accent">{categoryName}</p>
-                    <blockquote className="text-3xl font-semibold text-center italic text-glow-violet">
+                    <blockquote className="text-xl md:text-3xl font-semibold text-center italic text-glow-violet my-8">
                         "{currentQuote.text}"
                     </blockquote>
                     
-                    <div className="absolute bottom-4 text-center w-full px-4">
+                    <div className="absolute bottom-4 text-center w-full px-4 left-0">
                         <p className="text-gray-400 text-sm">Diapositiva {currentIndex + 1} / {quotes.length}</p>
                         <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2 max-w-xs mx-auto">
                             <div className="bg-brand-accent h-1.5 rounded-full transition-all duration-300" style={{ width: `${((currentIndex + 1) / quotes.length) * 100}%` }}></div>
                         </div>
                     </div>
 
-                    <button onClick={prevQuote} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white/10 rounded-full hover:bg-white/20 transition -ml-4 md:-ml-6" aria-label="Anterior">
+                    <button onClick={prevQuote} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white/10 rounded-full hover:bg-white/20 transition ml-2 md:-ml-6 z-10" aria-label="Anterior">
                         <FiChevronLeft size={24} />
                     </button>
-                    <button onClick={nextQuote} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white/10 rounded-full hover:bg-white/20 transition -mr-4 md:-mr-6" aria-label="Siguiente">
+                    <button onClick={nextQuote} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white/10 rounded-full hover:bg-white/20 transition mr-2 md:-mr-6 z-10" aria-label="Siguiente">
                         <FiChevronRight size={24} />
                     </button>
                 </div>

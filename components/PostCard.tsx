@@ -67,7 +67,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onToggleSave, isSaved, highli
                     </button>
                 )}
             </div>
-            <div className="p-6 flex flex-col flex-grow">
+            <div className="p-5 md:p-6 flex flex-col flex-grow">
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{post.date}</p>
                 <h3 className="text-xl font-bold mb-3 text-brand-primary dark:text-white group-hover:text-brand-accent transition-colors duration-300 min-h-[56px]">{highlightText(post.title, highlightTerm || '')}</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-4 text-base flex-grow">{highlightText(post.excerpt, highlightTerm || '')}</p>

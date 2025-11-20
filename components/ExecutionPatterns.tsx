@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FiEye, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
@@ -260,27 +261,27 @@ const ExecutionPatterns: React.FC = () => {
                 <p className="mt-2 text-gray-600 dark:text-gray-400">Refuerza tu visión con el entrenamiento repetitivo. Como un atleta de élite, la maestría se logra a través de la práctica constante.</p>
             </div>
 
-            <div className="relative mt-8 h-[420px] flex items-center justify-center">
+            <div className="relative mt-8 min-h-[420px] h-auto flex items-center justify-center">
                 {/* Carousel content */}
-                <div className="w-full max-w-md text-center">
+                <div className="w-full max-w-md text-center px-8 md:px-0">
                     <div className="h-40 flex items-center justify-center text-gray-700 dark:text-gray-300">
                         {currentPattern.svg}
                     </div>
-                    <h3 className="mt-4 text-3xl font-bold text-brand-accent">{currentPattern.name}</h3>
-                    <div className="flex justify-center items-center gap-4 my-2">
+                    <h3 className="mt-4 text-2xl md:text-3xl font-bold text-brand-accent">{currentPattern.name}</h3>
+                    <div className="flex justify-center items-center gap-4 my-2 flex-wrap">
                         <span className="text-xs font-bold uppercase px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">{currentPattern.category}</span>
                         <span className={`text-xs font-bold uppercase px-3 py-1 rounded-full ${getEffectivenessClass(currentPattern.effectiveness)}`}>
                             Efectividad: {currentPattern.effectiveness}
                         </span>
                     </div>
-                    <p className="mt-2 text-base text-gray-600 dark:text-gray-400 h-28">{currentPattern.description}</p>
+                    <p className="mt-2 text-sm md:text-base text-gray-600 dark:text-gray-400 min-h-[5rem] md:h-28">{currentPattern.description}</p>
                 </div>
 
                 {/* Navigation */}
-                <button onClick={prevPattern} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-gray-100 dark:bg-white/10 rounded-full hover:bg-gray-200 dark:hover:bg-white/20 transition">
+                <button onClick={prevPattern} className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-gray-100 dark:bg-white/10 rounded-full hover:bg-gray-200 dark:hover:bg-white/20 transition z-10" aria-label="Anterior">
                     <FiChevronLeft size={24} />
                 </button>
-                <button onClick={nextPattern} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-gray-100 dark:bg-white/10 rounded-full hover:bg-gray-200 dark:hover:bg-white/20 transition">
+                <button onClick={nextPattern} className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-gray-100 dark:bg-white/10 rounded-full hover:bg-gray-200 dark:hover:bg-white/20 transition z-10" aria-label="Siguiente">
                     <FiChevronRight size={24} />
                 </button>
             </div>
