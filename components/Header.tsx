@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { FiMenu, FiX, FiSun, FiMoon, FiSearch } from 'react-icons/fi';
 import { FaRobot } from 'react-icons/fa';
@@ -89,8 +90,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
     ];
 
     const handleSideMenuClick = (action: () => void) => {
-        action();
         setIsSideMenuOpen(false);
+        // Small delay to allow the menu closing animation to start before navigation logic kicks in
+        setTimeout(() => {
+            action();
+        }, 250);
     };
 
     const handleSearchClose = () => {
