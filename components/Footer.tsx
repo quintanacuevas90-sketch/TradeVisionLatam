@@ -129,31 +129,26 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Estructura de Consultoría Educativa registrada para operar en Canadá, Brasil y Unión Europea (España).</p>
                         </div>
                         
-                        {/* Custom Integrated Frame for Badge and Bigger Mascot */}
-                        <div className="relative group inline-block" onClick={() => navigate('/verificacion-legal')}>
-                            <div className="flex items-center gap-4 p-4 pr-6 rounded-xl bg-blue-900/50 border border-blue-700/50 hover:border-brand-accent transition-all duration-300 shadow-lg cursor-pointer backdrop-blur-sm overflow-hidden">
-                                
-                                {/* The Owl - Bigger and contained inside the frame */}
-                                <div className="relative w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0">
-                                     <img 
-                                        src="https://i.pinimg.com/736x/db/31/b4/db31b46235afd233c0372a0c5eaeb931.jpg" 
-                                        alt="Mascota Señalando Arriba" 
-                                        className="w-full h-full object-contain"
-                                    />
-                                </div>
+                        {/* Custom Layout: Badge Above, Owl Below */}
+                        <div className="relative group flex flex-col items-center cursor-pointer" onClick={() => navigate('/verificacion-legal')}>
+                            
+                            {/* Badge - Top */}
+                            <div className="flex items-center gap-3 p-3 pr-5 rounded-xl bg-blue-900/50 border border-blue-700/50 hover:border-brand-accent transition-all duration-300 shadow-lg backdrop-blur-sm relative z-10 transform translate-y-4 group-hover:translate-y-0">
+                                 <FaShieldAlt className="text-brand-accent text-2xl sm:text-3xl" />
+                                 <div className="text-left">
+                                     <span className="block text-sm sm:text-base font-extrabold text-white leading-tight" translate="no">TRADEVISION</span>
+                                     <span className="block text-[10px] sm:text-xs text-brand-accent uppercase tracking-wider">Verified Academy</span>
+                                     <p className="text-[10px] text-gray-400 leading-tight mt-0.5 group-hover:text-white transition-colors">Ver Certificación &gt;</p>
+                                 </div>
+                            </div>
 
-                                {/* The Info - Shield and Text */}
-                                <div className="flex flex-col justify-center z-10">
-                                     <div className="flex items-center gap-2 mb-1">
-                                        <FaShieldAlt className="text-brand-accent text-2xl sm:text-3xl" />
-                                        <div>
-                                            <span className="block text-sm sm:text-base font-extrabold text-white leading-tight" translate="no">TRADEVISION</span>
-                                            <span className="block text-[10px] sm:text-xs text-brand-accent uppercase tracking-wider">Verified Academy</span>
-                                        </div>
-                                     </div>
-                                     <p className="text-xs sm:text-sm text-gray-300 leading-tight pl-1">Formación Acreditada</p>
-                                     <p className="text-[10px] sm:text-xs text-gray-400 leading-tight pl-1 mt-1 group-hover:text-white transition-colors">Ver Certificación &gt;</p>
-                                </div>
+                            {/* Owl - Bottom */}
+                            <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex-shrink-0 z-0 -mt-4">
+                                 <img 
+                                    src="https://i.pinimg.com/736x/db/31/b4/db31b46235afd233c0372a0c5eaeb931.jpg" 
+                                    alt="Mascota Señalando Arriba" 
+                                    className="w-full h-full object-contain transform transition-transform duration-300 group-hover:scale-105"
+                                />
                             </div>
                         </div>
                     </div>

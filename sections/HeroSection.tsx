@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ModalType } from '../types';
 import AnimatedSection from '../components/AnimatedSection';
@@ -42,15 +41,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
             {/* Content Container */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-8">
-                    {/* Image Column - Circular Mascot - TAMAÑO COMPACTO Y ALA COMPLETA */}
+                    {/* Image Column - Circular Mascot - TAMAÑO REDUCIDO Y PADDING AJUSTADO */}
                     <div className="flex flex-col items-center flex-shrink-0">
-                        <div className="relative w-40 h-40 md:w-64 md:h-64 rounded-full border-4 border-brand-accent/20 overflow-hidden drop-shadow-[0_0_20px_rgba(64,224,208,0.3)] hover:scale-105 transition-transform duration-500 bg-brand-primary flex items-center justify-center">
+                        <div className="relative w-36 h-36 md:w-52 md:h-52 rounded-full border-4 border-brand-accent/20 overflow-hidden drop-shadow-[0_0_20px_rgba(64,224,208,0.3)] hover:scale-105 transition-transform duration-500 bg-white flex items-center justify-center p-1">
                             <img 
                                 id="buho-bienvenida"
                                 src="https://i.pinimg.com/736x/6b/6f/a2/6b6fa26efc0259fecd2a789d209b559a.jpg" 
                                 alt="Mascota TradeVision Presentando" 
                                 loading="lazy"
-                                className="w-full h-full object-contain object-center scale-110"
+                                className="w-full h-full object-contain object-center"
                                 style={{ 
                                     opacity: 0, 
                                     animation: 'fade-in-up 1.5s ease-out 0.5s forwards' 

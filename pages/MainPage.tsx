@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from '../components/Header';
 import NewsTicker from '../components/NewsTicker';
@@ -43,7 +42,7 @@ const MainPage: React.FC<MainPageProps> = ({ onOpenModal, tickerItems }) => {
     return (
         <>
             <Header onOpenModal={onOpenModal} />
-            <div className="pt-20">
+            <div className="pt-20 bg-gray-50 dark:bg-brand-primary">
                 <NewsTicker items={tickerItems} />
             </div>
             <main>

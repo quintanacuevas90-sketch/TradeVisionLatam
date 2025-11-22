@@ -55,17 +55,25 @@ const AboutPage: React.FC<AboutPageProps> = ({ onOpenModal }) => {
             <Header onOpenModal={onOpenModal} />
             <main className="pt-20">
                 {/* Hero Section */}
-                <AnimatedSection className="relative bg-brand-primary text-white py-24 sm:py-32">
+                <AnimatedSection className="relative bg-brand-primary text-white py-24 sm:py-32 overflow-hidden">
                     <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1554224155-8d04421cd6e1?q=80&w=2070&auto=format&fit=crop')" }}></div>
                     <div className="absolute inset-0 bg-gradient-to-b from-brand-primary/80 to-brand-primary"></div>
-                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                        <div className="absolute top-8 left-8">
-                            <PageBackButton variant="on-dark" />
+                    
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div className="max-w-4xl mx-auto text-center">
+                            <div className="mb-8 flex justify-center">
+                                <PageBackButton variant="on-dark" />
+                            </div>
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
+                                Somos <span translate="no" className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">TradeVision Latam</span>
+                            </h1>
+                            <p className="mt-6 text-lg sm:text-xl text-brand-accent font-semibold">
+                                La Disciplina es la Estrategia.
+                            </p>
+                            <p className="mt-4 text-base sm:text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                                Más que una academia, somos un ecosistema global de traders profesionales dedicados a combatir la desinformación con ética, lógica institucional y rentabilidad sostenible.
+                            </p>
                         </div>
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">Somos <span translate="no">TradeVision Latam</span></h1>
-                        <p className="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-300">
-                            Más que una academia. Somos un ecosistema global de traders profesionales dedicados a la disciplina, la ética y la rentabilidad sostenible.
-                        </p>
                     </div>
                 </AnimatedSection>
                 
