@@ -37,10 +37,10 @@ const CookieConsentModal: React.FC<CookieConsentModalProps> = ({ onConsent }) =>
     };
 
     const ToggleSwitch = ({ id, label, description, enabled, onChange }: { id: string, label: string, description: string, enabled: boolean, onChange: () => void }) => (
-        <div className="flex justify-between items-center p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
-            <div className="pr-3">
-                <label htmlFor={id} className="font-bold text-brand-primary dark:text-white cursor-pointer text-sm md:text-base">{label}</label>
-                <p className="text-xs text-gray-500 dark:text-gray-400 leading-tight mt-1">{description}</p>
+        <div className="flex justify-between items-center p-2.5 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+            <div className="pr-2">
+                <label htmlFor={id} className="font-bold text-brand-primary dark:text-white cursor-pointer text-xs md:text-base">{label}</label>
+                <p className="text-[10px] md:text-xs text-gray-500 dark:text-gray-400 leading-tight mt-0.5">{description}</p>
             </div>
             <div className="flex-shrink-0">
                 <input
@@ -52,10 +52,10 @@ const CookieConsentModal: React.FC<CookieConsentModalProps> = ({ onConsent }) =>
                 />
                 <label
                     htmlFor={id}
-                    className={`relative inline-block w-10 h-5 md:w-12 md:h-6 rounded-full transition-colors cursor-pointer ${enabled ? 'bg-brand-accent' : 'bg-gray-300 dark:bg-gray-600'}`}
+                    className={`relative inline-block w-9 h-5 md:w-12 md:h-6 rounded-full transition-colors cursor-pointer ${enabled ? 'bg-brand-accent' : 'bg-gray-300 dark:bg-gray-600'}`}
                 >
                     <span
-                        className={`absolute left-1 top-1 w-3 h-3 md:w-4 md:h-4 bg-white rounded-full transition-transform ${enabled ? 'transform translate-x-5 md:translate-x-6' : ''}`}
+                        className={`absolute left-1 top-1 w-3 h-3 md:w-4 md:h-4 bg-white rounded-full transition-transform ${enabled ? 'transform translate-x-4 md:translate-x-6' : ''}`}
                     ></span>
                 </label>
             </div>
@@ -64,47 +64,47 @@ const CookieConsentModal: React.FC<CookieConsentModalProps> = ({ onConsent }) =>
 
     return (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
-            <div className="bg-brand-primary border-2 border-brand-accent rounded-xl shadow-2xl max-w-2xl w-full p-5 md:p-8 animate-fade-in-up text-white max-h-[85vh] overflow-y-auto">
-                <h1 className="text-lg md:text-2xl font-extrabold mb-4 text-center" translate="no">
+            <div className="bg-brand-primary border-2 border-brand-accent rounded-xl shadow-2xl max-w-2xl w-full p-4 md:p-8 animate-fade-in-up text-white max-h-[85vh] overflow-y-auto scrollbar-thin scrollbar-thumb-brand-accent scrollbar-track-gray-800">
+                <h1 className="text-base md:text-2xl font-extrabold mb-3 text-center" translate="no">
                     Consentimiento de Cookies
                 </h1>
 
                 {!showPreferences ? (
                     <>
-                        <div className="text-gray-300 space-y-3 text-left text-xs md:text-sm leading-relaxed">
+                        <div className="text-gray-300 space-y-2 text-left text-xs md:text-sm leading-relaxed">
                             <p>En <strong className="text-white" translate="no">TRADEVISION</strong>, valoramos su privacidad. Usamos cookies para:</p>
-                            <ul className="list-disc list-inside pl-2 space-y-1">
-                                <li><strong>Funcionalidad:</strong> Guardar su progreso en la "Zona de Ejecución".</li>
-                                <li><strong>Análisis:</strong> Mejorar la experiencia de usuario.</li>
+                            <ul className="list-disc list-inside pl-2 space-y-0.5">
+                                <li><strong>Funcionalidad:</strong> Guardar progreso en "Zona de Ejecución".</li>
+                                <li><strong>Análisis:</strong> Mejorar experiencia de usuario.</li>
                                 <li><strong>Publicidad (Opcional):</strong> Contenido relevante.</li>
                             </ul>
-                            <p>Tiene el control total. Más detalles en nuestra <button onClick={handleViewPolicy} className="text-brand-accent hover:underline font-semibold">Política de Privacidad</button>.</p>
+                            <p>Más detalles en nuestra <button onClick={handleViewPolicy} className="text-brand-accent hover:underline font-semibold">Política de Privacidad</button>.</p>
                         </div>
-                        <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <button onClick={handleAcceptAll} className="w-full bg-brand-accent text-brand-primary font-bold py-2.5 px-4 rounded-lg hover:bg-opacity-80 transition transform hover:scale-105 text-sm md:text-base">
+                        <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <button onClick={handleAcceptAll} className="w-full bg-brand-accent text-brand-primary font-bold py-2 px-3 rounded-lg hover:bg-opacity-80 transition transform hover:scale-105 text-sm md:text-base">
                                 Aceptar Todas
                             </button>
-                            <button onClick={handleRejectAll} className="w-full bg-gray-600 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-gray-700 transition text-sm md:text-base">
+                            <button onClick={handleRejectAll} className="w-full bg-gray-600 text-white font-bold py-2 px-3 rounded-lg hover:bg-gray-700 transition text-sm md:text-base">
                                 Rechazar
                             </button>
-                            <button onClick={() => setShowPreferences(true)} className="w-full bg-transparent border border-gray-500 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-gray-700 transition flex items-center justify-center gap-2 text-sm md:text-base">
+                            <button onClick={() => setShowPreferences(true)} className="w-full bg-transparent border border-gray-500 text-white font-bold py-2 px-3 rounded-lg hover:bg-gray-700 transition flex items-center justify-center gap-2 text-sm md:text-base">
                                 <FiSettings /> Configurar
                             </button>
                         </div>
                     </>
                 ) : (
                     <>
-                        <div className="text-gray-300 space-y-4 text-left text-xs md:text-sm">
+                        <div className="text-gray-300 space-y-3 text-left text-xs md:text-sm">
                             <p>Configure sus preferencias. Las cookies funcionales son obligatorias.</p>
-                            <div className="space-y-3 mt-2">
-                                <div className="p-3 bg-gray-700/50 rounded-lg">
-                                    <p className="font-bold text-white text-sm md:text-base">Cookies Funcionales</p>
-                                    <p className="text-xs text-gray-400 mt-1">Siempre activas. Esenciales para el sitio.</p>
+                            <div className="space-y-2 mt-2">
+                                <div className="p-2.5 bg-gray-700/50 rounded-lg">
+                                    <p className="font-bold text-white text-xs md:text-base">Cookies Funcionales</p>
+                                    <p className="text-[10px] md:text-xs text-gray-400 mt-0.5">Siempre activas. Esenciales.</p>
                                 </div>
                                 <ToggleSwitch 
                                     id="analysis-toggle"
                                     label="Cookies de Análisis"
-                                    description="Estadísticas anónimas para mejorar la web."
+                                    description="Estadísticas anónimas."
                                     enabled={preferences.analysis}
                                     onChange={() => handleToggle('analysis')}
                                 />
@@ -117,11 +117,11 @@ const CookieConsentModal: React.FC<CookieConsentModalProps> = ({ onConsent }) =>
                                 />
                             </div>
                         </div>
-                         <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
-                            <button onClick={handleSavePreferences} className="w-full sm:w-auto bg-brand-accent text-brand-primary font-bold py-2.5 px-6 rounded-lg hover:bg-opacity-80 transition transform hover:scale-105 text-sm md:text-base">
-                                Guardar Preferencias
+                         <div className="mt-5 flex flex-col sm:flex-row justify-center gap-2">
+                            <button onClick={handleSavePreferences} className="w-full sm:w-auto bg-brand-accent text-brand-primary font-bold py-2 px-6 rounded-lg hover:bg-opacity-80 transition transform hover:scale-105 text-sm md:text-base">
+                                Guardar
                             </button>
-                            <button onClick={() => setShowPreferences(false)} className="w-full sm:w-auto bg-gray-600 text-white font-bold py-2.5 px-6 rounded-lg hover:bg-gray-700 transition text-sm md:text-base">
+                            <button onClick={() => setShowPreferences(false)} className="w-full sm:w-auto bg-gray-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 transition text-sm md:text-base">
                                 Volver
                             </button>
                         </div>

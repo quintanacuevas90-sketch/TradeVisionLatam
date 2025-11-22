@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -94,11 +95,20 @@ const BlogListPage: React.FC = () => {
                         <div className="mb-8">
                             <PageBackButton />
                         </div>
-                        <div className="text-center mb-12">
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Blog de <span translate="no">TradeVision</span></h1>
-                            <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto">
-                                Artículos, guías y análisis para traders que buscan consistencia y profesionalismo.
-                            </p>
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-12">
+                            <div className="flex-1 text-center md:text-left">
+                                <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Blog de <span translate="no">TradeVision</span></h1>
+                                <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl">
+                                    Artículos, guías y análisis para traders que buscan consistencia y profesionalismo.
+                                </p>
+                            </div>
+                            <div className="flex-shrink-0">
+                                <img 
+                                    src="https://i.pinimg.com/736x/13/5b/ab/135babacb14935c50766b891f049bdb6.jpg" 
+                                    alt="Mascota TradeVision Leyendo" 
+                                    className="w-40 md:w-56 rounded-full border-4 border-brand-accent shadow-2xl hover:scale-105 transition-transform duration-300"
+                                />
+                            </div>
                         </div>
                         
                         <div className="flex flex-col md:flex-row gap-4 mb-8">

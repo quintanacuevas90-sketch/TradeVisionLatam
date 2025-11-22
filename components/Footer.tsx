@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { ModalType } from '../types';
 import { LEGAL_TEXT, IP_LEGAL_TEXT, SOCIAL_LINKS } from '../constants';
 import { useRouter } from '../hooks/useRouter';
-import VerifiedBadge from './VerifiedBadge';
 import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
+import { FaShieldAlt } from 'react-icons/fa';
 
 interface FooterProps {
     onOpenModal: (modal: ModalType) => void;
@@ -53,13 +54,14 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
     const ipLegalParts = IP_LEGAL_TEXT.split('TradeVision Latam');
 
     return (
-        <footer className="bg-gray-100 dark:bg-brand-primary">
-            <div className="bg-yellow-500/90 dark:bg-yellow-600/90 text-black py-2 px-4 text-xs font-bold text-center tracking-wide">
+        <footer className="bg-gray-100 dark:bg-brand-primary relative overflow-hidden">
+            <div className="bg-yellow-500/90 dark:bg-yellow-600/90 text-black py-2 px-4 text-xs font-bold text-center tracking-wide relative z-20">
                 <p>
                     <span className="font-extrabold">❗ LEYENDA CLAVE: SOPORTE DE ÉLITE.</span> Si no está afiliado a <span translate="no">TRADEVISION</span> (con ID registrado), NO podemos prestar asistencia ni gestión en problemas de broker o retiros. El soporte es un beneficio exclusivo para la comunidad activa.
                 </p>
             </div>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
                     <div className="lg:col-span-2">
                         <h3 className="text-xl font-extrabold mb-4" translate="no">Trade<span className="text-brand-accent">Vision</span></h3>
@@ -110,7 +112,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                         </div>
                     ))}
                 </div>
-                <div className="border-t border-gray-200 dark:border-white/10 pt-8">
+                <div className="border-t border-gray-200 dark:border-white/10 pt-8 relative">
                     <h5 className="font-bold mb-2">Advertencia de Riesgo</h5>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
                         {legalParts[0]}<span translate="no">TradeVision Latam</span>{legalParts[1]}
@@ -121,12 +123,39 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                         {ipLegalParts[0]}<span translate="no">TradeVision Latam</span>{ipLegalParts[1]}
                     </p>
                     
-                    <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+                    <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mt-6 gap-8 relative">
                         <div className='text-center sm:text-left'>
                             <p className="text-sm text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} <span translate="no">TradeVision Latam</span>. Todos los derechos reservados.</p>
                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Estructura de Consultoría Educativa registrada para operar en Canadá, Brasil y Unión Europea (España).</p>
                         </div>
-                        <VerifiedBadge />
+                        
+                        {/* Custom Integrated Frame for Badge and Bigger Mascot */}
+                        <div className="relative group inline-block" onClick={() => navigate('/verificacion-legal')}>
+                            <div className="flex items-center gap-4 p-4 pr-6 rounded-xl bg-blue-900/50 border border-blue-700/50 hover:border-brand-accent transition-all duration-300 shadow-lg cursor-pointer backdrop-blur-sm overflow-hidden">
+                                
+                                {/* The Owl - Bigger and contained inside the frame */}
+                                <div className="relative w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0">
+                                     <img 
+                                        src="https://i.pinimg.com/736x/db/31/b4/db31b46235afd233c0372a0c5eaeb931.jpg" 
+                                        alt="Mascota Señalando Arriba" 
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+
+                                {/* The Info - Shield and Text */}
+                                <div className="flex flex-col justify-center z-10">
+                                     <div className="flex items-center gap-2 mb-1">
+                                        <FaShieldAlt className="text-brand-accent text-2xl sm:text-3xl" />
+                                        <div>
+                                            <span className="block text-sm sm:text-base font-extrabold text-white leading-tight" translate="no">TRADEVISION</span>
+                                            <span className="block text-[10px] sm:text-xs text-brand-accent uppercase tracking-wider">Verified Academy</span>
+                                        </div>
+                                     </div>
+                                     <p className="text-xs sm:text-sm text-gray-300 leading-tight pl-1">Formación Acreditada</p>
+                                     <p className="text-[10px] sm:text-xs text-gray-400 leading-tight pl-1 mt-1 group-hover:text-white transition-colors">Ver Certificación &gt;</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <p className="text-center text-[11px] text-gray-500 dark:text-gray-400 mt-4">

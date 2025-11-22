@@ -41,9 +41,32 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
 
             {/* Content Container */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">
-                    Bienvenido a la nueva era del <span translate="no">trading</span> <span className="text-brand-accent">profesional</span>.
-                </h1>
+                <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-8">
+                    {/* Image Column - Circular Mascot - TAMAÑO COMPACTO Y ALA COMPLETA */}
+                    <div className="flex flex-col items-center flex-shrink-0">
+                        <div className="relative w-40 h-40 md:w-64 md:h-64 rounded-full border-4 border-brand-accent/20 overflow-hidden drop-shadow-[0_0_20px_rgba(64,224,208,0.3)] hover:scale-105 transition-transform duration-500 bg-brand-primary flex items-center justify-center">
+                            <img 
+                                id="buho-bienvenida"
+                                src="https://i.pinimg.com/736x/6b/6f/a2/6b6fa26efc0259fecd2a789d209b559a.jpg" 
+                                alt="Mascota TradeVision Presentando" 
+                                loading="lazy"
+                                className="w-full h-full object-contain object-center scale-110"
+                                style={{ 
+                                    opacity: 0, 
+                                    animation: 'fade-in-up 1.5s ease-out 0.5s forwards' 
+                                }}
+                            />
+                        </div>
+                        <p className="text-xs text-gray-400 italic mt-3 font-semibold tracking-wide">Mascota TradeVision</p>
+                    </div>
+
+                    {/* Title Column */}
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-center md:text-left">
+                        <span className="text-white">Bienvenido a <span translate="no">TradeVision Latam</span>:</span> <br className="hidden lg:block" />
+                        <span className="text-brand-accent">La Disciplina es la Estrategia</span>
+                    </h1>
+                </div>
+
                 <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
                     <p>
                         Una academia de <span translate="no">trading</span> para <span translate="no">traders</span>, con la misión de forjar la disciplina y la rentabilidad en Latinoamérica.

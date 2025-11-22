@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -73,13 +74,25 @@ const PremiumCoursesPage: React.FC = () => {
                         <div className="mb-8">
                             <PageBackButton />
                         </div>
-                        <section className="text-center p-6 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
-                            <h1 className="text-3xl md:text-4xl font-extrabold text-brand-primary dark:text-white">ACCESO A LA ZONA DE DISCIPLINA</h1>
-                            <p className="text-gray-700 dark:text-gray-300 mb-4 max-w-3xl mx-auto mt-4">Si has llegado hasta aquí, es porque entiendes que la suerte se acabó. La rentabilidad sostenida no es un golpe de fortuna; es el resultado de un <strong>sistema, disciplina y una ejecución impecable</strong>.</p>
-                            <p className="text-gray-700 dark:text-gray-300 mb-6 max-w-3xl mx-auto">Hemos dedicado años de experiencia en estos programas. No son simples cursos, son <strong>sistemas de transformación</strong>...</p>
-                            <div className="p-4 bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-800 dark:text-red-300 text-left rounded-r-lg mb-6 max-w-3xl mx-auto"><p><strong>⚠️ ALTO:</strong> Si buscas atajos o crees que el éxito llega sin inversión, este no es tu lugar. El conocimiento de élite tiene un precio porque su valor es incalculable. La ignorancia, en cambio, te costará toda tu cuenta.</p></div>
-                            <p className="text-lg font-bold">Elige tu nivel de compromiso. La decisión es tuya. El momento es ahora. 👇</p>
+                        
+                        {/* Header with Mascot */}
+                        <section className="flex flex-col md:flex-row items-center justify-center gap-8 bg-gray-100 dark:bg-white/5 p-8 rounded-lg border border-gray-200 dark:border-white/10">
+                            <div className="flex-1 text-center md:text-left">
+                                <h1 className="text-3xl md:text-4xl font-extrabold text-brand-primary dark:text-white">ACCESO A LA ZONA DE DISCIPLINA</h1>
+                                <p className="text-gray-700 dark:text-gray-300 mb-4 mt-4">Si has llegado hasta aquí, es porque entiendes que la suerte se acabó. La rentabilidad sostenida no es un golpe de fortuna; es el resultado de un <strong>sistema, disciplina y una ejecución impecable</strong>.</p>
+                                <p className="text-gray-700 dark:text-gray-300 mb-6">Hemos dedicado años de experiencia en estos programas. No son simples cursos, son <strong>sistemas de transformación</strong>...</p>
+                                <div className="p-4 bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-800 dark:text-red-300 text-left rounded-r-lg mb-6"><p><strong>⚠️ ALTO:</strong> Si buscas atajos o crees que el éxito llega sin inversión, este no es tu lugar. El conocimiento de élite tiene un precio porque su valor es incalculable. La ignorancia, en cambio, te costará toda tu cuenta.</p></div>
+                                <p className="text-lg font-bold">Elige tu nivel de compromiso. La decisión es tuya. El momento es ahora. 👇</p>
+                            </div>
+                            <div className="flex-shrink-0">
+                                <img 
+                                    src="https://i.pinimg.com/736x/33/1d/7e/331d7ee5c20f61edc6704019d192accd.jpg" 
+                                    alt="Mascota TradeVision Enseñando" 
+                                    className="w-48 md:w-64 rounded-full border-4 border-brand-accent shadow-2xl hover:scale-105 transition-transform duration-300"
+                                />
+                            </div>
                         </section>
+
                         <section className="text-center">
                             <h3 className="text-xl font-bold text-brand-accent">¡Oportunidad por Tiempo Limitado!</h3>
                             <p className="text-gray-600 dark:text-gray-400 mt-1">La disponibilidad de la Tutoría Estratégica de Onboarding con nuestro equipo de mentores es limitada a los cupos prioritarios de esta semana. Asegure su acceso antes de que el grupo se cierre.</p>

@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -74,11 +75,20 @@ const BrokersPage: React.FC<BrokersPageProps> = ({ onOpenModal }) => {
                         <div className="mb-8">
                             <PageBackButton />
                         </div>
-                        <div className="text-center mb-12">
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Brokers y Herramientas</h1>
-                            <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl mx-auto">
-                                La selección de plataformas y herramientas recomendadas por nuestro equipo para una operativa segura y eficiente.
-                            </p>
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-12">
+                            <div className="flex-1 text-center md:text-left">
+                                <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Brokers y Herramientas</h1>
+                                <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 max-w-3xl">
+                                    La selección de plataformas y herramientas recomendadas por nuestro equipo para una operativa segura y eficiente.
+                                </p>
+                            </div>
+                            <div className="flex-shrink-0">
+                                <img 
+                                    src="https://i.pinimg.com/736x/08/a9/be/08a9be7a9a02639197bb6f7985d715f8.jpg" 
+                                    alt="Mascota TradeVision Pensando" 
+                                    className="w-40 md:w-56 rounded-full border-4 border-brand-accent shadow-2xl hover:scale-105 transition-transform duration-300"
+                                />
+                            </div>
                         </div>
 
                         {/* Elite Support Banner */}

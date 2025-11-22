@@ -261,20 +261,20 @@ const ExecutionPatterns: React.FC = () => {
                 <p className="mt-2 text-gray-600 dark:text-gray-400">Refuerza tu visión con el entrenamiento repetitivo. Como un atleta de élite, la maestría se logra a través de la práctica constante.</p>
             </div>
 
-            <div className="relative mt-8 min-h-[420px] h-auto flex items-center justify-center">
+            <div className="relative mt-8 min-h-[350px] md:min-h-[420px] h-auto flex items-center justify-center">
                 {/* Carousel content */}
-                <div className="w-full max-w-md text-center px-8 md:px-0">
-                    <div className="h-40 flex items-center justify-center text-gray-700 dark:text-gray-300">
+                <div className="w-full max-w-md text-center px-4 sm:px-8 md:px-0">
+                    <div className="h-32 md:h-40 flex items-center justify-center text-gray-700 dark:text-gray-300">
                         {currentPattern.svg}
                     </div>
-                    <h3 className="mt-4 text-2xl md:text-3xl font-bold text-brand-accent">{currentPattern.name}</h3>
-                    <div className="flex justify-center items-center gap-4 my-2 flex-wrap">
-                        <span className="text-xs font-bold uppercase px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">{currentPattern.category}</span>
-                        <span className={`text-xs font-bold uppercase px-3 py-1 rounded-full ${getEffectivenessClass(currentPattern.effectiveness)}`}>
+                    <h3 className="mt-4 text-xl md:text-3xl font-bold text-brand-accent">{currentPattern.name}</h3>
+                    <div className="flex justify-center items-center gap-2 md:gap-4 my-2 flex-wrap">
+                        <span className="text-[10px] md:text-xs font-bold uppercase px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">{currentPattern.category}</span>
+                        <span className={`text-[10px] md:text-xs font-bold uppercase px-2 py-1 rounded-full ${getEffectivenessClass(currentPattern.effectiveness)}`}>
                             Efectividad: {currentPattern.effectiveness}
                         </span>
                     </div>
-                    <p className="mt-2 text-sm md:text-base text-gray-600 dark:text-gray-400 min-h-[5rem] md:h-28">{currentPattern.description}</p>
+                    <p className="mt-2 text-xs md:text-base text-gray-600 dark:text-gray-400 min-h-[6rem] md:h-28 flex items-center justify-center">{currentPattern.description}</p>
                 </div>
 
                 {/* Navigation */}
@@ -286,7 +286,7 @@ const ExecutionPatterns: React.FC = () => {
                 </button>
             </div>
 
-            <div className="flex justify-center mt-4 space-x-2">
+            <div className="flex justify-center mt-4 space-x-2 flex-wrap gap-y-2">
                 {patterns.map((_, index) => (
                     <button
                         key={index}
