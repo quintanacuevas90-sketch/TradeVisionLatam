@@ -75,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
             title: 'Contenido y Recursos',
             links: [
                 { label: 'Protocolo de Confianza', action: () => navigate('/protocolo-confianza') },
-                { label: 'Zona de Ejecución', action: () => navigate('/zona-de-ejecucion') },
+                { label: 'TRADING ARENA 🎮', action: () => navigate('/zona-de-ejecucion') },
                 { label: 'Nuestra Metodología', action: () => navigate('/methodology') },
                 { label: 'Conoce a los Mentores', action: () => onOpenModal('mentors') },
                 { label: 'Sobre Nosotros', action: () => navigate('/acerca-de') },
@@ -190,7 +190,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                                 <button
                                                     key={link.label}
                                                     onClick={() => handleSideMenuClick(link.action)}
-                                                    className="text-left text-base text-gray-800 dark:text-white hover:text-brand-accent transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10"
+                                                    className={`text-left text-base transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 w-full ${
+                                                        link.label.includes('TRADING ARENA')
+                                                            ? 'font-extrabold text-cyber-violet text-glow-violet hover:opacity-80'
+                                                            : 'text-gray-800 dark:text-white hover:text-brand-accent'
+                                                    }`}
                                                 >
                                                     {link.label}
                                                 </button>

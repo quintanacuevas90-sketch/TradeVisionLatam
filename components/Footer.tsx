@@ -18,7 +18,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
             title: 'Navegación',
             links: [
                 { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
-                { label: 'Zona de Ejecución', action: () => navigate('/zona-de-ejecucion') },
+                { label: 'TRADING ARENA 🎮', action: () => navigate('/zona-de-ejecucion') },
                 { label: 'Recursos Gratuitos', action: () => navigate('/comunidad') },
                 { label: 'Brokers Recomendados', action: () => navigate('/brokers') },
                 { label: 'Blog de Trading', action: () => navigate('/blog') },
@@ -103,7 +103,11 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                             <ul className="space-y-2">
                                 {group.links.map((item) => (
                                     <li key={item.label}>
-                                        <button onClick={item.action} className="text-gray-500 dark:text-gray-400 hover:text-brand-accent transition text-left">
+                                        <button onClick={item.action} className={`transition text-left ${
+                                            item.label.includes('TRADING ARENA')
+                                                ? 'font-bold text-cyber-violet text-glow-violet hover:opacity-80'
+                                                : 'text-gray-500 dark:text-gray-400 hover:text-brand-accent'
+                                        }`}>
                                             {item.label === 'Brokers Recomendados' ? <><span translate="no">Brokers</span> Recomendados</> : item.label}
                                         </button>
                                     </li>

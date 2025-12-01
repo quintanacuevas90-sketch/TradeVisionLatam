@@ -5,7 +5,7 @@ import { FiMail } from 'react-icons/fi';
 
 export const TICKER_MESSAGES: string[] = [
     "🎓 Nivel PRO | Forex Privado: Domina el mercado regulado con nuestro curso premium. ¡Aprende la disciplina del trading institucional!",
-    "🧠 Zona de Ejecución Activa: Entrena tu mente con el Simulador de Disciplina y los quizzes de Psicología. ¡Mejora tu Psicotrading hoy!",
+    "🎮 TRADING ARENA ACTIVA: Entra a la arena, entrena tu disciplina y domina el mercado. ¡Sube de nivel hoy!",
     "📚 Manuales Gratuitos: Descarga la Guía de Patrones de Velas y el resumen clave de Trading en la Zona. ¡Conocimiento sólido para tu estrategia!",
     "✅ Comunidad Gratuita: Únete a nuestro canal de Telegram para tips de disciplina y actualizaciones. ¡Cero scammers, solo traders serios!",
     "🛠️ Control de Riesgo: Usa la Calculadora Binaria para simular riesgos (1% a 3% máximo). ¡La disciplina es el único edge!",

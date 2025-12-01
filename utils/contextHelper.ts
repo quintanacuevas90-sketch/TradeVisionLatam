@@ -93,7 +93,7 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
             context += `\nEstá viendo la página de 'Transparencia y Legalidad'. Describe la estructura corporativa de TradeVision como una consultoría educativa registrada internacionalmente y su compromiso con el cumplimiento normativo.`;
             break;
         case 'execution-zone':
-            context += `\nEstá en la 'Zona de Ejecución', una página interactiva para traders. Contiene cuatro módulos: 1) Un quiz de mentalidad (psicología). 2) Un carrusel de patrones de velas. 3) Un simulador de disciplina y riesgo. 4) Un carrusel de 50 diapositivas de mentalidad avanzada. El objetivo es forjar la disciplina.`;
+            context += `\nEstá en la 'TRADING ARENA', una página interactiva para traders. Contiene módulos de entrenamiento como Calibración Mental (quiz), Reconocimiento Táctico (patrones), Modo Entrenamiento (simulador), Mejora de Habilidades (mentalidad) y Potenciador de XP (calculadora). El objetivo es forjar la disciplina.`;
             break;
         case 'main':
         default:
