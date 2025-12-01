@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { FiMenu, FiX, FiSun, FiMoon, FiSearch } from 'react-icons/fi';
-import { FaRobot } from 'react-icons/fa';
+import { FaRobot, FaTrophy } from 'react-icons/fa';
 import { ModalType } from '../types';
 import { useTheme } from '../contexts/ThemeContext';
 import Logo from './Logo';
@@ -68,6 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 { label: 'Brokers', action: () => navigate('/brokers') },
                 { label: 'Blog', action: () => navigate('/blog') },
                 { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
+                { label: '🏆 Salón de la Fama', action: () => navigate('/hall-of-fame') },
                 { label: 'Soporte 24/7', action: () => onOpenModal('support') },
             ]
         },
@@ -193,7 +194,9 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                                     className={`text-left text-base transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 w-full ${
                                                         link.label.includes('TRADING ARENA')
                                                             ? 'font-extrabold text-cyber-violet text-glow-violet hover:opacity-80'
-                                                            : 'text-gray-800 dark:text-white hover:text-brand-accent'
+                                                            : link.label.includes('Salón de la Fama')
+                                                                ? 'font-bold text-yellow-500'
+                                                                : 'text-gray-800 dark:text-white hover:text-brand-accent'
                                                     }`}
                                                 >
                                                     {link.label}

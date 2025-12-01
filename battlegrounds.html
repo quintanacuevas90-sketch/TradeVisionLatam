@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TradeVision Battlegrounds | Simulador Táctico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --panel-color: #111827;
+            --green-neon: #39FF14;
+            --red-alert: #FF003C;
+            --cyber-turquoise: #00F0FF;
+            --blue-trap: #2E86DE;
+            --text-color: #E5E7EB;
+            --font-title: 'Orbitron', sans-serif;
+            --font-data: 'Roboto Mono', monospace;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-data);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- UI CONTAINER --- */
+        #game-container {
+            width: 100%;
+            max-width: 1024px;
+            height: 100vh;
+            max-height: 900px;
+            position: relative;
+            background: radial-gradient(circle at center, #1a1a2e 0%, var(--bg-color) 100%);
+            border: 2px solid var(--panel-color);
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.3;
+        }
+
+        /* --- SCREENS --- */
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            text-align: center;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 {
+            font-family: var(--font-title);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px var(--cyber-turquoise);
+            color: white;
+        }
+
+        h2 {
+            color: var(--cyber-turquoise);
+            font-size: 1.8rem;
+        }
+
+        .data-text {
+            color: var(--green-neon);
+            font-family: var(--font-data);
+        }
+
+        /* --- OWL HOST --- */
+        .owl-host {
+            font-size: 5rem;
+            margin: 1rem;
+            position: relative;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+            transition: transform 0.2s;
+        }
+        
+        .owl-host.angry {
+            animation: shake 0.5s infinite;
+            filter: drop-shadow(0 0 20px var(--red-alert)) hue-rotate(300deg);
+        }
+
+        .owl-host.hype::after {
+            content: '🕶️';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .speech-bubble {
+            background: var(--panel-color);
+            border: 1px solid var(--cyber-turquoise);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            max-width: 400px;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: var(--cyber-turquoise) transparent;
+            display: block;
+            width: 0;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            background: transparent;
+            border: 2px solid var(--green-neon);
+            color: var(--green-neon);
+            padding: 1rem 2rem;
+            font-family: var(--font-title);
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            margin: 0.5rem;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+        }
+
+        .btn:hover {
+            background: var(--green-neon);
+            color: black;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.6);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn.red {
+            border-color: var(--red-alert);
+            color: var(--red-alert);
+            box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+        }
+
+        .btn.red:hover {
+            background: var(--red-alert);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.6);
+        }
+
+        /* --- INPUTS --- */
+        input.cyber-input {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--cyber-turquoise);
+            color: var(--green-neon);
+            padding: 1rem;
+            font-family: var(--font-data);
+            font-size: 1.5rem;
+            text-align: center;
+            width: 200px;
+            margin-bottom: 1rem;
+        }
+
+        /* --- KEYPAD (Phase 1) --- */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        .key-btn {
+            background: #1f2937;
+            border: 1px solid #374151;
+            color: white;
+            padding: 15px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .key-btn:hover { border-color: var(--cyber-turquoise); }
+
+        /* --- TRAFFIC LIGHT (Phase 4) --- */
+        .traffic-light {
+            width: 80px;
+            height: 200px;
+            background: #000;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            padding: 10px;
+            border: 2px solid #333;
+        }
+        .light {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #333;
+            transition: background 0.1s;
+        }
+        .light.red.active { background: var(--red-alert); box-shadow: 0 0 20px var(--red-alert); }
+        .light.green.active { background: var(--green-neon); box-shadow: 0 0 20px var(--green-neon); }
+        .light.blue.active { background: var(--blue-trap); box-shadow: 0 0 20px var(--blue-trap); }
+
+        /* --- SIMULATOR (Phase 5) --- */
+        .sim-container {
+            width: 100%;
+            max-width: 800px;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 1rem;
+            height: 400px;
+        }
+        .chart-area {
+            background: #000;
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding-right: 50px; /* Space for future candles */
+        }
+        .candle-container {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+            width: 100%;
+            justify-content: flex-end;
+            gap: 2px;
+        }
+        .candle {
+            width: 10px;
+            background: var(--green-neon);
+            animation: candle-pulse 1s infinite alternate;
+        }
+        .candle.red { background: var(--red-alert); }
+        
+        .sim-controls {
+            background: var(--panel-color);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .control-display {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .amount-display {
+            font-size: 1.5rem;
+            color: white;
+            text-align: center;
+            border: 1px solid #333;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        #news-banner {
+            position: absolute;
+            top: 20px; left: 0; width: 100%;
+            background: var(--red-alert);
+            color: white;
+            font-weight: bold;
+            padding: 5px;
+            text-align: center;
+            display: none;
+            animation: blink 0.5s infinite;
+            z-index: 10;
+        }
+
+        .screen.shake {
+            animation: shake 0.5s infinite;
+        }
+
+        /* --- CERTIFICATE --- */
+        .cert-box {
+            border: 4px solid gold;
+            padding: 3rem;
+            background: rgba(0,0,0,0.8);
+            position: relative;
+            max-width: 600px;
+        }
+        .cert-title { color: gold; font-size: 2rem; margin-bottom: 1rem; }
+        .cert-name { font-size: 2.5rem; color: white; margin: 1rem 0; font-family: 'Times New Roman', serif; font-style: italic; border-bottom: 1px solid gold; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        @keyframes candle-pulse { from { opacity: 0.8; } to { opacity: 1; } }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .sim-container { grid-template-columns: 1fr; height: auto; }
+            .chart-area { height: 200px; }
+            h1 { font-size: 1.5rem; }
+            .owl-host { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="scanline"></div>
+
+    <!-- START SCREEN -->
+    <div id="screen-start" class="screen active">
+        <div class="owl-host" id="owl-start">🦉</div>
+        <div class="speech-bubble">
+            <p>Bienvenido al <strong>Battlegrounds</strong>. Soy tu instructor.</p>
+            <p class="mt-2">Aquí no hay suerte. Solo disciplina. ¿Tienes lo necesario?</p>
+        </div>
+        <h1>TRADEVISION<br><span style="color:var(--green-neon)">BATTLEGROUNDS</span></h1>
+        <button class="btn" onclick="Game.start()">INICIAR SIMULACIÓN</button>
+        <p style="margin-top: 1rem; font-size: 0.8rem; color: #666;">Audio Requerido 🔊</p>
+    </div>
+
+    <!-- PHASE 1: RISK MANAGEMENT -->
+    <div id="screen-phase1" class="screen">
+        <h2>FASE 1: GESTIÓN DE RIESGO</h2>
+        <div class="owl-host" id="owl-p1">🥚</div>
+        <div class="speech-bubble" id="msg-p1">Calcula el 1% de riesgo. ¡Rápido!</div>
+        
+        <div style="font-size: 1.5rem; margin-bottom: 1rem;">
+            Saldo: <span id="p1-balance" class="data-text">$0</span>
+        </div>
+        <input type="text" id="p1-input" class="cyber-input" readonly placeholder="?">
+        <div id="p1-timer" style="font-size: 3rem; color: var(--red-alert); font-weight: bold;">5.0</div>
+        
+        <div class="keypad">
+            <button class="key-btn" onclick="Game.p1Input('1')">1</button>
+            <button class="key-btn" onclick="Game.p1Input('2')">2</button>
+            <button class="key-btn" onclick="Game.p1Input('3')">3</button>
+            <button class="key-btn" onclick="Game.p1Input('4')">4</button>
+            <button class="key-btn" onclick="Game.p1Input('5')">5</button>
+            <button class="key-btn" onclick="Game.p1Input('6')">6</button>
+            <button class="key-btn" onclick="Game.p1Input('7')">7</button>
+            <button class="key-btn" onclick="Game.p1Input('8')">8</button>
+            <button class="key-btn" onclick="Game.p1Input('9')">9</button>
+            <button class="key-btn" onclick="Game.p1Input('.')">.</button>
+            <button class="key-btn" onclick="Game.p1Input('0')">0</button>
+            <button class="key-btn" onclick="Game.p1Input('DEL')">←</button>
+        </div>
+        <button class="btn" onclick="Game.p1Submit()" style="width: 100%; margin-top:10px;">ENVIAR</button>
+    </div>
+
+    <!-- PHASE 2: THEORY -->
+    <div id="screen-phase2" class="screen">
+        <h2>FASE 2: FILTRO TEÓRICO</h2>
+        <div class="owl-host" id="owl-p2">🥚</div>
+        <div class="speech-bubble" id="msg-p2">Demuestra que no eres un turista.</div>
+        
+        <div style="font-size: 2rem; margin-bottom: 1rem;" id="p2-lives">❤️❤️❤️</div>
+        <h3 id="p2-question" style="max-width: 600px; min-height: 80px;">Pregunta...</h3>
+        
+        <div id="p2-options" style="display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 500px;">
+            <!-- Buttons generated by JS -->
+        </div>
+    </div>
+
+    <!-- PHASE 3: TILT TEST -->
+    <div id="screen-phase3" class="screen">
+        <h2>FASE 3: CONTROL EMOCIONAL</h2>
+        <div class="owl-host" id="owl-p3">🐣</div>
+        <div class="speech-bubble" id="msg-p3">El mercado se congeló en tu contra. Cierra la operación.</div>
+        
+        <div style="height: 100px;"></div>
+        <button id="btn-lag" class="btn red" style="transform: scale(1.5); padding: 2rem;" onmousedown="Game.p3Click()">CERRAR OPERACIÓN</button>
+        <p style="margin-top: 2rem; color: #555;">Status: CONNECTION_LAG...</p>
+    </div>
+
+    <!-- PHASE 4: SNIPER REFLEX -->
+    <div id="screen-phase4" class="screen">
+        <h2>FASE 4: MODO SNIPER</h2>
+        <div class="owl-host" id="owl-p4">🐣</div>
+        <div class="speech-bubble" id="msg-p4">Espera el VERDE. Cuidado con las trampas (AZUL).</div>
+        
+        <div class="traffic-light" id="traffic-light" onmousedown="Game.p4Click()">
+            <div id="light-red" class="light red active"></div>
+            <div id="light-blue" class="light blue"></div>
+            <div id="light-green" class="light green"></div>
+        </div>
+        <p id="p4-result" class="data-text" style="margin-top: 1rem; min-height: 20px;"></p>
+    </div>
+
+    <!-- PHASE 5: THE SIMULATOR -->
+    <div id="screen-phase5" class="screen">
+        <h2>FASE 5: BOSS FIGHT</h2>
+        <div class="owl-host" id="owl-p5">🦉</div>
+        <div class="speech-bubble" id="msg-p5">Entorno de Mercado Real. No falles.</div>
+        
+        <div class="sim-container">
+            <div class="chart-area" id="chart-area">
+                <div id="news-banner">NOTICIA DE ALTO IMPACTO</div>
+                <div class="candle-container" id="candles">
+                    <!-- JS Candles -->
+                </div>
+            </div>
+            <div class="sim-controls">
+                <div class="control-display">ACTIVO: EUR/USD</div>
+                <div class="control-display">PAYOUT: 87%</div>
+                <div class="amount-display" id="sim-amount">$10</div>
+                <button class="btn" style="border-color: #39FF14; color: #39FF14;" onclick="Game.p5Trade('CALL')">▲ CALL</button>
+                <button class="btn" style="border-color: #FF003C; color: #FF003C;" onclick="Game.p5Trade('PUT')">▼ PUT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VICTORY -->
+    <div id="screen-victory" class="screen">
+        <div class="cert-box">
+            <div class="cert-title">CERTIFICADO OFICIAL</div>
+            <div class="owl-host hype">😎</div>
+            <p>Se otorga el rango de</p>
+            <h3 style="color: var(--green-neon); font-size: 1.5rem; margin: 1rem 0;">FRANCOTIRADOR INSTITUCIONAL</h3>
+            <p>a:</p>
+            <div class="cert-name" id="cert-username">Operador</div>
+            <p id="cert-date" style="margin-top: 1rem; color: #aaa;">Fecha: 2025</p>
+        </div>
+        <button class="btn" style="margin-top: 2rem;" onclick="location.reload()">Nuevo Recluta</button>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="screen-gameover" class="screen">
+        <h1 style="color: var(--red-alert); font-size: 4rem;">GAME OVER</h1>
+        <div class="owl-host angry">🦉</div>
+        <h3 id="fail-reason" style="color: white; margin: 2rem 0;">Razón...</h3>
+        <button class="btn" onclick="location.reload()">REINTENTAR</button>
+    </div>
+
+</div>
+
+<script>
+/**
+ * AUDIO ENGINE (Web Audio API)
+ * No external files. Pure synthesis.
+ */
+const AudioSys = {
+    ctx: null,
+    init: () => {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        AudioSys.ctx = new AudioContext();
+    },
+    playTone: (freq, type, duration, vol = 0.1) => {
+        if (!AudioSys.ctx) AudioSys.init();
+        const osc = AudioSys.ctx.createOscillator();
+        const gain = AudioSys.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, AudioSys.ctx.currentTime);
+        gain.gain.setValueAtTime(vol, AudioSys.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(AudioSys.ctx.destination);
+        osc.start();
+        osc.stop(AudioSys.ctx.currentTime + duration);
+    },
+    click: () => AudioSys.playTone(1200, 'square', 0.05, 0.05),
+    error: () => {
+        AudioSys.playTone(150, 'sawtooth', 0.3, 0.2);
+        setTimeout(() => AudioSys.playTone(100, 'sawtooth', 0.3, 0.2), 150);
+    },
+    success: () => {
+        AudioSys.playTone(440, 'sine', 0.1);
+        setTimeout(() => AudioSys.playTone(554, 'sine', 0.1), 100);
+        setTimeout(() => AudioSys.playTone(659, 'sine', 0.2), 200);
+    },
+    alarm: () => {
+        const now = AudioSys.ctx.currentTime;
+        const osc = AudioSys.ctx.createOscillator();
+        const gain = AudioSys.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.linearRampToValueAtTime(400, now + 0.3);
+        gain.gain.value = 0.2;
+        osc.connect(gain);
+        gain.connect(AudioSys.ctx.destination);
+        osc.start();
+        osc.stop(now + 0.3);
+    },
+    boom: () => {
+        // Noise buffer for explosion
+        if (!AudioSys.ctx) AudioSys.init();
+        const bufferSize = AudioSys.ctx.sampleRate * 1; 
+        const buffer = AudioSys.ctx.createBuffer(1, bufferSize, AudioSys.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+        const noise = AudioSys.ctx.createBufferSource();
+        noise.buffer = buffer;
+        const gain = AudioSys.ctx.createGain();
+        gain.gain.setValueAtTime(0.5, AudioSys.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, AudioSys.ctx.currentTime + 1);
+        noise.connect(gain);
+        gain.connect(AudioSys.ctx.destination);
+        noise.start();
+    }
+};
+
+/**
+ * GAME LOGIC
+ */
+const Game = {
+    state: {
+        balance: 0,
+        targetRisk: 0,
+        username: 'Trader',
+        lives: 3,
+        clicks: 0,
+        p5Bet: 10,
+        p5MartingaleCount: 0
+    },
+    
+    // --- NAVIGATION ---
+    showScreen: (id) => {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    },
+
+    fail: (reason) => {
+        AudioSys.error();
+        document.getElementById('fail-reason').innerText = reason;
+        Game.showScreen('screen-gameover');
+    },
+
+    // --- START ---
+    start: () => {
+        AudioSys.init();
+        AudioSys.click();
+        const name = prompt("INGRESA TU NOMBRE DE OPERADOR:", "Trader");
+        Game.state.username = name || "Trader";
+        Game.phase1();
+    },
+
+    // --- PHASE 1: RISK ---
+    phase1: () => {
+        Game.showScreen('screen-phase1');
+        Game.state.balance = Math.floor(Math.random() * 9000) + 1000; // 1000 - 10000
+        Game.state.targetRisk = (Game.state.balance * 0.01).toFixed(2); // 1%
+        
+        document.getElementById('p1-balance').innerText = `$${Game.state.balance}`;
+        document.getElementById('p1-input').value = '';
+        
+        let time = 5.0;
+        const timerEl = document.getElementById('p1-timer');
+        
+        const interval = setInterval(() => {
+            time -= 0.1;
+            timerEl.innerText = time.toFixed(1);
+            if (time <= 0) {
+                clearInterval(interval);
+                Game.fail("Te congelaste. El mercado no espera.");
+            }
+        }, 100);
+        Game.p1Interval = interval;
+    },
+
+    p1Input: (val) => {
+        AudioSys.click();
+        const input = document.getElementById('p1-input');
+        if (val === 'DEL') input.value = input.value.slice(0, -1);
+        else input.value += val;
+    },
+
+    p1Submit: () => {
+        clearInterval(Game.p1Interval);
+        const val = parseFloat(document.getElementById('p1-input').value);
+        if (val == Game.state.targetRisk) { // Loose equality for string/num
+            AudioSys.success();
+            document.getElementById('owl-p1').innerHTML = '😎'; // Hype
+            setTimeout(Game.phase2, 1500);
+        } else {
+            Game.fail(`Matemáticas pobres. El 1% de ${Game.state.balance} es ${Game.state.targetRisk}, no ${val}.`);
+        }
+    },
+
+    // --- PHASE 2: THEORY ---
+    phase2: () => {
+        Game.showScreen('screen-phase2');
+        Game.state.lives = 3;
+        Game.p2Index = 0;
+        Game.p2Questions = [
+            { q: "¿Qué patrón indica reversión bajista?", a: "Estrella Fugaz", bad: ["Martillo", "Doji"] },
+            { q: "El mercado OTC es...", a: "No regulado/Simulado", bad: ["Mercado Real", "Solo Forex"] },
+            { q: "Gestión de riesgo ideal:", a: "1% a 3%", bad: ["10%", "Martingala"] }
+        ];
+        Game.renderQuestion();
+    },
+
+    renderQuestion: () => {
+        if (Game.p2Index >= Game.p2Questions.length) {
+            AudioSys.success();
+            setTimeout(Game.phase3, 1000);
+            return;
+        }
+        
+        const q = Game.p2Questions[Game.p2Index];
+        document.getElementById('p2-question').innerText = q.q;
+        const opts = [...q.bad, q.a].sort(() => Math.random() - 0.5);
+        
+        const container = document.getElementById('p2-options');
+        container.innerHTML = '';
+        opts.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.innerText = opt;
+            btn.onclick = () => Game.p2Check(opt === q.a);
+            container.appendChild(btn);
+        });
+        
+        document.getElementById('p2-lives').innerText = '❤️'.repeat(Game.state.lives);
+    },
+
+    p2Check: (correct) => {
+        if (correct) {
+            AudioSys.click();
+            Game.p2Index++;
+            Game.renderQuestion();
+        } else {
+            AudioSys.error();
+            Game.state.lives--;
+            document.getElementById('p2-lives').innerText = '❤️'.repeat(Game.state.lives);
+            document.getElementById('owl-p2').classList.add('angry');
+            document.getElementById('msg-p2').innerText = "¡Vergüenza! Estudia más.";
+            
+            if (Game.state.lives <= 0) Game.fail("Reprobado en teoría básica.");
+            
+            setTimeout(() => {
+                document.getElementById('owl-p2').classList.remove('angry');
+                document.getElementById('msg-p2').innerText = "Concéntrate.";
+            }, 1000);
+        }
+    },
+
+    // --- PHASE 3: TILT ---
+    phase3: () => {
+        Game.showScreen('screen-phase3');
+        Game.state.clicks = 0;
+        Game.lastClick = 0;
+    },
+
+    p3Click: () => {
+        const now = Date.now();
+        // Lag simulation: First 2 clicks do nothing visually but count time
+        if (Game.state.clicks < 2) {
+            // Fake nothing happens
+        } else if (Game.state.clicks === 2) {
+            // Worked
+            AudioSys.success();
+            setTimeout(Game.phase4, 1000);
+            return;
+        }
+
+        // Rage detection: If clicking fast (> 4 clicks in short span)
+        if (now - Game.lastClick < 300) { 
+            // Rage click
+            Game.state.rageCounter = (Game.state.rageCounter || 0) + 1;
+        } else {
+            Game.state.rageCounter = 0;
+        }
+        Game.lastClick = now;
+        Game.state.clicks++;
+
+        if (Game.state.rageCounter > 3) {
+            Game.fail("Detectamos Ira (Rage Clicking). El mercado te liquidó.");
+        }
+    },
+
+    // --- PHASE 4: REFLEX ---
+    phase4: () => {
+        Game.showScreen('screen-phase4');
+        const r = document.getElementById('light-red');
+        const g = document.getElementById('light-green');
+        const b = document.getElementById('light-blue');
+        
+        r.className = 'light red active';
+        g.className = 'light green';
+        b.className = 'light blue';
+        
+        Game.p4CanClick = false;
+        
+        // Random wait 2-5s
+        const wait = Math.random() * 3000 + 2000;
+        
+        setTimeout(() => {
+            r.className = 'light red'; // off
+            
+            // 30% Trap chance
+            if (Math.random() < 0.3) {
+                b.className = 'light blue active';
+                Game.p4Trap = true;
+                setTimeout(() => {
+                    b.className = 'light blue';
+                    g.className = 'light green active';
+                    Game.p4Trap = false;
+                    Game.p4CanClick = true;
+                    Game.p4Start = Date.now();
+                }, 1000); // Wait 1s after trap
+            } else {
+                g.className = 'light green active';
+                Game.p4CanClick = true;
+                Game.p4Start = Date.now();
+            }
+        }, wait);
+    },
+
+    p4Click: () => {
+        if (!Game.p4CanClick) {
+            if (Game.p4Trap) Game.fail("¡Falsa Ruptura! Entraste en la trampa azul.");
+            else Game.fail("Salida en Falso. Entraste antes de tiempo.");
+            return;
+        }
+        
+        const diff = Date.now() - Game.p4Start;
+        document.getElementById('p4-result').innerText = `${diff}ms`;
+        
+        if (diff > 350) { // Requirement < 350ms (adjusted for web)
+            Game.fail(`Lento. ${diff}ms. Necesitas < 350ms.`);
+        } else {
+            AudioSys.success();
+            setTimeout(Game.phase5, 1000);
+        }
+    },
+
+    // --- PHASE 5: SIMULATOR ---
+    phase5: () => {
+        Game.showScreen('screen-phase5');
+        Game.p5Generating = true;
+        
+        // Init chart
+        const cont = document.getElementById('candles');
+        for(let i=0; i<30; i++) Game.addCandle('neutral');
+        
+        // Loop candles
+        Game.p5Interval = setInterval(() => {
+            Game.addCandle(Math.random() > 0.5 ? 'green' : 'red');
+        }, 500);
+
+        // News Event at 5s
+        setTimeout(() => {
+            AudioSys.boom();
+            document.getElementById('news-banner').style.display = 'block';
+            document.getElementById('screen-phase5').classList.add('shake');
+            document.getElementById('msg-p5').innerText = "¡NOTICIA! ALTA VOLATILIDAD.";
+            Game.p5NewsActive = true;
+            
+            // Erratic candles
+            clearInterval(Game.p5Interval);
+            Game.p5Interval = setInterval(() => {
+                Game.addCandle(Math.random() > 0.5 ? 'long-green' : 'long-red');
+            }, 200);
+
+            // End News after 4s
+            setTimeout(() => {
+                document.getElementById('news-banner').style.display = 'none';
+                document.getElementById('screen-phase5').classList.remove('shake');
+                document.getElementById('msg-p5').innerText = "Mercado estabilizado. Busca el patrón 'Estrella Fugaz' en Resistencia.";
+                Game.p5NewsActive = false;
+                
+                // Form pattern: Green, Green, Shooting Star (Red small body, long wick)
+                clearInterval(Game.p5Interval);
+                Game.addCandle('green');
+                setTimeout(() => Game.addCandle('green'), 500);
+                setTimeout(() => {
+                    Game.addCandle('star'); // The trigger
+                    Game.p5CanTrade = true; // Now user should PUT
+                }, 1000);
+                
+            }, 4000);
+
+        }, 5000);
+    },
+
+    addCandle: (type) => {
+        const cont = document.getElementById('candles');
+        const div = document.createElement('div');
+        div.className = 'candle';
+        
+        let h = Math.random() * 40 + 10;
+        let color = '#39FF14'; // green
+        
+        if (type === 'red') color = '#FF003C';
+        if (type === 'long-green') h = 90;
+        if (type === 'long-red') { h = 90; color = '#FF003C'; }
+        if (type === 'star') {
+            h = 10; 
+            color = '#FF003C'; 
+            div.style.borderTop = "20px solid #FF003C"; // Wick
+        }
+
+        div.style.height = h + '%';
+        div.style.backgroundColor = color;
+        
+        cont.appendChild(div);
+        if (cont.children.length > 40) cont.removeChild(cont.firstChild);
+    },
+
+    p5Trade: (dir) => {
+        AudioSys.click();
+        const amt = 10; // Fixed for simplicity in logic check or input
+        // Check News
+        if (Game.p5NewsActive) {
+            Game.fail("Operaste durante la noticia. Spread asesino.");
+            return;
+        }
+        
+        // Anti-Martingale Check
+        // Simulated: If user lost before (we assume start is clean), and bets double. 
+        // Here we simplify: Just check pattern logic.
+        
+        if (!Game.p5CanTrade) {
+            // Premature or wrong timing
+            Game.fail("Entraste sin confirmación de patrón.");
+            return;
+        }
+
+        if (dir === 'PUT') {
+            // WIN
+            AudioSys.success();
+            Game.victory();
+        } else {
+            // LOSS -> Check martingale logic if they try again? 
+            // For this linear game, wrong direction = fail
+            Game.fail("El patrón era bajista (Estrella Fugaz). Operaste al alza.");
+        }
+    },
+
+    // --- VICTORY ---
+    victory: () => {
+        Game.showScreen('screen-victory');
+        document.getElementById('cert-username').innerText = Game.state.username;
+        document.getElementById('cert-date').innerText = new Date().toLocaleDateString();
+        // Fire confetti logic or just simple celebration
+    }
+};
+</script>
+</body>
+</html>

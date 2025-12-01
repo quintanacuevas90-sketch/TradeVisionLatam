@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ModalType } from '../types';
 import AnimatedSection from '../components/AnimatedSection';
@@ -59,14 +60,19 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
                         <p className="text-xs text-gray-400 italic mt-3 font-semibold tracking-wide">Mascota TradeVision</p>
                     </div>
 
-                    {/* Title Column */}
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-center md:text-left">
-                        <span className="text-white">Bienvenido a <span translate="no">TradeVision Latam</span>:</span> <br className="hidden lg:block" />
-                        <span className="text-brand-accent">La Disciplina es la Estrategia</span>
+                    {/* Title Column - OPTIMIZADO PARA MÓVIL */}
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-relaxed md:leading-tight tracking-wide text-center md:text-left">
+                        <span className="text-white block lg:inline mb-2 lg:mb-0">
+                            Bienvenido a <span translate="no" className="whitespace-nowrap">TradeVision Latam</span>:
+                        </span>
+                        {' '}
+                        <span className="text-brand-accent block lg:inline">
+                            La Disciplina es la Estrategia
+                        </span>
                     </h1>
                 </div>
 
-                <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
                     <p>
                         Una academia de <span translate="no">trading</span> para <span translate="no">traders</span>, con la misión de forjar la disciplina y la rentabilidad en Latinoamérica.
                     </p>

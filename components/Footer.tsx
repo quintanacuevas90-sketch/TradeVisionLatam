@@ -36,14 +36,13 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
             ]
         },
         {
-            title: 'Legal',
+            title: 'Comunidad',
             links: [
+                { label: 'Salón de la Fama & Afiliados', action: () => navigate('/hall-of-fame') },
                 { label: 'Protocolo de Confianza', action: () => navigate('/protocolo-confianza') },
                 { label: 'Aviso Legal y Riesgo', action: () => navigate('/aviso-legal-riesgo') },
                 { label: 'Términos de la Academia', action: () => navigate('/terminos-academia') },
                 { label: 'Política de Privacidad', action: () => navigate('/politica-privacidad') },
-                { label: 'Transparencia y Legalidad', action: () => navigate('/transparencia-legal') },
-                { label: 'Mapa del Sitio', action: () => navigate('/sitemap') },
             ]
         }
     ];
@@ -106,7 +105,9 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                                         <button onClick={item.action} className={`transition text-left ${
                                             item.label.includes('TRADING ARENA')
                                                 ? 'font-bold text-cyber-violet text-glow-violet hover:opacity-80'
-                                                : 'text-gray-500 dark:text-gray-400 hover:text-brand-accent'
+                                                : item.label.includes('Blacklist')
+                                                    ? 'text-red-500 hover:text-red-400 text-xs font-bold'
+                                                    : 'text-gray-500 dark:text-gray-400 hover:text-brand-accent'
                                         }`}>
                                             {item.label === 'Brokers Recomendados' ? <><span translate="no">Brokers</span> Recomendados</> : item.label}
                                         </button>

@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -11,8 +12,8 @@ import HighRiskCalculator from '../components/HighRiskCalculator';
 import BinaryExecutionControl from '../components/BinaryExecutionControl';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
-import { FiArrowRight, FiUsers, FiMail, FiAward } from 'react-icons/fi';
-import { FaBrain, FaShieldAlt, FaCalculator, FaHeadset, FaCrosshairs, FaGamepad, FaTrophy, FaBolt, FaBug, FaScroll } from 'react-icons/fa';
+import { FiArrowRight, FiUsers, FiAward } from 'react-icons/fi';
+import { FaBrain, FaShieldAlt, FaCrosshairs, FaGamepad, FaTrophy, FaBolt, FaBug, FaScroll, FaCrown, FaGem, FaFileContract } from 'react-icons/fa';
 import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 
 const ModuleWrapper: React.FC<{ 
@@ -115,21 +116,33 @@ const ExecutionZonePage: React.FC = () => {
                                 <div className="inline-block mb-4 px-4 py-1 rounded-full border border-cyber-violet/30 bg-cyber-violet/10 text-cyber-violet text-xs sm:text-sm font-mono tracking-widest animate-pulse">
                                     SYSTEM STATUS: ONLINE
                                 </div>
-                                <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-[0_0_25px_rgba(188,19,254,0.3)] uppercase">
+                                <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-[0_0_25px_rgba(188,19,254,0.3)] uppercase leading-snug md:leading-tight">
                                     TRADING <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyber-violet to-electric-blue">ARENA 🎮</span>
                                 </h1>
                                  <h2 className="mt-4 text-lg sm:text-xl md:text-2xl font-bold text-gray-300 tracking-wider">Entrena, Juega y Domina el Mercado. <span className="text-acid-green">Sube de Nivel.</span></h2>
                                 <p className="mt-6 max-w-2xl text-base sm:text-lg text-gray-400 border-l-2 border-cyber-violet pl-6 text-left italic">
                                    "Zona de entrenamiento libre de riesgo. Usa estas herramientas para afilar tus habilidades antes de enfrentarte al Boss Final: el Mercado Real."
                                 </p>
+                                {/* HALL OF FAME BUTTON */}
+                                <div className="mt-8 text-center lg:text-left">
+                                    <button 
+                                        onClick={() => navigate('/hall-of-fame')}
+                                        className="inline-flex items-center gap-3 bg-[#FFD700]/10 border border-[#FFD700] hover:bg-[#FFD700] hover:text-black text-[#FFD700] px-6 py-3 rounded-lg font-bold transition-all duration-300 group"
+                                    >
+                                        <FaTrophy className="text-xl group-hover:scale-110 transition-transform" />
+                                        <span>VER A LOS INMORTALES</span>
+                                    </button>
+                                </div>
                             </div>
                             
-                            {/* Mascot Image - Setup Owl */}
+                            {/* Mascot Image - Setup Owl - UPDATED */}
                             <div className="flex-shrink-0 lg:mr-12">
                                 <img 
-                                    src="https://i.pinimg.com/originals/2d/38/8a/2d388a302dfe24bfd798842a10db81b2.jpg" 
-                                    alt="Mascota TradeVision en Setup" 
-                                    className="w-64 md:w-80 rounded-2xl border-2 border-cyber-violet shadow-[0_0_40px_rgba(188,19,254,0.3)] hover:scale-105 transition-transform duration-500"
+                                    src="https://i.pinimg.com/736x/2d/38/8a/2d388a302dfe24bfd798842a10db81b2.jpg" 
+                                    alt="Mascota zona de ejecución" 
+                                    width="500" 
+                                    height="500" 
+                                    className="w-64 md:w-80 rounded-full border-4 border-cyber-violet shadow-[0_0_40px_rgba(188,19,254,0.3)] hover:scale-105 transition-transform duration-500 object-cover aspect-square"
                                 />
                             </div>
                         </div>
@@ -143,7 +156,7 @@ const ExecutionZonePage: React.FC = () => {
                     <AnimatedSection id="module-1">
                         <ModuleWrapper 
                             level={1} 
-                            title="CALIBRACIÓN MENTAL" 
+                            title="CALIBRACIÓN: LA MENTE" 
                             icon={<FaBrain />}
                             imageUrl="https://i.pinimg.com/1200x/28/27/03/2827035b814c84f6596a533b8f142b76.jpg"
                         >
@@ -166,7 +179,7 @@ const ExecutionZonePage: React.FC = () => {
                     <AnimatedSection id="module-2">
                         <ModuleWrapper 
                             level={2} 
-                            title="RECONOCIMIENTO TÁCTICO" 
+                            title="TÁCTICA: PATRONES" 
                             icon={<FaScroll />}
                             imageUrl="https://i.pinimg.com/1200x/20/de/61/20de61b6a5276bcf5988b46805b8ffad.jpg"
                         >
@@ -189,7 +202,7 @@ const ExecutionZonePage: React.FC = () => {
                     <AnimatedSection id="module-3">
                         <ModuleWrapper 
                             level={3} 
-                            title="MODO ENTRENAMIENTO" 
+                            title="EJECUCIÓN: SIMULADOR" 
                             icon={<FaCrosshairs />}
                             imageUrl="https://i.pinimg.com/1200x/68/5a/14/685a1402457de41d3dd410e733bad8a3.jpg"
                         >
@@ -201,7 +214,7 @@ const ExecutionZonePage: React.FC = () => {
                     <AnimatedSection id="module-4">
                         <ModuleWrapper 
                             level={4} 
-                            title="MEJORA DE HABILIDADES" 
+                            title="DOMINIO: PSICOTRADING" 
                             icon={<FaTrophy />}
                             imageUrl="https://i.pinimg.com/1200x/98/59/d3/9859d3374c8de660a04f52cf276132c6.jpg"
                         >
@@ -213,7 +226,7 @@ const ExecutionZonePage: React.FC = () => {
                     <AnimatedSection id="module-5">
                          <ModuleWrapper 
                             level={5} 
-                            title="POTENCIADOR DE XP" 
+                            title="ESTRATEGIA: RIESGO" 
                             icon={<FaGamepad />}
                             imageUrl="https://i.pinimg.com/1200x/4e/d1/40/4ed140f9e51ef33678afa4ec9b6577f8.jpg"
                         >
@@ -233,30 +246,83 @@ const ExecutionZonePage: React.FC = () => {
                         </MissionBriefing>
                     </AnimatedSection>
 
-                    {/* NIVEL 6: TRADEVISION BATTLEGROUNDS */}
+                    {/* NIVEL 6: TRADEVISION BATTLEGROUNDS - GOLD EDITION PRE-LOBBY */}
                     <AnimatedSection id="module-6" className="py-12">
-                        <div className="bg-radial-dark rounded-xl p-8 sm:p-12 text-center border-2 border-hot-pink/50 shadow-[0_0_30px_rgba(255,0,85,0.4)]">
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                                <div className="text-5xl sm:text-7xl animate-pulse" aria-label="Guardian Owl emoji">🦉</div>
-                                <div className="relative">
-                                    <div className="speech-bubble bg-gray-800 text-white p-4 rounded-lg border border-electric-blue max-w-sm">
-                                        <p className="font-bold text-base sm:text-lg">¿Crees tener Nivel Institucional? Demuéstralo.</p>
-                                        <p className="text-acid-green text-sm sm:text-base">Nivel 6 Desbloqueado.</p>
+                        <div className="bg-radial-dark rounded-xl p-2 sm:p-4 text-center border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+                            
+                            {/* --- EL DESAFÍO "PERFECT RUN": SOLO PARA LEYENDAS --- */}
+                            <div className="relative overflow-hidden rounded-xl border-2 border-[#FFD700] bg-gradient-to-br from-[#0a192f] to-black p-6 sm:p-10 shadow-[0_0_40px_rgba(255,215,0,0.1)] text-left max-w-4xl mx-auto">
+                                
+                                {/* Glow effects */}
+                                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-40 h-40 bg-[#FFD700] opacity-10 blur-3xl rounded-full animate-pulse"></div>
+                                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-40 h-40 bg-brand-accent opacity-10 blur-3xl rounded-full"></div>
+
+                                {/* Header */}
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 border-b border-[#FFD700]/30 pb-4">
+                                    <div className="p-3 bg-[#FFD700]/10 rounded-full border border-[#FFD700] shadow-[0_0_15px_rgba(255,215,0,0.4)]">
+                                        <FaCrown className="text-[#FFD700] text-3xl sm:text-4xl animate-pulse" />
                                     </div>
-                                    {/* Arrow pointing to the left (towards owl) on larger screens */}
-                                    <div className="hidden sm:block absolute top-1/2 -left-3 transform -translate-y-1/2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-800"></div>
-                                    {/* Arrow pointing up (towards owl) on smaller screens */}
-                                    <div className="sm:hidden absolute -top-3 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-gray-800"></div>
+                                    <div>
+                                        <h3 className="text-xl sm:text-2xl font-extrabold text-[#FFD700] uppercase tracking-widest leading-tight text-shadow-sm">
+                                            ⚠️ AVISO DE ALTO NIVEL
+                                        </h3>
+                                        <p className="text-gray-400 text-xs sm:text-sm font-mono mt-1 tracking-wide">¿BUSCAS LA GLORIA O SOLO APROBAR?</p>
+                                    </div>
+                                </div>
+
+                                {/* Body */}
+                                <div className="space-y-4 text-gray-300 text-sm sm:text-base leading-relaxed font-sans">
+                                    <p>Escucha bien, Trader. El Nivel 6 es la barrera final, pero para algunos, es la consagración. La mayoría intentará sobrevivir... pero en <strong className="text-white" translate="no">TradeVision</strong> buscamos la <strong className="text-[#FFD700]">Excelencia</strong>.</p>
+                                    <p>Si logras superar las Fases (El Escudo, La Espada y La Batalla) <strong className="text-white bg-red-900/30 px-1 rounded">sin reiniciar el sistema</strong>, sin caer en "Margin Call" y con una ejecución IMPECABLE, no solo ganarás el nivel.</p>
+                                    <p className="italic text-gray-400">Te ganarás un lugar en la historia.</p>
+                                </div>
+
+                                {/* Rewards */}
+                                <div className="mt-8 bg-black/40 p-5 rounded-xl border border-[#FFD700]/30 backdrop-blur-md">
+                                    <h4 className="text-[#FFD700] font-bold text-xs uppercase mb-4 tracking-widest border-b border-[#FFD700]/20 pb-2 inline-block">RECOMPENSAS EXCLUSIVAS "PERFECT RUN":</h4>
+                                    <ul className="space-y-3 text-sm text-gray-200">
+                                        <li className="flex items-start gap-3">
+                                            <FaFileContract className="text-[#FFD700] text-lg mt-0.5 flex-shrink-0" /> 
+                                            <span><strong className="text-white">Certificado Oficial "Master Trader Elite":</strong> Acreditación digital firmada.</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <FaGem className="text-[#FFD700] text-lg mt-0.5 flex-shrink-0" /> 
+                                            <span><strong className="text-white">Inmortalidad en la Pizarra:</strong> Tu nombre en el Hall de la Fama.</span>
+                                        </li>
+                                        <li className="flex items-start gap-3">
+                                            <FaShieldAlt className="text-[#FFD700] text-lg mt-0.5 flex-shrink-0" /> 
+                                            <span><strong className="text-white">Insignia "Owl Black":</strong> Distintivo único para la comunidad.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                {/* Disclaimer */}
+                                <p className="mt-6 text-xs text-gray-500 italic text-center">
+                                    El mercado no perdona errores. Si crees que tienes el temple de acero y la disciplina de un francotirador...
+                                </p>
+
+                                {/* CTA Buttons */}
+                                <div className="mt-8 flex flex-col items-center gap-4">
+                                    <button
+                                        onClick={() => navigate('/battlegrounds')}
+                                        className="relative w-full sm:w-auto bg-gradient-to-r from-[#FFD700] via-[#FDB931] to-[#E5C100] text-black font-black py-4 px-8 rounded-lg text-base sm:text-lg uppercase tracking-widest shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:shadow-[0_0_40px_rgba(255,215,0,0.6)] hover:scale-105 transition-all duration-300 group overflow-hidden"
+                                    >
+                                        <span className="relative z-10 flex items-center justify-center gap-2">
+                                            ACEPTO EL RETO: VOY POR EL PERFECT RUN 🚀
+                                        </span>
+                                        <div className="absolute inset-0 bg-white/30 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+                                    </button>
+                                    
+                                    <button
+                                        onClick={() => navigate('/battlegrounds')}
+                                        className="text-xs sm:text-sm text-gray-500 hover:text-gray-300 underline transition-colors"
+                                    >
+                                        O ingresa normalmente si solo quieres practicar.
+                                    </button>
                                 </div>
                             </div>
-                            <a 
-                                href="battlegrounds.html"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn-battlegrounds inline-flex items-center justify-center gap-3 font-extrabold py-4 px-8 rounded-lg text-lg sm:text-2xl mt-8"
-                            >
-                                ENTRAR AL BATTLEGROUNDS ⚔️
-                            </a>
+                            {/* --- END CHALLENGE BLOCK --- */}
+
                         </div>
                     </AnimatedSection>
                 </div>

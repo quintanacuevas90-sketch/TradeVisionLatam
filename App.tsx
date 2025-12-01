@@ -1,3 +1,4 @@
+
 // FIX: Corrected import statement for React and its hooks.
 import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
@@ -40,6 +41,8 @@ import TerminosAcademiaPage from './pages/TerminosAcademiaPage';
 import PoliticaPrivacidadPage from './pages/PoliticaPrivacidadPage';
 import TransparenciaLegalPage from './pages/TransparenciaLegalPage';
 import ExecutionZonePage from './pages/ExecutionZonePage';
+import BattlegroundsPage from './pages/BattlegroundsPage';
+import HallOfFamePage from './pages/HallOfFamePage'; // Import Hall of Fame
 import AgeGateModal from './components/AgeGateModal';
 import CookieConsentModal from './components/CookieConsentModal';
 import FaqTrustPage from './pages/FaqTrustPage';
@@ -219,6 +222,8 @@ const App: React.FC = () => {
         '/transparencia-legal': <TransparenciaLegalPage />,
         '/zona-de-ejecucion': <ExecutionZonePage />,
         '/protocolo-confianza': <FaqTrustPage onOpenModal={handleOpenModal} />,
+        '/battlegrounds': <BattlegroundsPage />,
+        '/hall-of-fame': <HallOfFamePage />, // Add Hall of Fame route
     };
 
     return (
