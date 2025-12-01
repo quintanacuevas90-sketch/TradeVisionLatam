@@ -26,7 +26,7 @@ function getAiInstance(): GoogleGenAI | null {
         return ai;
     }
 
-    const apiKey = process.env.GOOGLE_API_KEY;
+    const apiKey = process.env.VITE_GOOGLE_API_KEY;
 
     if (!apiKey) {
         // Log an error for developers, but don't crash the app.
