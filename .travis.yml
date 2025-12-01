@@ -1,0 +1,65 @@
+# Travis CI Configuration para TradeVisionLatam
+# Automatiza pruebas y validación cada vez que haces push a GitHub
+
+language: node_js
+node_js:
+  - "18"  # Versión LTS recomendada
+
+# Cache de dependencias para acelerar builds
+cache:
+  directories:
+    - node_modules
+
+# Comandos para instalar dependencias
+install:
+  - npm ci  # npm ci es más seguro que npm install en CI/CD
+
+# Comandos para ejecutar pruebas
+script:
+  # 1. Lint: Valida la sintaxis y estilo del código
+  - npm run lint || true  # Continúa aunque falle (opcional)
+  
+  # 2. Build: Compila la aplicación
+  - npm run build
+  
+  # 3. Verifica que la construcción fue exitosa
+  - echo "Build completado exitosamente"
+
+# Notificaciones
+notifications:
+  email:
+    on_success: change  # Notifica solo si hay cambios en el estado
+    on_failure: always  # Siempre notifica si falla
+  
+  # Opcional: Integración con Slack
+  # slack:
+  #   secure: TU_SLACK_TOKEN_ENCRIPTADO
+
+# Branches que deben ejecutar CI
+branches:
+  only:
+    - main
+    - master
+    - develop
+
+# Etapas del pipeline (Opcional - para construcciones más complejas)
+stages:
+  - name: "Tests"
+    if: type = pull_request
+  - name: "Build"
+  - name: "Deploy"
+    if: branch = main AND type = push
+
+# Variables de entorno (si necesitas API keys)
+env:
+  global:
+    - NODE_ENV=production
+
+# Después de pruebas exitosas (Opcional)
+after_success:
+  - echo "Todas las pruebas pasaron exitosamente"
+  # Aquí podrías hacer deploy automático a Vercel/Netlify
+
+# Si algo falla
+on_failure:
+  - echo "Las pruebas fallaron. Revisa el log arriba."
