@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,11 +14,14 @@
       html {
         scroll-behavior: smooth;
       }
+      
       body {
         -webkit-user-select: none; /* Safari */
-        -ms-user-select: none; /* IE 10+ and Edge */
-        user-select: none; /* Standard syntax */
+        -moz-user-select: none;    /* Firefox */
+        -ms-user-select: none;     /* IE10+/Edge */
+        user-select: none;         /* Standard */
       }
+      
       @keyframes infinite-scroll {
         0% { transform: translate3d(0, 0, 0); }
         100% { transform: translate3d(-50%, 0, 0); }
@@ -354,6 +358,7 @@
     "react-icons/": "https://aistudiocdn.com/react-icons@^5.5.0/",
     "react-icons/fa/": "https://aistudiocdn.com/react-icons@^5.5.0/fa/",
     "react-icons/fa6/": "https://aistudiocdn.com/react-icons@^5.5.0/fa6/",
+    "react-icons/fi/": "https://aistudiocdn.com/react-icons@^5.5.0/fi/",
     "vite": "https://aistudiocdn.com/vite@^7.2.2",
     "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
   }
