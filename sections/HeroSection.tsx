@@ -48,7 +48,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
                             <img 
                                 id="buho-bienvenida"
                                 src="https://i.pinimg.com/736x/6b/6f/a2/6b6fa26efc0259fecd2a789d209b559a.jpg" 
-                                alt="Mascota TradeVision Presentando" 
+                                alt="Mascota TradeVision Latam Presentando" 
                                 loading="lazy"
                                 className="w-full h-full object-contain object-center"
                                 style={{ 
@@ -57,16 +57,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
                                 }}
                             />
                         </div>
-                        <p className="text-xs text-gray-400 italic mt-3 font-semibold tracking-wide">Mascota TradeVision</p>
+                        <p className="text-xs text-gray-400 italic mt-3 font-semibold tracking-wide">Mascota TradeVision Latam</p>
                     </div>
 
                     {/* Title Column - OPTIMIZADO PARA MÓVIL */}
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-normal sm:leading-relaxed md:leading-tight tracking-wide text-center md:text-left">
-                        <span className="text-white block lg:inline mb-3 lg:mb-0">
-                            Bienvenido a <span translate="no" className="inline-block sm:inline text-brand-accent/90 sm:text-inherit">TradeVision Latam</span>:
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-relaxed tracking-wide text-white text-center md:text-left">
+                        <span className="block lg:inline">
+                            Bienvenido a <span translate="no" className="whitespace-nowrap">TradeVision Latam</span>:
                         </span>
                         {' '}
-                        <span className="text-brand-accent block lg:inline mt-2 lg:mt-0">
+                        <span className="block lg:inline text-brand-accent mt-2 lg:mt-0">
                             La Disciplina es la Estrategia
                         </span>
                     </h1>

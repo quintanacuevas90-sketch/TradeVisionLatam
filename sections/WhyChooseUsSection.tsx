@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FaFistRaised, FaUsers, FaLaptopCode } from 'react-icons/fa';
 import AnimatedSection from '../components/AnimatedSection';
@@ -25,7 +24,7 @@ const WhyChooseUsSection: React.FC = () => {
     return (
         <AnimatedSection className="py-20 bg-gray-50 dark:bg-brand-primary">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">¿Por Qué <span className="text-brand-accent" translate="no">TradeVision</span>?</h2>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">¿Por Qué <span className="text-brand-accent" translate="no">TradeVision Latam</span>?</h2>
                 <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-12">No vendemos sueños, forjamos traders.</p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {features.map((feature, index) => (

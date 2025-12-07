@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { FiMenu, FiX, FiSun, FiMoon, FiSearch } from 'react-icons/fi';
 import { FaRobot, FaTrophy } from 'react-icons/fa';
@@ -82,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 { label: 'Sobre Nosotros', action: () => navigate('/acerca-de') },
                 { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },
                 { label: 'Impacto Social', action: () => navigate('/impacto-social') },
-                { label: 'Forma Parte de TradeVision', action: () => navigate('/colabora') },
+                { label: 'Forma Parte de TradeVision Latam', action: () => navigate('/colabora') },
                 { label: 'Programa de Afiliados', action: () => onOpenModal('affiliate') },
                 { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
                 { label: 'Información Legal', action: () => navigate('/aviso-legal-riesgo') },
@@ -115,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                             </button>
                             <button onClick={() => navigate('/')} className="flex items-center gap-3 text-2xl font-extrabold text-gray-900 dark:text-white">
                                 <Logo />
-                                <span translate="no">Trade<span className="text-brand-accent">Vision</span></span>
+                                <span translate="no">TradeVision<span className="text-brand-accent"> Latam</span></span>
                             </button>
                         </div>
 

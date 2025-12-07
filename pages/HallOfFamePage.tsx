@@ -7,8 +7,9 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import PageBackButton from '../components/PageBackButton';
 import { ModalType, Mentor } from '../types';
 import { MENTORS } from '../constants';
-import { FaCrown, FaUserTie, FaUserGraduate, FaHandshake, FaBan, FaFlag } from 'react-icons/fa';
+import { FaCrown, FaUserGraduate, FaHandshake, FaBan, FaFlag } from 'react-icons/fa';
 import { FiAlertTriangle } from 'react-icons/fi';
+import { useRouter } from '../hooks/useRouter';
 
 // --- STYLES ---
 // Using inline styles/Tailwind for specific effects requested in the prompt.
@@ -87,9 +88,9 @@ const UserCard: React.FC<{ user: HallOfFameUser, type: 'gold' | 'silver' | 'turq
 };
 
 const HallOfFamePage: React.FC = () => {
+    const { navigate } = useRouter();
     const onOpenModal = (modal: ModalType) => {
-        // Handle modal opening if needed from header/footer
-        window.location.hash = `/?open=${modal}`;
+        navigate(`/?open=${modal}`);
     };
 
     useEffect(() => {
@@ -140,7 +141,7 @@ const HallOfFamePage: React.FC = () => {
                             Salón de la Fama
                         </h1>
                         <h2 className="text-xl md:text-2xl text-[#00E5FF] font-bold mt-4 tracking-wide uppercase text-shadow-glow">
-                            TraderVision Latam
+                            TradeVision Latam
                         </h2>
                         
                         <div className="mt-12 max-w-4xl mx-auto p-8 bg-[#112240]/80 backdrop-blur-md border border-[#FFD700]/30 rounded-xl relative">

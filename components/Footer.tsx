@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ModalType } from '../types';
 import { LEGAL_TEXT, IP_LEGAL_TEXT, SOCIAL_LINKS } from '../constants';
@@ -31,7 +30,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                 { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },
                 { label: 'Impacto Social', action: () => navigate('/impacto-social') },
                 { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
-                { label: 'Forma Parte de TradeVision', action: () => navigate('/colabora') },
+                { label: 'Forma Parte de TradeVision Latam', action: () => navigate('/colabora') },
                 { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
             ]
         },
@@ -56,14 +55,14 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
         <footer className="bg-gray-100 dark:bg-brand-primary relative overflow-hidden">
             <div className="bg-yellow-500/90 dark:bg-yellow-600/90 text-black py-2 px-4 text-xs font-bold text-center tracking-wide relative z-20">
                 <p>
-                    <span className="font-extrabold">❗ LEYENDA CLAVE: SOPORTE DE ÉLITE.</span> Si no está afiliado a <span translate="no">TRADEVISION</span> (con ID registrado), NO podemos prestar asistencia ni gestión en problemas de broker o retiros. El soporte es un beneficio exclusivo para la comunidad activa.
+                    <span className="font-extrabold">❗ LEYENDA CLAVE: SOPORTE DE ÉLITE.</span> Si no está afiliado a <span translate="no">TRADEVISION LATAM</span> (con ID registrado), NO podemos prestar asistencia ni gestión en problemas de broker o retiros. El soporte es un beneficio exclusivo para la comunidad activa.
                 </p>
             </div>
             
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
                     <div className="lg:col-span-2">
-                        <h3 className="text-xl font-extrabold mb-4" translate="no">Trade<span className="text-brand-accent">Vision</span></h3>
+                        <h3 className="text-xl font-extrabold mb-4" translate="no">TradeVision<span className="text-brand-accent"> Latam</span></h3>
                         <p className="text-gray-500 dark:text-gray-400">Forjando traders disciplinados en Latinoamérica.</p>
                         <div className="flex space-x-4 mt-6">
                             {SOCIAL_LINKS.map((link) => {
@@ -141,7 +140,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                             <div className="flex items-center gap-3 p-3 pr-5 rounded-xl bg-blue-900/50 border border-blue-700/50 hover:border-brand-accent transition-all duration-300 shadow-lg backdrop-blur-sm relative z-10 transform translate-y-4 group-hover:translate-y-0">
                                  <FaShieldAlt className="text-brand-accent text-2xl sm:text-3xl" />
                                  <div className="text-left">
-                                     <span className="block text-sm sm:text-base font-extrabold text-white leading-tight" translate="no">TRADEVISION</span>
+                                     <span className="block text-sm sm:text-base font-extrabold text-white leading-tight" translate="no">TRADEVISION LATAM</span>
                                      <span className="block text-[10px] sm:text-xs text-brand-accent uppercase tracking-wider">Verified Academy</span>
                                      <p className="text-[10px] text-gray-400 leading-tight mt-0.5 group-hover:text-white transition-colors">Ver Certificación &gt;</p>
                                  </div>
@@ -151,7 +150,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                             <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex-shrink-0 z-0 -mt-4">
                                  <img 
                                     src="https://i.pinimg.com/736x/db/31/b4/db31b46235afd233c0372a0c5eaeb931.jpg" 
-                                    alt="Mascota Señalando Arriba" 
+                                    alt="Mascota TradeVision Latam Señalando Arriba" 
                                     className="w-full h-full object-contain transform transition-transform duration-300 group-hover:scale-105"
                                 />
                             </div>

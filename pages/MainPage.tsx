@@ -28,7 +28,7 @@ const DisciplineCtaSection: React.FC = () => {
                 <div className="p-6 md:p-8 rounded-lg bg-white dark:bg-brand-primary border-t-4 border-brand-accent shadow-2xl text-center max-w-4xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-extrabold text-brand-primary dark:text-white">Una Declaración de Principios</h2>
                     <blockquote className="mt-4 text-base md:text-xl text-gray-700 dark:text-gray-300 italic">
-                        "En <span translate="no">TRADEVISION</span>, el éxito no se compra con bots ni se basa en señales. Se construye con disciplina, consistencia y gestión de riesgo. Si busca el camino fácil, esta no es su academia."
+                        "En <span translate="no">TradeVision Latam</span>, el éxito no se compra con bots ni se basa en señales. Se construye con disciplina, consistencia y gestión de riesgo. Si busca el camino fácil, esta no es su academia."
                     </blockquote>
                     <p className="mt-4 font-bold text-gray-600 dark:text-gray-400 text-sm md:text-base">- José Quintana, Asesor Principal</p>
                 </div>

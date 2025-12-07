@@ -1,4 +1,3 @@
-
 // FIX: Corrected import statement for React and its hooks.
 import React, { useState, useEffect } from 'react';
 import MainPage from './pages/MainPage';
@@ -6,7 +5,8 @@ import BlogListPage from './pages/BlogListPage';
 import BlogPostPage from './pages/BlogPostPage';
 import SitemapPage from './pages/SitemapPage';
 import { ModalType, PageType } from './types';
-import PremiumCoursesModal from './modals/PremiumCoursesModal';
+// FIX: The default import for PremiumCoursesModal was causing an error. It has been changed to a named import to resolve the issue.
+import { PremiumCoursesModal } from './modals/PremiumCoursesModal';
 import AffiliateModal from './modals/AffiliateModal';
 import BrokersModal from './modals/BrokersModal';
 import CommunityModal from './modals/CommunityModal';
