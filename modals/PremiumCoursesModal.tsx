@@ -96,4 +96,4 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
                     <p className="text-gray-700 dark:text-gray-300 mb-6">
                         Hemos dedicado años de experiencia en estos programas. No son simples cursos, son <strong>sistemas de transformación</strong>...
                     </p>
-                    <div className="p-4 bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-800 dark:text-red-300
+                    <div className="p-4 bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-800 dark:text-red-300">
