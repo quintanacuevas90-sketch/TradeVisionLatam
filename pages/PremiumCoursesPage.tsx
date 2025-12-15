@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -43,7 +42,7 @@ const PremiumCoursesPage: React.FC = () => {
     const courses = [
         {
             title: "MANUAL PRO: INGENIERÍA DE PROMPTS CON IA",
-            price: "15",
+            price: "29.99",
             anchor: "Valor Real: $50 USD",
             urgency: "Precio de Lanzamiento",
             description: "La IA de TradeVision ha revolucionado nuestro Day Trading desde 2022, reduciendo el aprendizaje de una década a solo un año de automatización.",
@@ -55,9 +54,9 @@ const PremiumCoursesPage: React.FC = () => {
             cta: "Acceder al Manual de IA",
             link: "#/manual/ia-prompts"
         },
-        { title: "SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO", price: "79", anchor: "Valor Real: $150 USD", urgency: "¡SOLO 20 CUPOS DISPONIBLES ESTE MES!", description: "Diseñado para el trader estancado. Elimina la improvisación y opera con un sistema basado en probabilidad y gestión de riesgo.", content: ["4 Fórmulas de Operación de Alta Efectividad.", "<strong>Backtesting al Extremo</strong> para confirmar validez.", "<strong>Psicotrading y Gestión de Riesgo</strong> (La Clave Maestra)."], cta: "Explorar Módulos del Programa", link: "#/cursos/binarias-intermedio" },
-        { title: "VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (BINARIAS PRO)", price: "149", anchor: "Valor Real: $299 USD", urgency: "¡Oferta válida solo por 48 horas!", description: "Un reseteo mental completo. Olvida los indicadores y los mitos. Aprende a leer el verdadero motor del mercado: el lenguaje del precio.", content: ["<strong>ROMPIENDO MITOS:</strong> Olvídate de Bots y Scripts.", "Aprende el verdadero motor del mercado: <strong>Lenguaje del Precio</strong>.", "Aplicación universal para cualquier activo y temporalidad."], cta: "Asegure su Cupo Exclusivo", link: "#/cursos/binarias-pro-c90" },
-        { title: "ÉLITE INSTITUCIONAL: CURSO FOREX (LÓGICA Y EJECUCIÓN)", price: "349", anchor: "Valor del Programa: $750 USD", urgency: "¡ÚLTIMOS 8 CUPOS PARA ESTA GENERACIÓN!", description: "El programa definitivo para la profesionalización. Deja de ser la liquidez y aprende a operar junto al dinero inteligente.", content: ["El precio se mueve por <strong>LIQUIDEZ</strong>, no por noticias.", "El Patrón <strong>AMD Revelado</strong> (Acumulación, Manipulación, Distribución).", "Busca entradas con riesgo mínimo y beneficio <strong>5:1 o más</strong>."], cta: "Explorar Módulos del Programa", link: "#/cursos/forex-elite" },
+        { title: "SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO", price: "99", anchor: "Valor Real: $150 USD", urgency: "¡SOLO 20 CUPOS DISPONIBLES ESTE MES!", description: "Diseñado para el trader estancado. Elimina la improvisación y opera con un sistema basado en probabilidad y gestión de riesgo.", content: ["4 Fórmulas de Operación de Alta Efectividad.", "<strong>Backtesting al Extremo</strong> para confirmar validez.", "<strong>Psicotrading y Gestión de Riesgo</strong> (La Clave Maestra)."], cta: "Explorar Módulos del Programa", link: "#/cursos/binarias-intermedio" },
+        { title: "VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (BINARIAS PRO)", price: "199", anchor: "Valor Real: $299 USD", urgency: "¡Oferta válida solo por 48 horas!", description: "Un reseteo mental completo. Olvida los indicadores y los mitos. Aprende a leer el verdadero motor del mercado: el lenguaje del precio.", content: ["<strong>ROMPIENDO MITOS:</strong> Olvídate de Bots y Scripts.", "Aprende el verdadero motor del mercado: <strong>Lenguaje del Precio</strong>.", "Aplicación universal para cualquier activo y temporalidad."], cta: "Asegure su Cupo Exclusivo", link: "#/cursos/binarias-pro-c90" },
+        { title: "ÉLITE INSTITUCIONAL: CURSO FOREX (LÓGICA Y EJECUCIÓN)", price: "499", anchor: "Valor del Programa: $750 USD", urgency: "¡ÚLTIMOS 8 CUPOS PARA ESTA GENERACIÓN!", description: "El programa definitivo para la profesionalización. Deja de ser la liquidez y aprende a operar junto al dinero inteligente.", content: ["El precio se mueve por <strong>LIQUIDEZ</strong>, no por noticias.", "El Patrón <strong>AMD Revelado</strong> (Acumulación, Manipulación, Distribución).", "Busca entradas con riesgo mínimo y beneficio <strong>5:1 o más</strong>."], cta: "Explorar Módulos del Programa", link: "#/cursos/forex-elite" },
     ];
     const recommendedTools = [
         { name: "FUSION MARKETS (Bróker)", link: "https://fusionmarkets.com/?refcode=102866", color: "bg-blue-600 hover:bg-blue-700" },

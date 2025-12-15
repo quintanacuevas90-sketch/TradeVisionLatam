@@ -42,7 +42,7 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
             context += `\nEstá en la página de Brokers Recomendados. Se listan brokers para Binarias, Forex y Wallets. Algunos ejemplos son: ${brokerSample}.`;
             break;
         case 'premium-courses':
-            context += `\nEstá en la página de Cursos Premium. Se muestran detalles sobre: 1) MANUAL PRO: INGENIERÍA DE PROMPTS CON IA ($15), 2) SISTEMA DE EJECUCIÓN (Intermedio, $79), 3) VISIÓN AVANZADA (Binarias Pro, $149), 4) ÉLITE INSTITUCIONAL (Forex, $349).`;
+            context += `\nEstá en la página de Cursos Premium. Se muestran detalles sobre: 1) MANUAL PRO: INGENIERÍA DE PROMPTS CON IA ($29.99), 2) SISTEMA DE EJECUCIÓN (Intermedio, $99), 3) VISIÓN AVANZADA (Binarias Pro, $199), 4) ÉLITE INSTITUCIONAL (Forex, $499).`;
             break;
         case 'consultancy':
             context += `\nEstá en la página de Consultoría para Mentores. Se describe un servicio para ayudar a educadores a crear su marca, web y sistema de afiliados de forma ética.`;
@@ -63,19 +63,19 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
              context += `\nEstá en la página 'Forma Parte de TradeVision' (/colabora). Esta es una página de reclutamiento para mentores, influencers y gestores de comunidad que deseen asociarse con la academia.`;
             break;
         case 'forex-elite':
-            context += `\nEstá en la página de ventas del curso 'ÉLITE INSTITUCIONAL: LÓGICA Y EJECUCIÓN'. Este es el programa avanzado de Forex y Smart Money Concepts (SMC) de $349. La página detalla el problema que resuelve, los objetivos del curso (AMD, Order Blocks, etc.), las ventajas y FAQs.`;
+            context += `\nEstá en la página de ventas del curso 'ÉLITE INSTITUCIONAL: LÓGICA Y EJECUCIÓN'. Este es el programa avanzado de Forex y Smart Money Concepts (SMC) de $499. La página detalla el problema que resuelve, los objetivos del curso (AMD, Order Blocks, etc.), las ventajas y FAQs.`;
             break;
         case 'binarias-pro-c90':
-            context += `\nEstá en la página de ventas del curso 'VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (C90trade)'. Este es el programa avanzado de opciones binarias de $149. La página se enfoca en el concepto de 'reseteo mental', enseñando a operar sin indicadores y dominando la acción del precio, aplicable a cualquier temporalidad, incluyendo 'ráfagas' y 'blitz'.`;
+            context += `\nEstá en la página de ventas del curso 'VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (C90trade)'. Este es el programa avanzado de opciones binarias de $199. La página se enfoca en el concepto de 'reseteo mental', enseñando a operar sin indicadores y dominando la acción del precio, aplicable a cualquier temporalidad, incluyendo 'ráfagas' y 'blitz'.`;
             break;
         case 'binarias-intermedio':
-            context += `\nEstá en la página de ventas del curso 'SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO'. Este es un programa para traders estancados que no son rentables, con un costo de $79. Se enfoca en 4 estrategias de alta efectividad, gestión de riesgo y, principalmente, en Psicotrading para eliminar la improvisación.`;
+            context += `\nEstá en la página de ventas del curso 'SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO'. Este es un programa para traders estancados que no son rentables, con un costo de $99. Se enfoca en 4 estrategias de alta efectividad, gestión de riesgo y, principalmente, en Psicotrading para eliminar la improvisación.`;
             break;
         case 'comunidad':
             context += `\nEstá en la página de aterrizaje del 'Ecosistema Gratuito'. Esta página ofrece acceso a +1000 libros, +20 cursos gratis y análisis de expertos. El objetivo principal es que el usuario se una a la comunidad de Telegram.`;
             break;
         case 'ia-manual':
-            context += `\nEstá en la página de ventas del 'MANUAL: INGENIERÍA DE PROMPTS PARA LA MENTE MAESTRA DEL TRADING'. Este es un manual de $15 que enseña a usar IA (GPT/Deepseek) con 6 prompts maestros para automatizar el análisis de trading, gestión de riesgo, SMC, etc.`;
+            context += `\nEstá en la página de ventas del 'MANUAL: INGENIERÍA DE PROMPTS PARA LA MENTE MAESTRA DEL TRADING'. Este es un manual de $29.99 que enseña a usar IA (GPT/Deepseek) con 6 prompts maestros para automatizar el análisis de trading, gestión de riesgo, SMC, etc.`;
             break;
         case 'legal-verification':
             context += `\nEstá en la página de 'Verificación Legal y Alcance Global'. Esta página detalla la estructura educativa de TradeVision, su registro bajo normativas de consultoría en Canadá, Brasil y la UE (España), y su compromiso con la transparencia.`;
@@ -106,7 +106,7 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
 
         switch (modal) {
             case 'premium-courses':
-                context += `Cursos Premium: 1) MANUAL PRO: INGENIERÍA DE PROMPTS CON IA ($15), 2) SISTEMA DE EJECUCIÓN (Intermedio, $79), 3) VISIÓN AVANZADA (Binarias Pro, $149), 4) ÉLITE INSTITUCIONAL (Forex, $349). Se mencionan testimonios de alumnos élite y herramientas recomendadas como Fusion Markets y cTrader.`;
+                context += `Cursos Premium: 1) MANUAL PRO: INGENIERÍA DE PROMPTS CON IA ($29.99), 2) SISTEMA DE EJECUCIÓN (Intermedio, $99), 3) VISIÓN AVANZADA (Binarias Pro, $199), 4) ÉLITE INSTITUCIONAL (Forex, $499). Se mencionan testimonios de alumnos élite y herramientas recomendadas como Fusion Markets y cTrader.`;
                 break;
             case 'affiliate':
                 context += `Programa de Afiliados: Ofrece un Manual de Afiliados por $89.99 que enseña a evitar baneos y gestionar comunidades. Detalla plataformas de sub-afiliación como Affstore, Quotex, y CasaTrade con modelos RevShare y CPA. Advierte sobre prácticas prohibidas y explica términos legales.`;

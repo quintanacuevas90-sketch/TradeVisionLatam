@@ -8,6 +8,7 @@ import { useRouter } from '../hooks/useRouter';
 import { FaBookOpen, FaBrain, FaWhatsapp } from 'react-icons/fa';
 import { FiCheck, FiClock, FiXCircle, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
 import PageBackButton from '../components/PageBackButton';
+import SocialProofWidget from '../components/SocialProofWidget';
 
 const BinariasProPage: React.FC = () => {
     const { navigate } = useRouter();
@@ -59,13 +60,16 @@ const BinariasProPage: React.FC = () => {
                             <PageBackButton variant="on-dark" />
                         </div>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO</h1>
+                        
+                        <SocialProofWidget variant="binarias-pro" className="mb-6" />
+
                         <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">"Un reseteo mental completo. Olvida los indicadores, los mitos y los 'scripts mágicos'. Aprende a leer el verdadero motor del mercado."</p>
                         <ul className="flex flex-col sm:flex-row justify-center gap-x-6 gap-y-2 text-gray-200 mb-8">
                             {keyPoints.map(point => <li key={point} className="flex items-center gap-2"><FiCheck className="text-brand-accent"/> {point}</li>)}
                         </ul>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg shadow-brand-accent/30">
-                                Asegurar Acceso Prioritario ($149)
+                                Asegurar Acceso Prioritario ($199)
                             </a>
                             <button onClick={() => navigate('/premium-courses')} className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-brand-accent text-brand-accent font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-accent hover:text-brand-primary transition duration-300 w-full sm:w-auto">
                                 Volver a Cursos Premium
@@ -172,7 +176,7 @@ const BinariasProPage: React.FC = () => {
                         <h2 className="text-4xl font-extrabold text-white">Es Hora de Dejar de Ser el 99%. Únete a la Élite.</h2>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105">
-                                Asegurar Acceso Prioritario ($149)
+                                Asegurar Acceso Prioritario ($199)
                             </a>
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-green-600 transition duration-300 w-full sm:w-auto">
                                 <FaWhatsapp /> Tengo Dudas (Soporte)

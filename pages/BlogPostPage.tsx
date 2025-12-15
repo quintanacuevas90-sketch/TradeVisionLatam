@@ -7,10 +7,10 @@ import { BLOG_POSTS } from '../constants';
 import { ModalType } from '../types';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import { useRouter } from '../hooks/useRouter';
-import { FiCalendar, FiUser, FiBookmark, FiTwitter, FiFacebook, FiLinkedin, FiArrowLeft, FiHome } from 'react-icons/fi';
-import { FaWhatsapp, FaTelegram } from 'react-icons/fa';
+import { FiCalendar, FiUser, FiBookmark, FiArrowLeft, FiHome } from 'react-icons/fi';
 import Accordion from '../components/Accordion';
 import PageBackButton from '../components/PageBackButton';
+import EngagementBar from '../components/EngagementBar'; // IMPORTACIÓN NUEVA
 
 interface BlogPostPageProps {
     slug: string;
@@ -185,16 +185,6 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ slug }) => {
             </>
         );
     }
-
-    const shareUrl = window.location.href;
-    const shareTitle = encodeURIComponent(post.title);
-    const socialShares = [
-        { icon: FiTwitter, href: `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`, name: 'Twitter' },
-        { icon: FiFacebook, href: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`, name: 'Facebook' },
-        { icon: FiLinkedin, href: `https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareTitle}`, name: 'LinkedIn' },
-        { icon: FaWhatsapp, href: `https://api.whatsapp.com/send?text=${shareTitle}%20${shareUrl}`, name: 'WhatsApp' },
-        { icon: FaTelegram, href: `https://t.me/share/url?url=${shareUrl}&text=${shareTitle}`, name: 'Telegram' },
-    ];
     
     const relatedPosts = BLOG_POSTS.filter(p => p.id !== post.id).sort(() => 0.5 - Math.random()).slice(0, 3);
 
@@ -208,9 +198,16 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ slug }) => {
                         <div className="absolute inset-0 bg-gradient-to-t from-brand-primary via-brand-primary/80 to-transparent"></div>
                         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
                             <h1 className="text-4xl md:text-5xl font-extrabold">{post.title}</h1>
-                            <div className="mt-4 flex items-center justify-center gap-6 text-gray-300">
+                            <div className="mt-4 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 text-gray-300">
                                 <span className="flex items-center gap-2"><FiUser /> {post.author}</span>
                                 <span className="flex items-center gap-2"><FiCalendar /> {post.date}</span>
+                                <button
+                                    onClick={handleToggleSave}
+                                    className={`inline-flex items-center gap-2 font-semibold py-1 px-3 rounded-full text-xs transition-colors duration-300 border border-white/20 ${isSaved ? 'bg-brand-accent text-brand-primary' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                                >
+                                    <FiBookmark />
+                                    {isSaved ? 'Guardado' : 'Leer más Tarde'}
+                                </button>
                             </div>
                         </div>
                     </header>
@@ -225,7 +222,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ slug }) => {
                                     <div className="sticky top-24">
                                         {headings.length > 0 && (
                                             <>
-                                                <h4 className="font-bold mb-4">Índice del Artículo</h4>
+                                                <h4 className="font-bold mb-4 text-brand-primary dark:text-white">Índice del Artículo</h4>
                                                 <ul className="space-y-2 border-l-2 border-gray-200 dark:border-gray-700">
                                                     {headings.map(h => (
                                                         <li key={h.id} style={{ paddingLeft: `${(h.level - 2) * 1.5}rem` }}>
@@ -269,28 +266,16 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ slug }) => {
                                         </div>
                                     )}
 
+                                    {/* POST CONTENT */}
                                     <div 
                                         ref={contentRef}
                                         className="prose dark:prose-invert prose-lg max-w-none prose-h2:border-b prose-h2:border-gray-200 dark:prose-h2:border-gray-700 prose-h2:pb-2 prose-h2:mt-12 prose-h3:mt-8 prose-headings:text-brand-primary dark:prose-headings:text-white prose-a:text-brand-accent hover:prose-a:underline prose-strong:text-brand-primary dark:prose-strong:text-white prose-li:my-1"
                                         dangerouslySetInnerHTML={{ __html: post.content }}
                                     />
-                                    <div className="mt-12 flex flex-col sm:flex-row justify-between items-center gap-4 p-4 border-t border-b border-gray-200 dark:border-gray-700">
-                                        <button
-                                            onClick={handleToggleSave}
-                                            className={`inline-flex items-center gap-2 font-semibold py-2 px-4 rounded-lg transition-colors duration-300 ${isSaved ? 'bg-brand-accent/10 text-brand-accent' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300'}`}
-                                        >
-                                            <FiBookmark />
-                                            {isSaved ? 'Guardado' : 'Leer más Tarde'}
-                                        </button>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm font-semibold">Compartir:</span>
-                                            {socialShares.map(social => (
-                                                <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className="p-2 text-gray-500 dark:text-gray-400 hover:text-brand-accent rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label={`Share on ${social.name}`}>
-                                                    {React.createElement(social.icon)}
-                                                </a>
-                                            ))}
-                                        </div>
-                                    </div>
+
+                                    {/* NEW: ENGAGEMENT BAR */}
+                                    <EngagementBar articleId={post.slug} articleTitle={post.title} />
+
                                     <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
                                         <button
                                             onClick={() => navigate('/blog')}
@@ -313,7 +298,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ slug }) => {
 
                 <AnimatedSection className="py-20 bg-white dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <h2 className="text-3xl font-bold text-center mb-8">También te puede interesar</h2>
+                        <h2 className="text-3xl font-bold text-center mb-8 text-brand-primary dark:text-white">También te puede interesar</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {relatedPosts.map(p => <PostCard key={p.id} post={p} />)}
                         </div>

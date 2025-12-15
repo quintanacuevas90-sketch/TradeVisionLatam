@@ -8,13 +8,14 @@ import { useRouter } from '../hooks/useRouter';
 import { FaBookOpen, FaWhatsapp } from 'react-icons/fa';
 import { FiCheck, FiClock, FiCheckSquare, FiShield, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
 import PageBackButton from '../components/PageBackButton';
+import SocialProofWidget from '../components/SocialProofWidget';
 
 const BinariasIntermedioPage: React.FC = () => {
     const { navigate } = useRouter();
     const onOpenModal = (modal: ModalType) => navigate(`/?open=${modal}`);
 
     useEffect(() => {
-        document.title = "Curso Intermedio de Binarias ($79) | Deja de Quemar Cuentas | TradeVision Latam";
+        document.title = "Curso Intermedio de Binarias ($99) | Deja de Quemar Cuentas | TradeVision Latam";
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
             metaDescription.setAttribute('content', "¿No eres rentable? Este no es un curso más. Aprende 4 estrategias de alta efectividad y domina el Psicotrading con José Quintana. El sistema para traders estancados.");
@@ -51,6 +52,9 @@ const BinariasIntermedioPage: React.FC = () => {
                             <PageBackButton variant="on-dark" />
                         </div>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO</h1>
+                        
+                        <SocialProofWidget variant="binarias-premium" className="mb-6" />
+
                         <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-4">Para ti, que ya sabes lo básico, pero sigues sin ser rentable.</p>
                         <p className="text-base sm:text-lg text-gray-400 max-w-3xl mx-auto mb-8">"Este no es un curso más. Es el sistema diseñado para sacarte del estancamiento, eliminar la improvisación y forjar la mentalidad correcta."</p>
                         <ul className="flex flex-col sm:flex-row justify-center gap-x-6 gap-y-2 text-gray-200 mb-8">
@@ -58,7 +62,7 @@ const BinariasIntermedioPage: React.FC = () => {
                         </ul>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg shadow-brand-accent/30">
-                                Iniciar Sistema de Ejecución ($79)
+                                Iniciar Sistema de Ejecución ($99)
                             </a>
                             <button onClick={() => navigate('/premium-courses')} className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-brand-accent text-brand-accent font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-accent hover:text-brand-primary transition duration-300 w-full sm:w-auto">
                                 Volver a Cursos Premium
@@ -127,18 +131,18 @@ const BinariasIntermedioPage: React.FC = () => {
                         <p className="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">Invierte en el sistema que te enseñará a proteger tu capital y a operar con disciplina profesional.</p>
                         <div className="mt-8">
                             <p className="text-lg text-gray-400">Valor Real: <del>$150 USD</del></p>
-                            <p className="text-5xl font-black text-white mt-2">$79 <span className="text-2xl font-bold">USD</span></p>
+                            <p className="text-5xl font-black text-white mt-2">$99 <span className="text-2xl font-bold">USD</span></p>
                             <p className="text-sm font-bold text-gray-300">(Pago Único)</p>
                             <p className="mt-4 text-red-500 font-bold">🚨 ¡SOLO 20 CUPOS DISPONIBLES ESTE MES!</p>
                         </div>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105">
-                                ASEGURAR MI CUPO AHORA ($79)
+                                ASEGURAR MI CUPO AHORA ($99)
                             </a>
                             <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-green-600 transition duration-300 w-full sm:w-auto">
                                 <FaWhatsapp /> Tengo Dudas (Soporte)
                             </a>
-                            <button onClick={() => navigate('/premium-courses')} className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-gray-500 text-gray-300 font-bold py-3 px-8 rounded-lg text-lg hover:bg-gray-700 hover:border-gray-700 transition duration-300 w-full sm:w-auto">
+                            <button onClick={() => navigate('/premium-courses')} className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-brand-accent text-brand-accent font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-accent hover:text-brand-primary transition duration-300 w-full sm:w-auto">
                                 <FiArrowLeft /> Volver a Cursos Premium
                             </button>
                         </div>

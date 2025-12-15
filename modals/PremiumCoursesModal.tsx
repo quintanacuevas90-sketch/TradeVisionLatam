@@ -26,22 +26,22 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
 
     const courses = [
         {
-            title: "MANUAL PRO: INGENIERÍA DE PROMPTS CON IA",
-            price: "15",
-            anchor: "Valor Real: $50 USD",
-            urgency: "Precio de Lanzamiento",
-            description: "La IA de TradeVision Latam ha revolucionado nuestro Day Trading desde 2022, reduciendo el aprendizaje de una década a solo un año de automatización.",
+            title: "PRE-VENTA: Protocolo de Prompts V2.0",
+            price: "19.99",
+            anchor: "Valor Real: $29.99 USD",
+            urgency: "¡SOLO 50 CUPOS DE PRE-VENTA!",
+            description: "Estamos actualizando el motor de IA. Congela el precio más bajo ahora y recibe prioridad de entrega en el lanzamiento.",
             content: [
-                "Aprende los <strong>6 Prompts maestros</strong> para entrenar a 10 asesores expertos.",
-                "Automatiza gestión de riesgo, Order Flow, Smart Money y Análisis Fundamental.",
-                "Incluye el prompt para <strong>crear tus propios prompts</strong> de cualquier estrategia."
+                "Ahorra $10 USD pre-ordenando hoy.",
+                "Arquitectura de <strong>Prompts Dinámicos</strong> V2.0.",
+                "Acceso prioritario 24h antes del público."
             ],
-            cta: "Acceder al Manual de IA",
+            cta: "Pre-Ordenar Ahora ($19.99)",
             link: "#/manual/ia-prompts"
         },
         {
             title: "SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO",
-            price: "79",
+            price: "99",
             anchor: "Valor Real: $150 USD",
             urgency: "¡SOLO 20 CUPOS DISPONIBLES ESTE MES!",
             description: "Diseñado para el trader estancado. Elimina la improvisación y opera con un sistema basado en probabilidad y gestión de riesgo.",
@@ -51,7 +51,7 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
         },
         {
             title: "VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (BINARIAS PRO)",
-            price: "149",
+            price: "199",
             anchor: "Valor Real: $299 USD",
             urgency: "¡Oferta válida solo por 48 horas!",
             description: "Un reseteo mental completo. Olvida los indicadores y los mitos. Aprende a leer el verdadero motor del mercado: el lenguaje del precio.",
@@ -61,7 +61,7 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
         },
         {
             title: "ÉLITE INSTITUCIONAL: CURSO FOREX (LÓGICA Y EJECUCIÓN)",
-            price: "349",
+            price: "499",
             anchor: "Valor del Programa: $750 USD",
             urgency: "¡ÚLTIMOS 8 CUPOS PARA ESTA GENERACIÓN!",
             description: "El programa definitivo para la profesionalización. Deja de ser la liquidez y aprende a operar junto al dinero inteligente.",
@@ -96,4 +96,96 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
                     <p className="text-gray-700 dark:text-gray-300 mb-6">
                         Hemos dedicado años de experiencia en estos programas. No son simples cursos, son <strong>sistemas de transformación</strong>...
                     </p>
-                    <div className="p-4 bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-800 dark:text-red-300
+                    <div className="p-4 bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-800 dark:text-red-300 text-left rounded-r-lg mb-6">
+                        <p><strong>⚠️ ALTO:</strong> Si buscas atajos o crees que el éxito llega sin inversión, este no es tu lugar. El conocimiento de élite tiene un precio porque su valor es incalculable. La ignorancia, en cambio, te costará toda tu cuenta.</p>
+                    </div>
+                    <p className="text-lg font-bold">Elige tu nivel de compromiso. La decisión es tuya. El momento es ahora. 👇</p>
+                </section>
+
+                {/* 3. Courses Grid */}
+                <section>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                        {courses.map((course) => (
+                            <CourseCard 
+                                key={course.title} 
+                                course={course} 
+                                isFeatured={course.title.toLowerCase().includes('forex')} 
+                                onClose={onClose}
+                            />
+                        ))}
+                    </div>
+                </section>
+
+                {/* 4. Testimonials */}
+                <section className="text-center">
+                    <h2 className="text-3xl font-bold mb-6 text-brand-primary dark:text-white">La Voz de Nuestros Alumnos Élite</h2>
+                    <TestimonialCarousel testimonials={PREMIUM_TESTIMONIALS} />
+                </section>
+
+                {/* 5. Recommended Tools */}
+                <section className="text-center p-6 bg-gray-100 dark:bg-white/5 rounded-lg border border-gray-200 dark:border-white/10">
+                    <h2 className="text-2xl font-bold mb-4 text-brand-primary dark:text-white">🛠️ Herramientas de Ejecución Profesional</h2>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">(Recomendadas por José Quintana)</p>
+                    <div className="flex flex-wrap justify-center gap-4">
+                        {recommendedTools.map(tool => (
+                            <a 
+                                key={tool.name} 
+                                href={tool.link} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className={`font-bold py-2 px-6 rounded-lg text-white transition-opacity ${tool.color}`}
+                            >
+                                {tool.name}
+                            </a>
+                        ))}
+                    </div>
+                </section>
+
+                {/* 6. Closing CTA */}
+                <section className="text-center">
+                    <h2 className="text-3xl font-bold text-red-500 mb-2">💳 ACCESO Y SOPORTE INMEDIATO</h2>
+                    <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">Es momento de tomar la decisión que transformará tu cuenta.</p>
+                    
+                    <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+                        <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="bg-green-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-green-600 transition">
+                            SOPORTE DIRECTO
+                        </a>
+                        <a href="https://t.me/tradevision90" target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-600 transition">
+                            ÚNETE A LA COMUNIDAD
+                        </a>
+                        <a href="https://linktr.ee/TradeVisionLatam" target="_blank" rel="noopener noreferrer" className="bg-brand-primary text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-700 transition">
+                            Todas Nuestras Redes
+                        </a>
+                    </div>
+                    
+                    <p className="text-xl font-extrabold text-red-500">¡NO HAY ATAJOS. HAY UN SISTEMA. ES HORA DE UNIRTE!</p>
+                </section>
+
+                {/* 7. Payment Methods */}
+                <section className="border-t border-gray-200 dark:border-white/20 pt-6">
+                    <h4 className="text-xl font-bold text-center mb-4 text-brand-primary dark:text-white">💳 Formas de Pago Aceptadas</h4>
+                    <ul className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-center text-sm text-gray-700 dark:text-gray-300">
+                        <li>🪙 <strong>Criptomonedas (USDT):</strong> BINANCE (la forma más rápida).</li>
+                        <li>💵 <strong>Dólares Digitales:</strong> PayPal, Zelle, Zinli, Volet.</li>
+                        <li>🏦 <strong>Transferencias Bancarias:</strong> Banesco Panamá, Soles (BCP), y Bolívares (BS VENEZUELA).</li>
+                    </ul>
+                </section>
+
+                {/* 8. Free Resources Link */}
+                <div className="text-center border-t border-gray-200 dark:border-white/20 pt-6">
+                    <h4 className="text-xl font-bold text-brand-primary dark:text-white">¿Buscas Cursos y Libros Gratis?</h4>
+                    <p className="text-gray-600 dark:text-gray-400 my-2">Únete a nuestra comunidad principal y accede a una vasta biblioteca de recursos sin costo.</p>
+                    <a 
+                        href="https://t.me/tradevision90" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="inline-flex items-center gap-2 bg-blue-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-600 transition"
+                    >
+                        <FaTelegram />
+                        ¡Accede Aquí!
+                    </a>
+                </div>
+            </div>
+        </Modal>
+    );
+};

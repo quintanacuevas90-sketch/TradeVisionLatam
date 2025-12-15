@@ -48,6 +48,7 @@ import CookieConsentModal from './components/CookieConsentModal';
 import FaqTrustPage from './pages/FaqTrustPage';
 import EmailCopyModal from './modals/EmailCopyModal';
 import { TICKER_MESSAGES } from './constants';
+import LoginWall from './components/LoginWall'; // IMPORTACIÓN DEL MURO DE ACCESO
 
 const App: React.FC = () => {
     const { path, navigate } = useRouter();
@@ -76,7 +77,13 @@ const App: React.FC = () => {
     // Effect to manage body scroll for all modals
     useEffect(() => {
         const isModalOpen = showAgeGate || showCookieConsent || isEmailModalOpen;
-        document.body.style.overflow = isModalOpen ? 'hidden' : 'auto';
+        // Solo aplicar hidden si el LoginWall NO está activo (el LoginWall maneja su propio scroll)
+        // Pero como el LoginWall se monta al principio, su lógica tiene prioridad.
+        // Aquí manejamos los otros modales.
+        const isLoginWallPassed = localStorage.getItem('member_access') === 'true';
+        if (isLoginWallPassed) {
+             document.body.style.overflow = isModalOpen ? 'hidden' : 'auto';
+        }
     }, [showAgeGate, showCookieConsent, isEmailModalOpen]);
 
     const handleAcceptAgeGate = () => {
@@ -228,6 +235,9 @@ const App: React.FC = () => {
 
     return (
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
+            {/* LOGIN WALL: Primera capa de seguridad */}
+            <LoginWall />
+
             {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={handleViewPolicy} />}
             {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
             {isEmailModalOpen && <EmailCopyModal onClose={() => setIsEmailModalOpen(false)} />}
