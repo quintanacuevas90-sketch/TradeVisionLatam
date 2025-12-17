@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiDownload } from 'react-icons/fi';
 
-const pdfUrl = 'https://cdn.jsdelivr.net/gh/quintanacuevas90-sketch/TradeVisionLatam@main/public/manual-bienvenida.pdf';
+const pdfUrl = 'https://tradevision.me/TradeVisionLatam/manual-bienvenida.pdf';
 const WelcomeBanner: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
 
