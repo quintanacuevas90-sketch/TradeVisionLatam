@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { FiDownload } from 'react-icons/fi';
 
-const pdfUrl = 'https://tradevision.me/TradeVisionLatam/manual-bienvenida.pdf';
 const WelcomeBanner: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
 
     const checkAccess = () => {
         const access = localStorage.getItem('member_access');
-        setIsVisible(access === 'true');
+        const hasDownloaded = localStorage.getItem('has_downloaded_welcome_pdf');
+        
+        // El banner solo es visible si tiene acceso y NO ha descargado el manual aún
+        setIsVisible(access === 'true' && hasDownloaded !== 'true');
     };
 
     useEffect(() => {
@@ -26,6 +28,13 @@ const WelcomeBanner: React.FC = () => {
         };
     }, []);
 
+    const handleDownloadClick = () => {
+        // Guardar bandera de descarga para que no vuelva a aparecer
+        localStorage.setItem('has_downloaded_welcome_pdf', 'true');
+        // Ocultar inmediatamente el componente
+        setIsVisible(false);
+    };
+
     if (!isVisible) return null;
 
     return (
@@ -38,9 +47,10 @@ const WelcomeBanner: React.FC = () => {
             </div>
 
             <a 
-                href={pdfUrl} 
+                href="https://drive.google.com/file/d/1bIgbWDmt1K5rQbAmIbaIDccUnmXXuYvV/view?usp=sharing" 
                 target="_blank" 
-                download="Manual_TradeVision_Latam.pdf"
+                rel="noopener noreferrer"
+                onClick={handleDownloadClick}
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-black font-black py-2.5 px-6 rounded-lg shadow-[0_0_15px_rgba(202,138,4,0.3)] transition-all transform hover:scale-105 active:scale-95 text-xs md:text-sm uppercase tracking-wider"
             >
                 <FiDownload className="text-lg" />
