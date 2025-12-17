@@ -1,26 +1,13 @@
-// FIX: Corrected import statement for React and its hooks.
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useMemo } from 'react';
+import Router from './components/Router';
+import { useRouter } from './hooks/useRouter';
 import MainPage from './pages/MainPage';
 import BlogListPage from './pages/BlogListPage';
 import BlogPostPage from './pages/BlogPostPage';
 import SitemapPage from './pages/SitemapPage';
-import { ModalType, PageType } from './types';
-// FIX: The default import for PremiumCoursesModal was causing an error. It has been changed to a named import to resolve the issue.
-import { PremiumCoursesModal } from './modals/PremiumCoursesModal';
-import AffiliateModal from './modals/AffiliateModal';
-import BrokersModal from './modals/BrokersModal';
-import CommunityModal from './modals/CommunityModal';
-import EducationModal from './modals/EducationModal';
-import SupportModal from './modals/SupportModal';
-import ConsultancyModal from './modals/ConsultancyModal';
-import Chatbot from './components/Chatbot';
-import WhatsAppButton from './components/WhatsAppButton';
-import { fetchFinancialNews } from './services/geminiService';
-import { generateContextualSummary } from './utils/contextHelper';
-import Router from './components/Router';
-import { useRouter } from './hooks/useRouter';
-import MentorsModal from './modals/MentorsModal';
 import FaqPage from './pages/FaqPage';
+import FaqTrustPage from './pages/FaqTrustPage';
 import BrokersPage from './pages/BrokersPage';
 import PremiumCoursesPage from './pages/PremiumCoursesPage';
 import ConsultancyPage from './pages/ConsultancyPage';
@@ -33,208 +20,195 @@ import ForexElitePage from './pages/ForexElitePage';
 import BinariasProPage from './pages/BinariasProPage';
 import BinariasIntermedioPage from './pages/BinariasIntermedioPage';
 import CommunityPage from './pages/CommunityPage';
-import { useChatbotTriggers } from './hooks/useChatbotTriggers';
 import AiManualPage from './pages/AiManualPage';
 import LegalVerificationPage from './pages/LegalVerificationPage';
-import AvisoLegalRiesgoPage from './pages/LegalPage';
+import LegalPage from './pages/LegalPage';
 import TerminosAcademiaPage from './pages/TerminosAcademiaPage';
 import PoliticaPrivacidadPage from './pages/PoliticaPrivacidadPage';
 import TransparenciaLegalPage from './pages/TransparenciaLegalPage';
 import ExecutionZonePage from './pages/ExecutionZonePage';
+import HallOfFamePage from './pages/HallOfFamePage';
 import BattlegroundsPage from './pages/BattlegroundsPage';
-import HallOfFamePage from './pages/HallOfFamePage'; // Import Hall of Fame
+
+import { PremiumCoursesModal } from './modals/PremiumCoursesModal';
+import AffiliateModal from './modals/AffiliateModal';
+import BrokersModal from './modals/BrokersModal';
+import CommunityModal from './modals/CommunityModal';
+import EducationModal from './modals/EducationModal';
+import SupportModal from './modals/SupportModal';
+import MentorsModal from './modals/MentorsModal';
+import ConsultancyModal from './modals/ConsultancyModal';
+
+import LoginWall from './components/LoginWall';
+import WelcomeBanner from './components/WelcomeBanner';
 import AgeGateModal from './components/AgeGateModal';
 import CookieConsentModal from './components/CookieConsentModal';
-import FaqTrustPage from './pages/FaqTrustPage';
 import EmailCopyModal from './modals/EmailCopyModal';
+import Chatbot from './components/Chatbot';
+import WhatsAppButton from './components/WhatsAppButton';
+
+import { ModalType, PageType } from './types';
 import { TICKER_MESSAGES } from './constants';
-import LoginWall from './components/LoginWall'; // IMPORTACIÓN DEL MURO DE ACCESO
+import { fetchFinancialNews } from './services/geminiService';
+import { generateContextualSummary } from './utils/contextHelper';
+import { useChatbotTriggers } from './hooks/useChatbotTriggers';
 
 const App: React.FC = () => {
+    // Correct usage of React hooks and state management to resolve missing name errors.
     const { path, navigate } = useRouter();
     const [activeModal, setActiveModal] = useState<ModalType | null>(null);
-    const [newsItems, setNewsItems] = useState<string[]>([]);
-    const [isLoadingNews, setIsLoadingNews] = useState(true);
-    const [chatbotContext, setChatbotContext] = useState<string>('');
-    const [isChatOpen, setIsChatOpen] = useState(false);
-    const { triggerText, closeTrigger } = useChatbotTriggers(activeModal, isChatOpen);
-    const [showAgeGate, setShowAgeGate] = useState(false);
-    const [showCookieConsent, setShowCookieConsent] = useState(false);
+    const [showAgeGate, setShowAgeGate] = useState(() => !localStorage.getItem('age_gate_accepted'));
+    const [showCookieConsent, setShowCookieConsent] = useState(() => !localStorage.getItem('cookie_consent'));
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [newsItems, setNewsItems] = useState<string[]>([]);
 
-    // Age Gate & Cookie Consent logic
-    useEffect(() => {
-        const isAgeGateAccepted = localStorage.getItem('ageGateAccepted') === 'true';
-        const isCookieConsentSet = localStorage.getItem('cookieConsent') !== null;
+    // Derive current page type and slug for dynamic context summary generation.
+    const pathname = path.split('?')[0];
+    const slug = pathname.startsWith('/blog/') ? pathname.split('/')[2] : undefined;
 
-        if (!isAgeGateAccepted) {
-            setShowAgeGate(true);
-        } else if (!isCookieConsentSet) {
-            setShowCookieConsent(true);
-        }
-    }, []);
+    const getPageType = (pathname: string): PageType => {
+        if (pathname === '/') return 'main';
+        if (pathname.startsWith('/blog/')) return 'post';
+        if (pathname === '/blog') return 'blog';
+        if (pathname === '/sitemap') return 'sitemap';
+        if (pathname === '/faq') return 'faq';
+        if (pathname === '/protocolo-confianza') return 'protocolo-confianza';
+        if (pathname === '/brokers') return 'brokers';
+        if (pathname === '/premium-courses') return 'premium-courses';
+        if (pathname === '/consultancy') return 'consultancy';
+        if (pathname === '/methodology') return 'methodology';
+        if (pathname === '/acerca-de') return 'acerca-de';
+        if (pathname === '/responsabilidad') return 'responsabilidad';
+        if (pathname === '/impacto-social') return 'impacto-social';
+        if (pathname === '/colabora') return 'colabora';
+        if (pathname === '/cursos/forex-elite') return 'forex-elite';
+        if (pathname === '/cursos/binarias-pro-c90') return 'binarias-pro-c90';
+        if (pathname === '/cursos/binarias-intermedio') return 'binarias-intermedio';
+        if (pathname === '/comunidad') return 'comunidad';
+        if (pathname === '/manual/ia-prompts') return 'ia-manual';
+        if (pathname === '/verificacion-legal') return 'legal-verification';
+        if (pathname === '/aviso-legal-riesgo') return 'aviso-legal-riesgo';
+        if (pathname === '/terminos-academia') return 'terminos-academia';
+        if (pathname === '/politica-privacidad') return 'politica-privacidad';
+        if (pathname === '/transparencia-legal') return 'transparencia-legal';
+        if (pathname === '/zona-de-ejecucion') return 'execution-zone';
+        return 'main';
+    };
 
-    // Effect to manage body scroll for all modals
-    useEffect(() => {
-        const isModalOpen = showAgeGate || showCookieConsent || isEmailModalOpen;
-        // Solo aplicar hidden si el LoginWall NO está activo (el LoginWall maneja su propio scroll)
-        // Pero como el LoginWall se monta al principio, su lógica tiene prioridad.
-        // Aquí manejamos los otros modales.
-        const isLoginWallPassed = localStorage.getItem('member_access') === 'true';
-        if (isLoginWallPassed) {
-             document.body.style.overflow = isModalOpen ? 'hidden' : 'auto';
-        }
-    }, [showAgeGate, showCookieConsent, isEmailModalOpen]);
+    const pageType = getPageType(pathname);
+    const chatbotContext = useMemo(() => generateContextualSummary(activeModal, pageType, slug), [activeModal, pageType, slug]);
+    const { triggerText, closeTrigger } = useChatbotTriggers(activeModal, isChatOpen);
+
+    const openModal = (type: ModalType) => setActiveModal(type);
+    const closeModal = () => setActiveModal(null);
 
     const handleAcceptAgeGate = () => {
-        localStorage.setItem('ageGateAccepted', 'true');
+        localStorage.setItem('age_gate_accepted', 'true');
         setShowAgeGate(false);
-        if (localStorage.getItem('cookieConsent') === null) {
-            setShowCookieConsent(true);
-        }
     };
 
     const handleViewPolicy = () => {
-        navigate('/terminos-academia');
-        handleAcceptAgeGate();
+        navigate('/aviso-legal-riesgo');
     };
-    
+
     const handleCookieConsent = (decision: { analysis: boolean; advertising: boolean; }) => {
-        const consentData = {
-            timestamp: new Date().toISOString(),
-            ...decision
-        };
-        localStorage.setItem('cookieConsent', JSON.stringify(consentData));
+        localStorage.setItem('cookie_consent', JSON.stringify(decision));
         setShowCookieConsent(false);
     };
 
-    // Logic to open/close modals based on URL hash query params.
+    // Synchronization of URL parameters with modal state.
     useEffect(() => {
-        const params = new URLSearchParams(path.split('?')[1] || '');
-        const modalToOpen = params.get('open') as ModalType | null;
-        const validModals: ModalType[] = ['premium-courses', 'affiliate', 'brokers', 'community', 'support', 'mentors'];
-
-        if (modalToOpen && validModals.includes(modalToOpen)) {
-            setActiveModal(modalToOpen);
-        } else {
-            setActiveModal(null);
+        const params = new URLSearchParams(window.location.hash.split('?')[1]);
+        const openParam = params.get('open') as ModalType | null;
+        if (openParam) {
+            setActiveModal(openParam);
         }
     }, [path]);
 
-    // Listener for custom event to open chatbot from anywhere
+    // Setup global listeners for UI triggers like chatbot or email copy modal.
     useEffect(() => {
-        const handleOpenChat = () => {
-            setTimeout(() => setIsChatOpen(true), 50);
-        };
-        window.addEventListener('open-chatbot', handleOpenChat);
-        return () => window.removeEventListener('open-chatbot', handleOpenChat);
-    }, []);
-
-    // Listener for custom event to open Email Modal
-    useEffect(() => {
+        const handleOpenChat = () => setIsChatOpen(true);
         const handleOpenEmail = () => setIsEmailModalOpen(true);
+
+        window.addEventListener('open-chatbot', handleOpenChat);
         window.addEventListener('open-email-modal', handleOpenEmail);
-        return () => window.removeEventListener('open-email-modal', handleOpenEmail);
+
+        return () => {
+            window.removeEventListener('open-chatbot', handleOpenChat);
+            window.removeEventListener('open-email-modal', handleOpenEmail);
+        };
     }, []);
 
+    // Initial data fetching for real-time financial news headlines.
     useEffect(() => {
         const getNews = async () => {
-            setIsLoadingNews(true);
-            const items = await fetchFinancialNews();
-            setNewsItems(items);
-            setIsLoadingNews(false);
+            const news = await fetchFinancialNews();
+            setNewsItems(news);
         };
         getNews();
     }, []);
 
-    useEffect(() => {
-        let currentPage: PageType = 'main';
-        let pageSlug: string | undefined = undefined;
-        const pathname = path.split('?')[0];
-
-        if (pathname === '/blog') currentPage = 'blog';
-        else if (pathname.startsWith('/blog/')) { currentPage = 'post'; pageSlug = pathname.split('/')[2]; }
-        else if (pathname === '/sitemap') currentPage = 'sitemap';
-        else if (pathname === '/faq') currentPage = 'faq';
-        else if (pathname === '/brokers') currentPage = 'brokers';
-        else if (pathname === '/premium-courses') currentPage = 'premium-courses';
-        else if (pathname === '/consultancy') currentPage = 'consultancy';
-        else if (pathname === '/methodology') currentPage = 'methodology';
-        else if (pathname === '/acerca-de') currentPage = 'acerca-de';
-        else if (pathname === '/responsabilidad') currentPage = 'responsabilidad';
-        else if (pathname === '/impacto-social') currentPage = 'impacto-social';
-        else if (pathname === '/colabora') currentPage = 'colabora';
-        else if (pathname === '/cursos/forex-elite') currentPage = 'forex-elite';
-        else if (pathname === '/cursos/binarias-pro-c90') currentPage = 'binarias-pro-c90';
-        else if (pathname === '/cursos/binarias-intermedio') currentPage = 'binarias-intermedio';
-        else if (pathname === '/comunidad') currentPage = 'comunidad';
-        else if (pathname === '/manual/ia-prompts') currentPage = 'ia-manual';
-        else if (pathname === '/verificacion-legal') currentPage = 'legal-verification';
-        else if (pathname === '/aviso-legal-riesgo') currentPage = 'aviso-legal-riesgo';
-        else if (pathname === '/terminos-academia') currentPage = 'terminos-academia';
-        else if (pathname === '/politica-privacidad') currentPage = 'politica-privacidad';
-        else if (pathname === '/transparencia-legal') currentPage = 'transparencia-legal';
-        else if (pathname === '/zona-de-ejecucion') currentPage = 'execution-zone';
-        else if (pathname === '/protocolo-confianza') currentPage = 'protocolo-confianza';
-
-        const summary = generateContextualSummary(activeModal, currentPage, pageSlug);
-        setChatbotContext(summary);
-    }, [activeModal, path]);
-
-    const handleOpenModal = (modal: ModalType) => {
-        const basePath = path.split('?')[0];
-        navigate(`${basePath}?open=${modal}`);
-    };
-    
-    const handleCloseModal = () => {
-        const basePath = path.split('?')[0];
-        navigate(basePath);
-    };
-
-    const renderModal = () => {
-        switch (activeModal) {
-            case 'premium-courses': return <PremiumCoursesModal onClose={handleCloseModal} />;
-            case 'affiliate': return <AffiliateModal onClose={handleCloseModal} onOpenModal={() => navigate('/consultancy')} />;
-            case 'brokers': return <BrokersModal onClose={handleCloseModal} />;
-            case 'community': return <CommunityModal onClose={handleCloseModal} />;
-            case 'support': return <SupportModal onClose={handleCloseModal} />;
-            case 'mentors': return <MentorsModal onClose={handleCloseModal} />;
-            default: return null;
-        }
-    };
-
+    // Define standard and dynamic routes for the custom Router component.
     const routes = {
-        '/': <MainPage onOpenModal={handleOpenModal} tickerItems={TICKER_MESSAGES} />,
+        '/': <MainPage onOpenModal={openModal} tickerItems={TICKER_MESSAGES} />,
         '/blog': <BlogListPage />,
-        '/blog/:slug': (params: { slug: string }) => <BlogPostPage slug={params.slug} />,
-        '/sitemap': <SitemapPage onOpenModal={handleOpenModal} />,
-        '/faq': <FaqPage onOpenModal={handleOpenModal} />,
-        '/brokers': <BrokersPage onOpenModal={handleOpenModal} />,
+        '/blog/:slug': ({ slug }: { slug: string }) => <BlogPostPage slug={slug} />,
+        '/sitemap': <SitemapPage onOpenModal={openModal} />,
+        '/faq': <FaqPage onOpenModal={openModal} />,
+        '/protocolo-confianza': <FaqTrustPage onOpenModal={openModal} />,
+        '/brokers': <BrokersPage onOpenModal={openModal} />,
         '/premium-courses': <PremiumCoursesPage />,
         '/consultancy': <ConsultancyPage />,
         '/methodology': <MethodologyPage />,
-        '/acerca-de': <AboutPage onOpenModal={handleOpenModal} />,
-        '/responsabilidad': <ResponsibilityPage onOpenModal={handleOpenModal} />,
+        '/acerca-de': <AboutPage onOpenModal={openModal} />,
+        '/responsabilidad': <ResponsibilityPage onOpenModal={openModal} />,
         '/impacto-social': <SocialImpactPage />,
-        '/colabora': <CollaboratePage onOpenModal={handleOpenModal} />,
+        '/colabora': <CollaboratePage onOpenModal={openModal} />,
         '/cursos/forex-elite': <ForexElitePage />,
         '/cursos/binarias-pro-c90': <BinariasProPage />,
         '/cursos/binarias-intermedio': <BinariasIntermedioPage />,
-        '/comunidad': <CommunityPage onOpenModal={handleOpenModal} />,
+        '/comunidad': <CommunityPage onOpenModal={openModal} />,
         '/manual/ia-prompts': <AiManualPage />,
-        '/verificacion-legal': <LegalVerificationPage onOpenModal={handleOpenModal} />,
-        '/aviso-legal-riesgo': <AvisoLegalRiesgoPage />,
+        '/verificacion-legal': <LegalVerificationPage onOpenModal={openModal} />,
+        '/aviso-legal-riesgo': <LegalPage />,
         '/terminos-academia': <TerminosAcademiaPage />,
         '/politica-privacidad': <PoliticaPrivacidadPage />,
         '/transparencia-legal': <TransparenciaLegalPage />,
         '/zona-de-ejecucion': <ExecutionZonePage />,
-        '/protocolo-confianza': <FaqTrustPage onOpenModal={handleOpenModal} />,
+        '/hall-of-fame': <HallOfFamePage />,
         '/battlegrounds': <BattlegroundsPage />,
-        '/hall-of-fame': <HallOfFamePage />, // Add Hall of Fame route
+    };
+
+    // Centralized modal rendering logic based on active state.
+    const renderModal = () => {
+        switch (activeModal) {
+            case 'premium-courses':
+                return <PremiumCoursesModal onClose={closeModal} />;
+            case 'affiliate':
+                return <AffiliateModal onClose={closeModal} onOpenModal={openModal} />;
+            case 'brokers':
+                return <BrokersModal onClose={closeModal} />;
+            case 'community':
+                return <CommunityModal onClose={closeModal} />;
+            case 'support':
+                return <SupportModal onClose={closeModal} />;
+            case 'mentors':
+                return <MentorsModal onClose={closeModal} />;
+            case 'consultancy':
+                return <ConsultancyModal onClose={closeModal} />;
+            case 'education':
+                return <EducationModal onClose={closeModal} />;
+            default:
+                return null;
+        }
     };
 
     return (
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
+            {/* WELCOME BANNER: Solo visible para miembros */}
+            <WelcomeBanner />
+
             {/* LOGIN WALL: Primera capa de seguridad */}
             <LoginWall />
 
@@ -250,6 +224,7 @@ const App: React.FC = () => {
                 newsItems={newsItems}
                 pageContext={chatbotContext}
                 triggerText={triggerText}
+                onOpenChat={() => setIsChatOpen(true)}
                 onCloseTrigger={closeTrigger}
             />
             <WhatsAppButton />

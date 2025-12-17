@@ -40,12 +40,11 @@ const LoginWall: React.FC = () => {
             // IMPORTANTE: mode: 'no-cors' es vital para enviar datos a Google desde un dominio externo.
             // Esto significa que la respuesta será "opaca" (no podemos leer el JSON de respuesta),
             // pero el servidor procesará los datos correctamente.
-                console.log('Enviando Payload:', formData);
             await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 mode: 'no-cors', 
                 headers: {
-                    'Content-Type': 'text/plain;charset=utf-8json',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),
             });
