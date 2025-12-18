@@ -3,7 +3,7 @@ import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, F
 import Logo from './Logo';
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby87DhdC7O8YhaYE6BFEpO-hszGLNSAnRIiAL4WLHhwhECekhd8OGHXcTbyVj9xJnK53Q/exec";
+const WEBHOOK_URL = "hhttps://script.google.com/macros/s/AKfycbwN8vg3oGDL5E4lM_kdh2HBhPQVPBD_jSwGnUbtvot6Y_fAArTRk1-HKgzPlXppKn9Kpg/exec
 const SESSION_TTL = 172800000; // 48 Horas
 
 const LATAM_DATA = [
