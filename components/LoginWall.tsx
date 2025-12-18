@@ -105,21 +105,24 @@ const LoginWall: React.FC = () => {
         setIsLoading(true);
 
         // Preparación de metadatos solicitados
-        const payload = {
-            ...formData,
-            whatsapp: fullPhone,
-            ip_address: clientIP,
-            device_info: navigator.userAgent,
-            registro_hora: new Date().toLocaleString('es-ES')
-        };
+        const // Preparación con FormData
+     const formDataToSend = new FormData();
+     formDataToSend.append('nombre', formData.nombre);
+     formDataToSend.append('email', formData.email);
+     formDataToSend.append('whatsapp', fullPhone);
+     formDataToSend.append('pais', formData.pais);
+     formDataToSend.append('edad', formData.edad);
+     formDataToSend.append('ip_address', clientIP);
+     formDataToSend.append('device_info', navigator.userAgent);
+     formDataToSend.append('registro_hora', new Date().toLocaleString('es-ES'));
 
-        try {
-            // Envío al Webhook
-            await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+     try {
+       // Envío al Webhook
+       await fetch(WEBHOOK_URL, {
+         method: 'POST',
+         mode: 'no-cors',
+         body: formDataToSend
+       });
             });
 
             // Éxito simulado (no-cors no retorna respuesta legible)
