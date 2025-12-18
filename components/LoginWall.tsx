@@ -109,7 +109,7 @@ if (!isVisible) return null;
 return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050b14]/98 backdrop-blur-2xl">
         {/* ELIMINADA LA ANIMACIÓN 'fade-in-up' PARA ASEGURAR VISIBILIDAD */}
-            <div className="w-full max-w-md p-8 m-4 bg-[#0A1931] border border-brand-accent/20 rounded-2xl relative opacity-100 visible">            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-50"></div>
+            <div className="relative z-50 w-full max-w-md bg-[#0A1931] p-8 rounded-2xl border border-blue-500 shadow-2xl">            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-50"></div>
             <div className="text-center mb-8">
                 <div className="flex justify-center mb-4"><Logo className="w-16 h-16" /></div>
                 <h2 className="text-2xl font-black text-white uppercase">Validación de Miembro</h2>
