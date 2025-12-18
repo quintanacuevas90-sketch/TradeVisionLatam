@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -48,7 +47,8 @@ const ModuleWrapper: React.FC<{
                
                 <div className="flex items-end gap-4 sm:gap-6 text-white">
                     <div className="p-3 sm:p-5 bg-black/70 rounded-full backdrop-blur-md border border-cyber-violet/30 text-cyber-violet shadow-lg group-hover:scale-110 group-hover:border-cyber-violet transition-all duration-300">
-                        {React.cloneElement(icon as React.ReactElement, { size: 24, className: "sm:w-8 sm:h-8" })}
+                        {/* Fix: Cast icon to any to allow size and className props during cloneElement */}
+                        {React.cloneElement(icon as React.ReactElement<any>, { size: 24, className: "sm:w-8 sm:h-8" })}
                     </div>
                     <div className="pb-1 sm:pb-2">
                         <h2 className="text-2xl sm:text-4xl md:text-6xl font-extrabold tracking-wide text-white drop-shadow-lg leading-none uppercase mb-2 group-hover:text-glow-violet transition-all duration-300 text-shadow-md">

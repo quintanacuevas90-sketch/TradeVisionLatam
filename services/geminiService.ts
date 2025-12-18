@@ -92,7 +92,8 @@ function getChatInstance(): Chat | null {
     }
 
     if (!chatInstance) {
-        const model = 'gemini-2.5-flash';
+        // Fix: Use recommended model name
+        const model = 'gemini-3-flash-preview';
         const config = {
              systemInstruction: SYSTEM_INSTRUCTION
         };
@@ -131,8 +132,9 @@ ${context}
         const sources: GroundingSource[] = [];
 
         for await (const chunk of result) {
+            // Fix: Access chunk.text directly (property, not method)
             const chunkText = chunk.text;
-            onStream(chunkText, sources);
+            onStream(chunkText || '', sources);
         }
     } catch (error) {
         console.error("Error sending message to Gemini:", error);
@@ -152,14 +154,16 @@ export const fetchFinancialNews = async (): Promise<string[]> => {
     
     try {
         const response = await aiInstance.models.generateContent({
-            model: 'gemini-2.5-flash',
+            // Fix: Use recommended model name
+            model: 'gemini-3-flash-preview',
             contents: "Dame los 5 titulares de noticias más recientes e importantes, combinando noticias del mercado de divisas (Forex) de https://es.tradingview.com/markets/currencies/news/ con noticias sobre Criptomonedas y Bitcoin. Formatea la respuesta como una lista con guiones, donde cada titular está en una nueva línea.",
             config: {
                 tools: [{ googleSearch: {} }],
             },
         });
 
-        const textResponse = response.text.trim();
+        // Fix: Access response.text directly (property, not method)
+        const textResponse = response.text?.trim() || '';
         // Parse a markdown list (handles -, *, or numbered lists)
         const headlines = textResponse
             .split('\n')

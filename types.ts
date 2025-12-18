@@ -1,7 +1,8 @@
 
 
 
-export type ModalType = 'premium-courses' | 'affiliate' | 'brokers' | 'community' | 'support' | 'mentors';
+
+export type ModalType = 'premium-courses' | 'affiliate' | 'brokers' | 'community' | 'support' | 'mentors' | 'consultancy' | 'education';
 
 export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora' | 'forex-elite' | 'binarias-pro-c90' | 'binarias-intermedio' | 'comunidad' | 'ia-manual' | 'legal-verification' | 'aviso-legal-riesgo' | 'terminos-academia' | 'politica-privacidad' | 'transparencia-legal' | 'execution-zone' | 'protocolo-confianza';
 

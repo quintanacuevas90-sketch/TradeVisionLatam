@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { useRouter } from '../hooks/useRouter';
 
@@ -16,7 +14,9 @@ const Router: React.FC<RouterProps> = ({ routes }) => {
     // Try to find a direct match first
     if (routes[pathname]) {
         const component = routes[pathname];
-        return typeof component === 'function' ? component({}) : component;
+        // Fix: Use type guard and wrap in fragment to ensure valid ReactNode return
+        const element = typeof component === 'function' ? (component as Function)({}) : component;
+        return <>{element}</>;
     }
 
     // Check for dynamic routes (e.g., /blog/:slug)
@@ -37,14 +37,17 @@ const Router: React.FC<RouterProps> = ({ routes }) => {
 
                 if (isMatch) {
                     const component = routes[route];
-                     return typeof component === 'function' ? component(params) : component;
+                    // Fix: Use type guard and wrap in fragment to ensure valid ReactNode return
+                    const element = typeof component === 'function' ? (component as Function)(params) : component;
+                    return <>{element}</>;
                 }
             }
         }
     }
 
     // Fallback to a 404 or default route if desired
-    return routes['/'] || <div>Page Not Found</div>;
+    // Fix: Wrap in fragment
+    return <>{routes['/'] || <div>Page Not Found</div>}</>;
 };
 
 export default Router;

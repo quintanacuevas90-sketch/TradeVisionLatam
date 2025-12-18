@@ -14,7 +14,8 @@ interface AboutPageProps {
     onOpenModal: (modal: ModalType) => void;
 }
 
-const Milestone: React.FC<{ year: string, title: string, description: string, icon: React.ReactNode }> = ({ year, title, description, icon }) => (
+// Fix: Updated description type from string to React.ReactNode to allow JSX elements
+const Milestone: React.FC<{ year: string, title: string, description: React.ReactNode, icon: React.ReactNode }> = ({ year, title, description, icon }) => (
     <div className="flex items-start gap-4">
         <div className="flex flex-col items-center">
             <div className="flex-shrink-0 w-12 h-12 rounded-full bg-brand-accent/20 text-brand-accent flex items-center justify-center">

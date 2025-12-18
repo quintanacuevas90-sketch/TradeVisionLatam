@@ -29,10 +29,12 @@ interface ChatbotProps {
     newsItems: string[];
     pageContext: string;
     triggerText: string | null;
+    // Fix: Added missing prop definition
+    onOpenChat: () => void;
     onCloseTrigger: () => void;
 }
 
-const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageContext, triggerText, onCloseTrigger }) => {
+const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageContext, triggerText, onOpenChat, onCloseTrigger }) => {
     const [messages, setMessages] = useState<ChatMessage[]>(() => {
         try {
             const savedMessages = localStorage.getItem('tradevision-chat-history');
@@ -89,7 +91,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageCon
     }, []);
 
     const handleOpenChat = () => {
-        setIsOpen(true);
+        // Fix: Use the provided onOpenChat prop
+        onOpenChat();
         if (triggerText) {
             onCloseTrigger();
         }
