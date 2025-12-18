@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ModalType } from '../types';
 import { LEGAL_TEXT, IP_LEGAL_TEXT, SOCIAL_LINKS } from '../constants';
 import { useRouter } from '../hooks/useRouter';
 import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 import { FaShieldAlt } from 'react-icons/fa';
+import { FiLock, FiKey, FiUnlock } from 'react-icons/fi';
+import AffiliateProgramModal from './AffiliateProgramModal';
 
 interface FooterProps {
     onOpenModal: (modal: ModalType) => void;
@@ -11,6 +13,7 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
     const { navigate } = useRouter();
+    const [isAffiliateLocked, setIsAffiliateLocked] = useState(false);
 
     const footerLinkGroups = [
         {
@@ -30,14 +33,26 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                 { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },
                 { label: 'Impacto Social', action: () => navigate('/impacto-social') },
                 { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
-                { label: 'Forma Parte de TradeVision Latam', action: () => navigate('/colabora') },
+                { 
+                    label: 'Forma Parte de TradeVision Latam', 
+                    isLocked: true,
+                    action: () => setIsAffiliateLocked(true) 
+                },
                 { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
             ]
         },
         {
             title: 'Comunidad',
             links: [
-                { label: 'Salón de la Fama & Afiliados', action: () => navigate('/hall-of-fame') },
+                { 
+                    label: '🏆 Salón de la Fama', 
+                    action: () => navigate('/hall-of-fame') 
+                },
+                { 
+                    label: 'Programa de Afiliados', 
+                    isLocked: true,
+                    action: () => setIsAffiliateLocked(true) 
+                },
                 { label: 'Protocolo de Confianza', action: () => navigate('/protocolo-confianza') },
                 { label: 'Aviso Legal y Riesgo', action: () => navigate('/aviso-legal-riesgo') },
                 { label: 'Términos de la Academia', action: () => navigate('/terminos-academia') },
@@ -63,7 +78,20 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
                     <div className="lg:col-span-2">
                         <h3 className="text-xl font-extrabold mb-4" translate="no">TradeVision<span className="text-brand-accent"> Latam</span></h3>
-                        <p className="text-gray-500 dark:text-gray-400">Forjando traders disciplinados en Latinoamérica.</p>
+                        <p className="text-gray-500 dark:text-gray-400 mb-6">Forjando traders disciplinados en Latinoamérica.</p>
+                        
+                        {/* BOTÓN DESTACADO: INFO PRIVILEGIADA */}
+                        <button 
+                            onClick={() => setIsAffiliateLocked(true)}
+                            className="mb-8 flex items-center justify-between p-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 font-black text-xs uppercase tracking-widest hover:bg-yellow-500/20 transition-all group w-full max-w-xs shadow-[0_0_20px_rgba(234,179,8,0.1)]"
+                        >
+                            <div className="flex items-center gap-3">
+                                <FiKey className="text-xl group-hover:rotate-12 transition-transform" />
+                                <span>INFO PRIVILEGIADA</span>
+                            </div>
+                            <FiUnlock className="opacity-50" />
+                        </button>
+
                         <div className="flex space-x-4 mt-6">
                             {SOCIAL_LINKS.map((link) => {
                                 const isMail = link.href.startsWith('mailto:');
@@ -101,14 +129,22 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                             <ul className="space-y-2">
                                 {group.links.map((item) => (
                                     <li key={item.label}>
-                                        <button onClick={item.action} className={`transition text-left ${
-                                            item.label.includes('TRADING ARENA')
-                                                ? 'font-bold text-cyber-violet text-glow-violet hover:opacity-80'
-                                                : item.label.includes('Blacklist')
-                                                    ? 'text-red-500 hover:text-red-400 text-xs font-bold'
+                                        <button 
+                                            onClick={item.action} 
+                                            className={`transition text-left flex items-center justify-between w-full group/link ${
+                                            (item as any).isLocked
+                                                ? 'text-yellow-600 dark:text-yellow-400 font-bold'
+                                                : item.label.includes('TRADING ARENA')
+                                                    ? 'font-bold text-cyber-violet text-glow-violet hover:opacity-80'
                                                     : 'text-gray-500 dark:text-gray-400 hover:text-brand-accent'
-                                        }`}>
-                                            {item.label === 'Brokers Recomendados' ? <><span translate="no">Brokers</span> Recomendados</> : item.label}
+                                            }`}
+                                        >
+                                            <span className="flex-1">
+                                                {item.label}
+                                            </span>
+                                            {(item as any).isLocked && (
+                                                <FiLock size={12} className="ml-2 opacity-60 group-hover/link:scale-110 transition-transform" />
+                                            )}
                                         </button>
                                     </li>
                                 ))}
@@ -133,10 +169,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Estructura de Consultoría Educativa registrada para operar en Canadá, Brasil y Unión Europea (España).</p>
                         </div>
                         
-                        {/* Custom Layout: Badge Above, Owl Below */}
                         <div className="relative group flex flex-col items-center cursor-pointer" onClick={() => navigate('/verificacion-legal')}>
-                            
-                            {/* Badge - Top */}
                             <div className="flex items-center gap-3 p-3 pr-5 rounded-xl bg-blue-900/50 border border-blue-700/50 hover:border-brand-accent transition-all duration-300 shadow-lg backdrop-blur-sm relative z-10 transform translate-y-4 group-hover:translate-y-0">
                                  <FaShieldAlt className="text-brand-accent text-2xl sm:text-3xl" />
                                  <div className="text-left">
@@ -146,7 +179,6 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                                  </div>
                             </div>
 
-                            {/* Owl - Bottom */}
                             <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex-shrink-0 z-0 -mt-4">
                                  <img 
                                     src="https://i.pinimg.com/736x/db/31/b4/db31b46235afd233c0372a0c5eaeb931.jpg" 
@@ -162,6 +194,11 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                     </p>
                 </div>
             </div>
+
+            <AffiliateProgramModal 
+                isOpen={isAffiliateLocked} 
+                onClose={() => setIsAffiliateLocked(false)} 
+            />
         </footer>
     );
 };

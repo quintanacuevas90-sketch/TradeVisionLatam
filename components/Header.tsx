@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FiMenu, FiX, FiSun, FiMoon, FiSearch } from 'react-icons/fi';
+import { FiMenu, FiX, FiSun, FiMoon, FiSearch, FiLock, FiUnlock, FiKey } from 'react-icons/fi';
 import { FaRobot, FaTrophy } from 'react-icons/fa';
 import { ModalType } from '../types';
 import { useTheme } from '../contexts/ThemeContext';
@@ -8,6 +8,7 @@ import Search from './Search';
 import { useRouter } from '../hooks/useRouter';
 import TrendingCurrenciesWidget from './TrendingCurrenciesWidget';
 import Accordion from './Accordion';
+import AffiliateProgramModal from './AffiliateProgramModal';
 
 interface HeaderProps {
     onOpenModal: (modal: ModalType) => void;
@@ -18,6 +19,8 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
+    const [isAffiliateLocked, setIsAffiliateLocked] = useState(false);
+    
     const lastScrollY = useRef(0);
     const { theme, toggleTheme } = useTheme();
     const { navigate } = useRouter();
@@ -25,22 +28,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-
-            // Determine if header should be sticky (have a background)
             if (currentScrollY > 10) {
                 setIsScrolled(true);
             } else {
                 setIsScrolled(false);
             }
 
-            // Determine if header should be visible (hide on scroll down)
-            // We only hide if we're scrolled down past the header height (80px)
             if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
-                setIsVisible(false); // Scrolling down
+                setIsVisible(false);
             } else {
-                setIsVisible(true); // Scrolling up
+                setIsVisible(true);
             }
-
             lastScrollY.current = currentScrollY;
         };
 
@@ -48,7 +46,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Dedicated array for main desktop navigation for clarity
     const mainNavLinks = [
         { label: 'Brokers', action: () => navigate('/brokers') },
         { label: 'Cursos', action: () => navigate('/premium-courses') },
@@ -57,7 +54,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
         { label: 'Soporte', action: () => onOpenModal('support') },
     ];
 
-    // Restructured navigation links for the side menu with clear grouping
     const navLinkGroups = [
         {
             title: 'Navegación Principal',
@@ -81,8 +77,16 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 { label: 'Sobre Nosotros', action: () => navigate('/acerca-de') },
                 { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },
                 { label: 'Impacto Social', action: () => navigate('/impacto-social') },
-                { label: 'Forma Parte de TradeVision Latam', action: () => navigate('/colabora') },
-                { label: 'Programa de Afiliados', action: () => onOpenModal('affiliate') },
+                { 
+                    label: 'Forma Parte de TradeVision Latam', 
+                    isLocked: true,
+                    action: () => setIsAffiliateLocked(true) 
+                },
+                { 
+                    label: 'Programa de Afiliados', 
+                    isLocked: true,
+                    action: () => setIsAffiliateLocked(true) 
+                },
                 { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
                 { label: 'Información Legal', action: () => navigate('/aviso-legal-riesgo') },
             ]
@@ -91,7 +95,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
 
     const handleSideMenuClick = (action: () => void) => {
         setIsSideMenuOpen(false);
-        // Small delay to allow the menu closing animation to start before navigation logic kicks in
         setTimeout(() => {
             action();
         }, 250);
@@ -106,8 +109,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
             <header className={`w-full z-40 transition-all duration-300 ${isScrolled ? 'bg-white/80 dark:bg-brand-primary/80 backdrop-blur-sm shadow-lg fixed top-0' : 'bg-transparent absolute'} ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">
-                        
-                        {/* Left side: Hamburger Menu + Logo */}
                         <div className="flex items-center gap-4 lg:flex-1 justify-start">
                             <button onClick={() => setIsSideMenuOpen(true)} className="text-gray-800 dark:text-white p-2 -ml-2" aria-label="Open menu">
                                 <FiMenu size={24} />
@@ -118,7 +119,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                             </button>
                         </div>
 
-                        {/* Center: Main Navigation (Desktop) */}
                         <nav className="hidden lg:flex items-center gap-6">
                             {mainNavLinks.map((link) => (
                                 <button
@@ -131,7 +131,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                             ))}
                         </nav>
                         
-                        {/* Right side: Search + Theme Toggle */}
                         <div className="flex items-center lg:flex-1 justify-end gap-2">
                             <TrendingCurrenciesWidget />
                             <button
@@ -153,7 +152,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 </div>
             </header>
             
-            {/* Overlay */}
             {isSideMenuOpen && (
                 <div 
                     onClick={() => setIsSideMenuOpen(false)}
@@ -162,7 +160,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 ></div>
             )}
             
-            {/* Side Menu Panel */}
             <div
                 className={`fixed top-0 left-0 h-full w-full max-w-xs bg-white dark:bg-brand-primary shadow-2xl z-[51] transform transition-transform duration-300 ease-in-out ${
                     isSideMenuOpen ? 'translate-x-0' : '-translate-x-full'
@@ -180,8 +177,23 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                             <FiX size={24} />
                         </button>
                     </div>
+
                     <div className="flex-grow overflow-y-auto -mr-4 pr-4">
                         <nav className="flex flex-col">
+                            {/* NUEVO BOTÓN DESTACADO: INFO PRIVILEGIADA */}
+                            <div className="px-3 mb-4">
+                                <button 
+                                    onClick={() => handleSideMenuClick(() => setIsAffiliateLocked(true))}
+                                    className="w-full flex items-center justify-between p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 font-black text-xs uppercase tracking-tighter hover:bg-yellow-500/20 transition-all group"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <FiKey className="text-lg group-hover:rotate-12 transition-transform" />
+                                        <span>INFO PRIVILEGIADA</span>
+                                    </div>
+                                    <FiUnlock className="opacity-50" />
+                                </button>
+                            </div>
+
                             {navLinkGroups.map((group) => (
                                 <div key={group.title} className="border-b border-gray-200 dark:border-white/10 last:border-b-0">
                                     <Accordion variant="menu" title={group.title}>
@@ -190,15 +202,18 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                                 <button
                                                     key={link.label}
                                                     onClick={() => handleSideMenuClick(link.action)}
-                                                    className={`text-left text-base transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 w-full ${
-                                                        link.label.includes('TRADING ARENA')
-                                                            ? 'font-extrabold text-cyber-violet text-glow-violet hover:opacity-80'
-                                                            : link.label.includes('Salón de la Fama')
-                                                                ? 'font-bold text-yellow-500'
-                                                                : 'text-gray-800 dark:text-white hover:text-brand-accent'
+                                                    className={`text-left text-base transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 w-full flex items-center justify-between ${
+                                                        (link as any).isLocked
+                                                            ? 'text-yellow-600 dark:text-yellow-400 font-bold'
+                                                            : link.label.includes('TRADING ARENA')
+                                                                ? 'font-extrabold text-cyber-violet text-glow-violet hover:opacity-80'
+                                                                : link.label.includes('Salón de la Fama')
+                                                                    ? 'font-bold text-yellow-500'
+                                                                    : 'text-gray-800 dark:text-white hover:text-brand-accent'
                                                     }`}
                                                 >
-                                                    {link.label}
+                                                    <span>{link.label}</span>
+                                                    {(link as any).isLocked && <FiLock size={14} className="opacity-60" />}
                                                 </button>
                                             ))}
                                         </div>
@@ -212,7 +227,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                         <button
                             onClick={() => {
                                 setIsSideMenuOpen(false);
-                                // Use a short delay to allow the menu to start closing before opening the chat
                                 setTimeout(() => {
                                     window.dispatchEvent(new CustomEvent('open-chatbot'));
                                 }, 150);
@@ -223,12 +237,16 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                             Asistente IA
                         </button>
                     </div>
-
                 </div>
             </div>
 
-            {/* Search Component */}
             <Search isOpen={isSearchOpen} onClose={handleSearchClose} />
+            
+            {/* Modal de Programa de Afiliados (Muro de Seguridad) */}
+            <AffiliateProgramModal 
+                isOpen={isAffiliateLocked} 
+                onClose={() => setIsAffiliateLocked(false)} 
+            />
         </>
     );
 };

@@ -1,4 +1,4 @@
-import { GoogleGenAI, Chat, GroundingChunk } from "@google/genai";
+import { GoogleGenAI, Chat } from "@google/genai";
 import { GroundingSource } from '../types';
 
 // We use a single chat instance to maintain conversation history
@@ -92,7 +92,6 @@ function getChatInstance(): Chat | null {
     }
 
     if (!chatInstance) {
-        // Fix: Use recommended model name
         const model = 'gemini-3-flash-preview';
         const config = {
              systemInstruction: SYSTEM_INSTRUCTION
@@ -128,11 +127,10 @@ ${context}
 
         const result = await chat.sendMessageStream({ message: finalMessage });
 
-        // Sources will always be empty now as grounding mode is removed.
         const sources: GroundingSource[] = [];
 
         for await (const chunk of result) {
-            // Fix: Access chunk.text directly (property, not method)
+            /* Access chunk.text directly as a property */
             const chunkText = chunk.text;
             onStream(chunkText || '', sources);
         }
@@ -154,7 +152,6 @@ export const fetchFinancialNews = async (): Promise<string[]> => {
     
     try {
         const response = await aiInstance.models.generateContent({
-            // Fix: Use recommended model name
             model: 'gemini-3-flash-preview',
             contents: "Dame los 5 titulares de noticias más recientes e importantes, combinando noticias del mercado de divisas (Forex) de https://es.tradingview.com/markets/currencies/news/ con noticias sobre Criptomonedas y Bitcoin. Formatea la respuesta como una lista con guiones, donde cada titular está en una nueva línea.",
             config: {
@@ -162,9 +159,8 @@ export const fetchFinancialNews = async (): Promise<string[]> => {
             },
         });
 
-        // Fix: Access response.text directly (property, not method)
+        /* Access response.text directly as a property */
         const textResponse = response.text?.trim() || '';
-        // Parse a markdown list (handles -, *, or numbered lists)
         const headlines = textResponse
             .split('\n')
             .map(line => line.trim())

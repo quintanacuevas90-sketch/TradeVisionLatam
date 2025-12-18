@@ -20,18 +20,28 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false, onClose }) => {
     const { navigate } = useRouter();
-    const isInternalLink = course.link.startsWith('#/');
+    
+    // Detectamos si es un enlace interno de navegación o un disparador de modal
+    const isInternalPath = course.link.startsWith('#/');
+    const isActionTrigger = course.link === "OPEN_MANUAL_MODAL" || course.link === "#";
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        if (isInternalLink) {
-            e.preventDefault();
-            const path = course.link.substring(1);
-            navigate(path);
-            onClose?.(); // Close modal if function is provided
+        if (isInternalPath || isActionTrigger) {
+            e.preventDefault(); // Detenemos la navegación del <a>
+            
+            if (isInternalPath) {
+                const path = course.link.substring(1);
+                navigate(path);
+                onClose?.(); // Cerramos el modal padre si existe
+            }
+            
+            // Si es un disparador de acción (como el manual de IA),
+            // el evento subirá (bubble up) al contenedor padre que tiene el setIsManualModalOpen(true)
         }
     };
 
-    const linkProps = isInternalLink 
+    // Solo aplicamos target="_blank" si es un enlace externo real (no # ni disparador)
+    const linkProps = (isInternalPath || isActionTrigger)
         ? { href: course.link, onClick: handleClick } 
         : { href: course.link, target: "_blank", rel: "noopener noreferrer" };
 

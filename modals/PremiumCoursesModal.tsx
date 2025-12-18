@@ -5,11 +5,13 @@ import { FaTelegram } from 'react-icons/fa';
 import { PREMIUM_TESTIMONIALS } from '../constants';
 import CourseCard from '../components/CourseCard';
 import TestimonialCarousel from '../components/TestimonialCarousel';
+import ManualSalesModal from '../components/ManualSalesModal';
 
 // --- MAIN MODAL COMPONENT ---
 
 export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [offerEndTime, setOfferEndTime] = useState<number | null>(null);
+    const [isManualModalOpen, setIsManualModalOpen] = useState(false);
 
     useEffect(() => {
         const storedEndTime = localStorage.getItem('tradevisionLatamOfferEndTime');
@@ -37,7 +39,7 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
                 "Acceso prioritario 24h antes del público."
             ],
             cta: "Pre-Ordenar Ahora ($19.99)",
-            link: "#/manual/ia-prompts"
+            link: "OPEN_MANUAL_MODAL"
         },
         {
             title: "SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO",
@@ -79,6 +81,9 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
 
     return (
         <Modal onClose={onClose} title="ACCESO A LA ZONA DE DISCIPLINA">
+            {/* Modal de Ventas del Manual (Overlay adicional) */}
+            <ManualSalesModal isOpen={isManualModalOpen} onClose={() => setIsManualModalOpen(false)} />
+
             <div className="space-y-12">
                 
                 {/* 1. Urgency Hook */}
@@ -106,12 +111,17 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
                 <section>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                         {courses.map((course) => (
-                            <CourseCard 
-                                key={course.title} 
-                                course={course} 
-                                isFeatured={course.title.toLowerCase().includes('forex')} 
-                                onClose={onClose}
-                            />
+                            <div 
+                                key={course.title}
+                                onClick={() => course.link === "OPEN_MANUAL_MODAL" ? setIsManualModalOpen(true) : null}
+                                className={course.link === "OPEN_MANUAL_MODAL" ? "cursor-pointer w-full" : "w-full"}
+                            >
+                                <CourseCard 
+                                    course={course} 
+                                    isFeatured={course.title.toLowerCase().includes('forex')} 
+                                    onClose={onClose}
+                                />
+                            </div>
                         ))}
                     </div>
                 </section>
