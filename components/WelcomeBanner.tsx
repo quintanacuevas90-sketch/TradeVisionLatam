@@ -47,7 +47,7 @@ const WelcomeBanner: React.FC = () => {
             </div>
 
             <a 
-                href="https://drive.google.com/file/d/1bIgbWDmt1K5rQbAmIbaIDccUnmXXuYvV/view?usp=sharing" 
+                href="/manual-bienvenida.pdf" download="Manual_TradeVision_Latam.pdf" target="_blank" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={handleDownloadClick}
