@@ -3,7 +3,8 @@ import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, F
 import Logo from './Logo';
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
-const WEBHOOK_URL =https://script.google.com/macros/s/AKfycbxyAvB6GF3j6AxbfAx74I39QseHxZnW5qUDgXnMKyPrRg6weyvJp7fPR8dQFN6SNwo0KA/exec
+// ✅ CORREGIDO: URL entre comillas
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxyAvB6GF3j6AxbfAx74I39QseHxZnW5qUDgXnMKyPrRg6weyvJp7fPR8dQFN6SNwo0KA/exec";
 const SESSION_TTL = 172800000; // 48 Horas
 
 const LATAM_DATA = [
@@ -92,7 +93,7 @@ const LoginWall: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         const fullPhone = `${phonePrefix}${formData.whatsapp}`.replace(/\s/g, '');
 
         // Validación de Blacklist Manual
@@ -104,28 +105,29 @@ const LoginWall: React.FC = () => {
 
         setIsLoading(true);
 
-        // Preparación de metadatos solicitados
-        const // Preparación con FormData
-     const formDataToSend = new FormData();
-     formDataToSend.append('nombre', formData.nombre);
-     formDataToSend.append('email', formData.email);
-     formDataToSend.append('whatsapp', fullPhone);
-     formDataToSend.append('pais', formData.pais);
-     formDataToSend.append('edad', formData.edad);
-     formDataToSend.append('ip_address', clientIP);
-     formDataToSend.append('device_info', navigator.userAgent);
-     formDataToSend.append('registro_hora', new Date().toLocaleString('es-ES'));
+        try {
+            // ✅ CORREGIDO: Usamos URLSearchParams para máxima compatibilidad con Google Apps Script
+            const data = new URLSearchParams();
+            data.append('nombre', formData.nombre);
+            data.append('email', formData.email);
+            data.append('whatsapp', fullPhone);
+            data.append('pais', formData.pais);
+            data.append('edad', formData.edad);
+            data.append('ip_address', clientIP);     // Ahora sí llegará
+            data.append('device_info', navigator.userAgent);
+            data.append('registro_hora', new Date().toLocaleString('es-ES'));
 
-     try {
-       // Envío al Webhook
-       await fetch(WEBHOOK_URL, {
-         method: 'POST',
-         mode: 'no-cors',
-         body: formDataToSend
-       });
+            // Envío al Webhook con formato form-urlencoded
+            await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Necesario para Google Scripts
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: data.toString()
             });
 
-            // Éxito simulado (no-cors no retorna respuesta legible)
+            // Éxito simulado (Google no devuelve respuesta legible en no-cors)
             setTimeout(() => {
                 localStorage.setItem('member_access', 'true');
                 localStorage.setItem('session_start', Date.now().toString());
@@ -159,12 +161,11 @@ const LoginWall: React.FC = () => {
 
     return (
         <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-            {/* Tarjeta en Blanco para Depuración y Visibilidad Máxima */}
+            {/* Tarjeta Visual */}
             <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-brand-accent p-8 animate-fade-in-up">
                 
                 <div className="text-center mb-6">
                     <div className="flex justify-center mb-4 scale-125">
-                        {/* Fallback para el Logo */}
                         <React.Suspense fallback={<div className="text-black font-bold">TRADEVISION</div>}>
                             <Logo className="w-16 h-16" />
                         </React.Suspense>
