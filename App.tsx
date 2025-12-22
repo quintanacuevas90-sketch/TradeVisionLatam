@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import Router from './components/Router';
 import { useRouter } from './hooks/useRouter';
@@ -46,6 +45,7 @@ import CookieConsentModal from './components/CookieConsentModal';
 import EmailCopyModal from './modals/EmailCopyModal';
 import Chatbot from './components/Chatbot';
 import WhatsAppButton from './components/WhatsAppButton';
+import Logo from './components/Logo';
 
 import { ModalType, PageType } from './types';
 import { TICKER_MESSAGES } from './constants';
@@ -54,8 +54,12 @@ import { generateContextualSummary } from './utils/contextHelper';
 import { useChatbotTriggers } from './hooks/useChatbotTriggers';
 
 const App: React.FC = () => {
-    // Correct usage of React hooks and state management to resolve missing name errors.
     const { path, navigate } = useRouter();
+    
+    // --- ESTADOS DE AUTENTICACIÓN Y PROTECCIÓN ---
+    const [isAuthChecking, setIsAuthChecking] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    
     const [activeModal, setActiveModal] = useState<ModalType | null>(null);
     const [showAgeGate, setShowAgeGate] = useState(() => !localStorage.getItem('age_gate_accepted'));
     const [showCookieConsent, setShowCookieConsent] = useState(() => !localStorage.getItem('cookie_consent'));
@@ -63,7 +67,48 @@ const App: React.FC = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [newsItems, setNewsItems] = useState<string[]>([]);
 
-    // Derive current page type and slug for dynamic context summary generation.
+    // Lógica de verificación de sesión (TTL 48h)
+    const checkAccessStatus = () => {
+        const access = localStorage.getItem('member_access');
+        const start = localStorage.getItem('session_start');
+        const now = Date.now();
+        const SESSION_TTL = 172800000; // 48 Horas
+
+        if (access === 'true' && start) {
+            const elapsed = now - parseInt(start, 10);
+            return elapsed < SESSION_TTL;
+        }
+        return false;
+    };
+
+    useEffect(() => {
+        // Verificación inicial inmediata
+        const hasAccess = checkAccessStatus();
+        setIsAuthenticated(hasAccess);
+        
+        // Simulación mínima de carga para suavizar la transición del Shield
+        const timer = setTimeout(() => {
+            setIsAuthChecking(false);
+        }, 800);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Observer para detectar cuando LoginWall otorga acceso (sin refrescar)
+    useEffect(() => {
+        if (isAuthenticated) return;
+
+        const interval = setInterval(() => {
+            if (checkAccessStatus()) {
+                setIsAuthenticated(true);
+                clearInterval(interval);
+            }
+        }, 500);
+
+        return () => clearInterval(interval);
+    }, [isAuthenticated]);
+
+    // --- LÓGICA DE DASHBOARD ---
     const pathname = path.split('?')[0];
     const slug = pathname.startsWith('/blog/') ? pathname.split('/')[2] : undefined;
 
@@ -117,7 +162,6 @@ const App: React.FC = () => {
         setShowCookieConsent(false);
     };
 
-    // Synchronization of URL parameters with modal state.
     useEffect(() => {
         const params = new URLSearchParams(window.location.hash.split('?')[1]);
         const openParam = params.get('open') as ModalType | null;
@@ -126,21 +170,17 @@ const App: React.FC = () => {
         }
     }, [path]);
 
-    // Setup global listeners for UI triggers like chatbot or email copy modal.
     useEffect(() => {
         const handleOpenChat = () => setIsChatOpen(true);
         const handleOpenEmail = () => setIsEmailModalOpen(true);
-
         window.addEventListener('open-chatbot', handleOpenChat);
         window.addEventListener('open-email-modal', handleOpenEmail);
-
         return () => {
             window.removeEventListener('open-chatbot', handleOpenChat);
             window.removeEventListener('open-email-modal', handleOpenEmail);
         };
     }, []);
 
-    // Initial data fetching for real-time financial news headlines.
     useEffect(() => {
         const getNews = async () => {
             const news = await fetchFinancialNews();
@@ -149,7 +189,6 @@ const App: React.FC = () => {
         getNews();
     }, []);
 
-    // Define standard and dynamic routes for the custom Router component.
     const routes = {
         '/': <MainPage onOpenModal={openModal} tickerItems={TICKER_MESSAGES} />,
         '/blog': <BlogListPage />,
@@ -180,38 +219,49 @@ const App: React.FC = () => {
         '/battlegrounds': <BattlegroundsPage />,
     };
 
-    // Centralized modal rendering logic based on active state.
     const renderModal = () => {
         switch (activeModal) {
-            case 'premium-courses':
-                return <PremiumCoursesModal onClose={closeModal} />;
-            case 'affiliate':
-                return <AffiliateModal onClose={closeModal} onOpenModal={openModal} />;
-            case 'brokers':
-                return <BrokersModal onClose={closeModal} />;
-            case 'community':
-                return <CommunityModal onClose={closeModal} />;
-            case 'support':
-                return <SupportModal onClose={closeModal} />;
-            case 'mentors':
-                return <MentorsModal onClose={closeModal} />;
-            case 'consultancy':
-                return <ConsultancyModal onClose={closeModal} />;
-            case 'education':
-                return <EducationModal onClose={closeModal} />;
-            default:
-                return null;
+            case 'premium-courses': return <PremiumCoursesModal onClose={closeModal} />;
+            case 'affiliate': return <AffiliateModal onClose={closeModal} onOpenModal={openModal} />;
+            case 'brokers': return <BrokersModal onClose={closeModal} />;
+            case 'community': return <CommunityModal onClose={closeModal} />;
+            case 'support': return <SupportModal onClose={closeModal} />;
+            case 'mentors': return <MentorsModal onClose={closeModal} />;
+            case 'consultancy': return <ConsultancyModal onClose={closeModal} />;
+            case 'education': return <EducationModal onClose={closeModal} />;
+            default: return null;
         }
     };
 
+    // --- PRIORIDAD DE RENDERIZADO (ANTI-FLICKER) ---
+
+    // 1. Pantalla de Escudo (Carga Inicial)
+    if (isAuthChecking) {
+        return (
+            <div className="fixed inset-0 bg-[#050b14] flex flex-col items-center justify-center z-[9999]">
+                <Logo className="w-24 h-24 animate-pulse drop-shadow-[0_0_20px_rgba(64,224,208,0.5)]" />
+                <div className="mt-8 w-48 h-1 bg-white/10 rounded-full overflow-hidden relative">
+                    <div className="h-full bg-brand-accent animate-[loading_2s_infinite] w-1/3 absolute left-0 rounded-full shadow-[0_0_10px_rgba(64,224,208,0.8)]"></div>
+                </div>
+                <style>{`
+                    @keyframes loading {
+                        0% { left: -40%; }
+                        100% { left: 110%; }
+                    }
+                `}</style>
+            </div>
+        );
+    }
+
+    // 2. Muro de Autenticación (Si no hay sesión válida)
+    if (!isAuthenticated) {
+        return <LoginWall />;
+    }
+
+    // 3. Contenido Principal (Dashboard)
     return (
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
-            {/* WELCOME BANNER: Solo visible para miembros */}
             <WelcomeBanner />
-
-            {/* LOGIN WALL: Primera capa de seguridad */}
-            <LoginWall />
-
             {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={handleViewPolicy} />}
             {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
             {isEmailModalOpen && <EmailCopyModal onClose={() => setIsEmailModalOpen(false)} />}
