@@ -5,7 +5,7 @@ import Logo from './Logo';
 // --- CONFIGURACIÓN Y CONSTANTES ---
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxyAvB6GF3j6AxbfAx74I39QseHxZnW5qUDgXnMKyPrRg6weyvJp7fPR8dQFN6SNwo0KA/exec";
 const SESSION_TTL = 172800000; // 48 Horas
-const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/5WHSRBUSQSZSS"; // Tu botón de pago real
+const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/5WHSRBUSQSZSS";
 
 const LATAM_DATA = [
   { country: "Argentina", code: "+54" }, { country: "Bolivia", code: "+591" }, { country: "Brasil", code: "+55" },
@@ -18,16 +18,15 @@ const LATAM_DATA = [
 ];
 
 const BLACKLIST = {
-  ips: ['192.168.1.1', '200.10.50.20'],
-  emails: ['estafador@gmail.com', 'hater@hotmail.com', 'scammer@tradevision.me'],
-  phones: ['+573001234567', '+584120000000']
+  ips: ['192.168.1.1'],
+  emails: ['scammer@tradevision.me'],
+  phones: ['+000000000000']
 };
 
 const LoginWall: React.FC = () => {
-    // --- ESTADOS ---
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [showOffer, setShowOffer] = useState(false); // Estado para el Upsell
+    const [showOffer, setShowOffer] = useState(false);
     const [isBanned, setIsBanned] = useState(false);
     const [clientIP, setClientIP] = useState('0.0.0.0');
     const [phonePrefix, setPhonePrefix] = useState('');
@@ -39,17 +38,22 @@ const LoginWall: React.FC = () => {
         edad: ''
     });
 
-    // --- LÓGICA DE INICIO Y SEGURIDAD ---
     useEffect(() => {
         const initSecurity = async () => {
-            // 1. Obtener IP
+            // 1. Obtener IP con fallback rápido
             let ip = '0.0.0.0';
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
+
             try {
-                const response = await fetch('https://api.ipify.org?format=json');
+                const response = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
                 const data = await response.json();
                 ip = data.ip;
                 setClientIP(ip);
-            } catch (e) { console.error("IP check failed"); }
+                clearTimeout(timeoutId);
+            } catch (e) { 
+                console.warn("IP Check bypassed due to timeout/error"); 
+            }
 
             // 2. Verificar Baneo
             if (BLACKLIST.ips.includes(ip)) {
@@ -71,8 +75,7 @@ const LoginWall: React.FC = () => {
                 }
             }
 
-            // 4. Bloquear si no hay sesión válida
-            localStorage.clear();
+            // 4. Asegurar visibilidad del muro
             setIsVisible(true);
             document.body.style.overflow = 'hidden';
         };
@@ -80,7 +83,6 @@ const LoginWall: React.FC = () => {
         initSecurity();
     }, []);
 
-    // --- MANEJADORES ---
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const country = e.target.value;
         const info = LATAM_DATA.find(item => item.country === country);
@@ -93,7 +95,6 @@ const LoginWall: React.FC = () => {
     };
 
     const handleSkipOffer = () => {
-        // Guardar sesión y dejar pasar al usuario GRATIS
         localStorage.setItem('member_access', 'true');
         localStorage.setItem('session_start', Date.now().toString());
         setIsVisible(false);
@@ -102,12 +103,10 @@ const LoginWall: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         const fullPhone = `${phonePrefix}${formData.whatsapp}`.replace(/\s/g, '');
 
-        // Validación de Blacklist Manual
         if (BLACKLIST.emails.includes(formData.email.toLowerCase().trim()) || BLACKLIST.phones.includes(fullPhone)) {
-            alert("Acceso denegado: Usuario bloqueado por seguridad.");
+            alert("Acceso restringido por seguridad.");
             setIsBanned(true);
             return;
         }
@@ -115,7 +114,6 @@ const LoginWall: React.FC = () => {
         setIsLoading(true);
 
         try {
-            // ✅ CORRECCIÓN CRÍTICA: Usamos URLSearchParams para asegurar que Google Sheets reciba los datos
             const data = new URLSearchParams();
             data.append('nombre', formData.nombre);
             data.append('email', formData.email);
@@ -126,38 +124,32 @@ const LoginWall: React.FC = () => {
             data.append('device_info', navigator.userAgent);
             data.append('registro_hora', new Date().toLocaleString('es-ES'));
 
-            // Envío al Webhook
-            await fetch(WEBHOOK_URL, {
+            // Envío asíncrono (no esperamos respuesta estricta para no bloquear al usuario)
+            fetch(WEBHOOK_URL, {
                 method: 'POST',
-                mode: 'no-cors', // Necesario para Google Apps Script
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: data.toString()
-            });
+            }).catch(() => null);
 
-            // Éxito simulado + Activación de UPSELL
             setTimeout(() => {
                 setIsLoading(false);
-                // NO cerramos el muro todavía, mostramos la oferta
                 setShowOffer(true); 
-            }, 1500);
+            }, 1000);
 
         } catch (error) {
-            console.error("Submit Error:", error);
             setIsLoading(false);
-            alert("Error de conexión. Intente nuevamente.");
+            setShowOffer(true); // Fallback al éxito para no perder al usuario
         }
     };
 
-    // --- RENDER DE BLOQUEO (BANEO) ---
     if (isBanned) {
         return (
-            <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center p-6 text-center">
+            <div className="fixed inset-0 z-[9999] bg-[#050b14] flex items-center justify-center p-6 text-center">
                 <div className="max-w-md">
                     <FiShieldOff className="text-red-500 text-7xl mx-auto mb-4" />
-                    <h1 className="text-white text-3xl font-black mb-4">ACCESO DENEGADO</h1>
-                    <p className="text-gray-400 font-mono">Su IP ({clientIP}) ha sido bloqueada permanentemente.</p>
+                    <h1 className="text-white text-3xl font-black mb-4">TERMINAL BLOQUEADA</h1>
+                    <p className="text-gray-400 font-mono">Su acceso ha sido revocado permanentemente por incumplimiento de términos.</p>
                 </div>
             </div>
         );
@@ -166,131 +158,107 @@ const LoginWall: React.FC = () => {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] bg-[#050b14]/95 backdrop-blur-xl flex items-center justify-center p-4">
-            {/* --- RENDERIZADO CONDICIONAL: OFERTA VS FORMULARIO --- */}
-            
+        <div className="fixed inset-0 z-[9999] bg-[#050b14]/98 backdrop-blur-2xl flex items-center justify-center p-4">
             {showOffer ? (
-                // 💰 TARJETA DE VENTA (UPSELL)
-                <div className="w-full max-w-md bg-[#0A1931] rounded-2xl shadow-2xl overflow-hidden border-4 border-yellow-500 p-8 animate-fade-in-up text-center relative">
+                <div className="w-full max-w-md bg-[#0A1931] rounded-3xl shadow-2xl overflow-hidden border-4 border-yellow-500 p-8 animate-fade-in-up text-center relative">
                     <div className="absolute top-0 left-0 w-full h-2 bg-yellow-500 animate-pulse"></div>
-                    
-                    <h2 className="text-xl font-bold text-green-400 mb-2 uppercase tracking-widest">¡Registro Exitoso!</h2>
+                    <h2 className="text-xl font-bold text-green-400 mb-2 uppercase tracking-widest">¡Excelente!</h2>
                     <h1 className="text-3xl font-black text-white mb-4 leading-none uppercase italic">OFERTA ÚNICA DE BIENVENIDA</h1>
-                    
                     <p className="text-gray-300 text-sm mb-6 leading-relaxed">
-                        ¿Por qué operar solo? Obtén los <strong className="text-yellow-400">PROMPTS MAESTROS</strong> para obligar a ChatGPT y Gemini a analizar el mercado por ti. Ahorra 3 años de errores.
+                        ¿Quieres que la IA trabaje para ti? Obtén los <strong className="text-yellow-400">PROMPTS MAESTROS</strong> para automatizar el análisis técnico. Evita años de estudio frustrado.
                     </p>
-
-                    <div className="mb-8 bg-black/30 p-4 rounded-lg border border-white/10">
-                        <span className="text-red-500 line-through text-lg font-bold mr-3">$97.00</span>
+                    <div className="mb-8 bg-black/30 p-4 rounded-xl border border-white/10">
+                        <span className="text-red-500 line-through text-lg font-bold mr-3">$50.00</span>
                         <span className="text-yellow-400 text-4xl font-black">$19.99</span>
                     </div>
-
                     <button 
                         onClick={() => window.open(PAYPAL_LINK, '_blank')}
-                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg shadow-[0_0_20px_rgba(234,179,8,0.5)] transition-all transform hover:scale-105 flex items-center justify-center gap-2 mb-4 text-lg"
+                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-xl shadow-[0_0_25px_rgba(234,179,8,0.4)] transition-all transform hover:scale-105 flex items-center justify-center gap-2 mb-4 text-lg"
                     >
-                        <FiLock /> DESCARGAR AHORA
+                        <FiLock /> ASEGURAR COPIA
                     </button>
-
-                    <button 
-                        onClick={handleSkipOffer}
-                        className="text-gray-500 text-xs hover:text-gray-300 underline transition-colors"
-                    >
-                        No gracias, prefiero entrar al Dashboard gratuito y aprender lento.
+                    <button onClick={handleSkipOffer} className="text-gray-500 text-xs hover:text-white underline transition-colors">
+                        Acceder al Dashboard gratuito sin manual de IA.
                     </button>
                 </div>
-
             ) : (
-                // 📝 FORMULARIO DE REGISTRO (REDISEÑADO PREMIUM DARK)
-                <div className="w-full max-w-md bg-[#0A1931] rounded-3xl shadow-[0_0_60px_rgba(0,229,255,0.15)] overflow-hidden border border-white/10 p-8 relative flex flex-col items-center">
-                    {/* Línea de brillo cian superior */}
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-60"></div>
+                <div className="w-full max-w-md bg-[#0A1931] rounded-3xl shadow-[0_0_80px_rgba(0,229,255,0.1)] overflow-hidden border border-white/10 p-8 relative flex flex-col items-center">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-40"></div>
                     
                     <div className="text-center mb-8">
-                        <div className="flex justify-center mb-4 transform hover:scale-110 transition-transform duration-500">
-                            <React.Suspense fallback={<div className="text-brand-accent font-bold">TRADEVISION</div>}>
-                                <Logo className="w-20 h-20 drop-shadow-[0_0_15px_rgba(64,224,208,0.4)]" />
-                            </React.Suspense>
-                        </div>
-                        <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-1">Acceso Exclusivo</h2>
-                        <p className="text-brand-accent text-[10px] uppercase font-black tracking-[0.3em] opacity-80">Terminal de Seguridad TradeVision</p>
+                        <Logo className="w-20 h-20 mb-4 drop-shadow-[0_0_20px_rgba(64,224,208,0.3)] mx-auto" />
+                        <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-1">Terminal de Acceso</h2>
+                        <p className="text-brand-accent text-[9px] uppercase font-black tracking-[0.4em] opacity-60">Security Protocol v4.0</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4 w-full">
                         <div className="relative group">
-                            <FiUser className="absolute left-3 top-3.5 text-brand-accent/50 group-focus-within:text-brand-accent transition-colors" />
+                            <FiUser className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                             <input 
                                 name="nombre" type="text" required placeholder="Nombre Completo"
                                 value={formData.nombre} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-accent focus:bg-[#1a3055] outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
                             />
                         </div>
 
                         <div className="relative group">
-                            <FiMail className="absolute left-3 top-3.5 text-brand-accent/50 group-focus-within:text-brand-accent transition-colors" />
+                            <FiMail className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                             <input 
-                                name="email" type="email" required placeholder="Correo Electrónico"
+                                name="email" type="email" required placeholder="Email de Registro"
                                 value={formData.email} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-accent focus:bg-[#1a3055] outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
                             />
                         </div>
 
                         <div className="relative group">
-                            <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/50 group-focus-within:text-brand-accent transition-colors" />
+                            <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                             <select 
                                 name="pais" required value={formData.pais} onChange={handleCountryChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-2 focus:ring-brand-accent focus:bg-[#1a3055] outline-none appearance-none transition-all text-sm cursor-pointer"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none cursor-pointer text-sm"
                             >
-                                <option value="" disabled className="text-gray-500">Selecciona tu País</option>
+                                <option value="" disabled>País</option>
                                 {LATAM_DATA.map(i => <option key={i.country} value={i.country} className="bg-[#0A1931]">{i.country}</option>)}
                             </select>
                         </div>
 
                         <div className="flex gap-2">
-                            <div className="w-20 bg-[#112240] text-brand-accent border border-white/5 rounded-xl flex items-center justify-center font-bold text-sm font-mono shadow-inner">
+                            <div className="w-20 bg-[#050b14] text-brand-accent border border-white/5 rounded-xl flex items-center justify-center font-bold text-xs font-mono">
                                 {phonePrefix || '+--'}
                             </div>
                             <div className="relative flex-1 group">
-                                <FiPhone className="absolute left-3 top-3.5 text-brand-accent/50 group-focus-within:text-brand-accent transition-colors" />
+                                <FiPhone className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                                 <input 
                                     name="whatsapp" type="tel" required placeholder="WhatsApp"
                                     value={formData.whatsapp} onChange={handleChange}
-                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-accent focus:bg-[#1a3055] outline-none transition-all text-sm"
+                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
                                 />
                             </div>
                         </div>
 
                         <div className="relative group">
-                            <FiHash className="absolute left-3 top-3.5 text-brand-accent/50 group-focus-within:text-brand-accent transition-colors" />
+                            <FiHash className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                             <input 
-                                name="edad" type="number" min="18" max="99" required placeholder="Edad (Mínimo 18)"
+                                name="edad" type="number" min="18" max="99" required placeholder="Edad"
                                 value={formData.edad} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-500 focus:ring-2 focus:ring-brand-accent focus:bg-[#1a3055] outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
                             />
                         </div>
 
                         <button 
                             type="submit" disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-[0_4px_15px_rgba(64,224,208,0.3)] hover:shadow-[0_6px_25px_rgba(64,224,208,0.5)] transition-all flex items-center justify-center gap-2 group active:scale-95 disabled:opacity-50 disabled:grayscale uppercase tracking-wider text-sm md:text-base mt-2"
+                            className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-center justify-center gap-2 group active:scale-95 disabled:opacity-50 mt-2 uppercase tracking-widest text-sm"
                         >
                             {isLoading ? (
                                 <FiCpu className="animate-spin text-xl" />
                             ) : (
-                                <><FiLock /> DESBLOQUEAR ECOSISTEMA <FiArrowRight className="group-hover:translate-x-1 transition-transform" /></>
+                                <><FiLock /> VALIDAR ACCESO <FiArrowRight className="group-hover:translate-x-1 transition-transform" /></>
                             )}
                         </button>
 
                         <div className="text-center mt-6">
-                            <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest flex items-center justify-center gap-1.5 opacity-60">
-                                <FiCheckCircle className="text-brand-accent" /> Canal Seguro SSL-256 Verificado
+                            <p className="text-[10px] text-gray-500 uppercase font-black tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-60">
+                                <FiCheckCircle className="text-brand-accent" /> SSL SECURE TERMINAL
                             </p>
-                            <div className="mt-4 p-3 bg-red-500/5 border border-red-500/10 rounded-lg">
-                                <p className="text-[9px] text-gray-500 leading-tight italic flex items-center gap-2">
-                                    <FiAlertTriangle className="text-red-500/50 flex-shrink-0" size={14} />
-                                    <span>Advertencia: El trading conlleva riesgo de pérdida de capital. <strong className="text-gray-400">TradeVision Latam</strong> es una academia educativa.</span>
-                                </p>
-                            </div>
                         </div>
                     </form>
                 </div>
