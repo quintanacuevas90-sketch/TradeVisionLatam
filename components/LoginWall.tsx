@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiAlertTriangle, FiCheckCircle, FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import Logo from './Logo';
@@ -109,8 +108,8 @@ const LoginWall: React.FC = () => {
         document.body.style.overflow = 'auto'; // refuerzo
     };
 
-    // REGEX EMAIL SIMPLIFICADO (solo una arroba y un punto después)
-    const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+    // Regex robusta y segura para Cloudflare/esbuild
+    const emailPattern = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     const validateForm = () => {
         const nameParts = formData.nombre.trim().split(/\s+/);
@@ -118,7 +117,7 @@ const LoginWall: React.FC = () => {
             alert("⚠️ IDENTIDAD: Ingresa tu Nombre y Apellido real.");
             return false;
         }
-        // Validación robusta de email (regex simplificado)
+        // Validación robusta de email
         if (!emailPattern.test(formData.email.trim())) {
             alert("⚠️ EMAIL: Ingresa un email válido.");
             return false;
@@ -212,7 +211,7 @@ const LoginWall: React.FC = () => {
                         <span className="text-red-500 line-through text-lg font-bold mr-3">$97.00</span>
                         <span className="text-yellow-400 text-4xl font-black">$19.99</span>
                     </div>
-                    <button onClick={() => window.open(PAYPAL_LINK, '_blank')} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg shadow-[0_0_20px_rgba(234,214,1[...]
+                    <button onClick={() => window.open(PAYPAL_LINK, '_blank')} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg shadow-[0_0_20px_rgba(234,234,59,0.3)]">
                         <FiLock /> ASEGURAR COPIA
                     </button>
                     <button onClick={handleSkipOffer} className="text-gray-500 text-xs hover:text-white underline transition-colors">
@@ -235,7 +234,7 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="nombre" type="text" required placeholder="Nombre Completo"
                                 value={formData.nombre} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transi[...]
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                         </div>
 
@@ -244,7 +243,7 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="email" type="email" required placeholder="Email de Registro"
                                 value={formData.email} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transi[...]
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                         </div>
 
@@ -252,7 +251,7 @@ const LoginWall: React.FC = () => {
                             <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                             <select 
                                 name="pais" required value={formData.pais} onChange={handleCountryChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition-all"
                             >
                                 <option value="" disabled>País de Residencia</option>
                                 {LATAM_DATA.map(i => <option key={i.country} value={i.country} className="bg-[#0A1931]">{i.country}</option>)}
@@ -268,7 +267,7 @@ const LoginWall: React.FC = () => {
                                 <input 
                                     name="whatsapp" type="tel" required placeholder="WhatsApp"
                                     value={formData.whatsapp} onChange={handleChange}
-                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none tr[...]
+                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                                 />
                             </div>
                         </div>
@@ -280,7 +279,7 @@ const LoginWall: React.FC = () => {
                                 type={showPassword ? "text" : "password"} 
                                 required placeholder="Crea tu Contraseña"
                                 value={formData.password} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none trans[...]
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                             <div className="absolute right-3 top-3.5 cursor-pointer text-gray-500" onClick={() => setShowPassword(!showPassword)}>
                                 {showPassword ? <FiEyeOff /> : <FiEye />}
@@ -292,13 +291,13 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="edad" type="number" min="18" max="99" required placeholder="Edad"
                                 value={formData.edad} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transi[...]
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                         </div>
 
                         <button 
                             type="submit" disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-[...]
+                            className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-center justify-center gap-2 group"
                         >
                             {isLoading ? (
                                 <FiCpu className="animate-spin text-xl" />
