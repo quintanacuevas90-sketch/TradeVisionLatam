@@ -1,3 +1,4 @@
+```tsx name=components/LoginWall.tsx url=https://github.com/quintanacuevas90-sketch/TradeVisionLatam/blob/main/components/LoginWall.tsx
 import React, { useState, useEffect } from 'react';
 import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiAlertTriangle, FiCheckCircle, FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import Logo from './Logo';
@@ -56,12 +57,16 @@ const LoginWall: React.FC = () => {
         password: ''
     });
 
+    // Limpieza overflow segura al desaparecer modal por cualquier vía
+    useEffect(() => {
+        if (!isVisible) {
+            document.body.style.overflow = 'auto';
+        }
+    }, [isVisible]);
+
     useEffect(() => {
         const initSecurity = async () => {
-            // Aseguramos bloqueo de scroll
             document.body.style.overflow = 'hidden';
-
-            // Intento de obtener IP con timeout para no bloquear la UI
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 2000);
@@ -72,13 +77,12 @@ const LoginWall: React.FC = () => {
                 if (BLACKLIST.ips.includes(data.ip)) {
                     setIsBanned(true);
                 }
-            } catch (e) { 
+            } catch (e) {
+                setClientIP('IP_NO_DETECTADA');
                 console.warn("IP check bypassed or timed out"); 
             }
         };
-
         initSecurity();
-        
         return () => {
             document.body.style.overflow = 'auto';
         };
@@ -102,13 +106,21 @@ const LoginWall: React.FC = () => {
         localStorage.setItem('member_access', 'true');
         localStorage.setItem('session_start', Date.now().toString());
         setIsVisible(false);
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = 'auto'; // refuerzo
     };
+
+    // Regex simple para validación general de email RFC 5322
+    const emailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
     const validateForm = () => {
         const nameParts = formData.nombre.trim().split(/\s+/);
         if (nameParts.length < 2) {
             alert("⚠️ IDENTIDAD: Ingresa tu Nombre y Apellido real.");
+            return false;
+        }
+        // Validación robusta de email
+        if (!emailPattern.test(formData.email.trim())) {
+            alert("⚠️ EMAIL: Ingresa un email válido.");
             return false;
         }
         if (phoneDigits > 0) {
@@ -125,9 +137,19 @@ const LoginWall: React.FC = () => {
         e.preventDefault();
         if (!validateForm()) return;
 
-        const fullPhone = `${phonePrefix}${formData.whatsapp}`.replace(/\s/g, '');
+        // Limpiar todos los campos de espacios antes de enviar
+        const cleanedData = {
+            nombre: formData.nombre.trim(),
+            email: formData.email.trim(),
+            whatsapp: formData.whatsapp.trim(),
+            pais: formData.pais.trim(),
+            edad: formData.edad.trim(),
+            password: formData.password.trim(),
+        };
 
-        if (BLACKLIST.emails.includes(formData.email.toLowerCase().trim()) || BLACKLIST.phones.includes(fullPhone)) {
+        const fullPhone = `${phonePrefix}${cleanedData.whatsapp}`.replace(/\s/g, '');
+
+        if (BLACKLIST.emails.includes(cleanedData.email.toLowerCase()) || BLACKLIST.phones.includes(fullPhone)) {
             setIsBanned(true);
             return;
         }
@@ -136,15 +158,14 @@ const LoginWall: React.FC = () => {
 
         try {
             const data = new URLSearchParams();
-            data.append('nombre', formData.nombre);
-            data.append('email', formData.email);
+            data.append('nombre', cleanedData.nombre);
+            data.append('email', cleanedData.email);
             data.append('whatsapp', fullPhone);
-            data.append('pais', formData.pais);
-            data.append('edad', formData.edad);
-            data.append('password', formData.password);
+            data.append('pais', cleanedData.pais);
+            data.append('edad', cleanedData.edad);
+            data.append('password', cleanedData.password);
             data.append('ip_address', clientIP);
             data.append('registro_hora', new Date().toLocaleString('es-ES'));
-
             await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -191,7 +212,7 @@ const LoginWall: React.FC = () => {
                         <span className="text-red-500 line-through text-lg font-bold mr-3">$97.00</span>
                         <span className="text-yellow-400 text-4xl font-black">$19.99</span>
                     </div>
-                    <button onClick={() => window.open(PAYPAL_LINK, '_blank')} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg shadow-[0_0_20px_rgba(234,179,8,0.5)] transition-all transform hover:scale-105 flex items-center justify-center gap-2 mb-4 text-lg">
+                    <button onClick={() => window.open(PAYPAL_LINK, '_blank')} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg shadow-[0_0_20px_rgba(234,214,18,0.07)] mb-4 flex items-center justify-center gap-2 text-lg transition-all">
                         <FiLock /> ASEGURAR COPIA
                     </button>
                     <button onClick={handleSkipOffer} className="text-gray-500 text-xs hover:text-white underline transition-colors">
@@ -214,7 +235,7 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="nombre" type="text" required placeholder="Nombre Completo"
                                 value={formData.nombre} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                         </div>
 
@@ -223,7 +244,7 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="email" type="email" required placeholder="Email de Registro"
                                 value={formData.email} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                         </div>
 
@@ -231,7 +252,7 @@ const LoginWall: React.FC = () => {
                             <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                             <select 
                                 name="pais" required value={formData.pais} onChange={handleCountryChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition-all text-sm cursor-pointer"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition-all"
                             >
                                 <option value="" disabled>País de Residencia</option>
                                 {LATAM_DATA.map(i => <option key={i.country} value={i.country} className="bg-[#0A1931]">{i.country}</option>)}
@@ -247,7 +268,7 @@ const LoginWall: React.FC = () => {
                                 <input 
                                     name="whatsapp" type="tel" required placeholder="WhatsApp"
                                     value={formData.whatsapp} onChange={handleChange}
-                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                                 />
                             </div>
                         </div>
@@ -259,7 +280,7 @@ const LoginWall: React.FC = () => {
                                 type={showPassword ? "text" : "password"} 
                                 required placeholder="Crea tu Contraseña"
                                 value={formData.password} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                             <div className="absolute right-3 top-3.5 cursor-pointer text-gray-500" onClick={() => setShowPassword(!showPassword)}>
                                 {showPassword ? <FiEyeOff /> : <FiEye />}
@@ -271,13 +292,13 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="edad" type="number" min="18" max="99" required placeholder="Edad"
                                 value={formData.edad} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                         </div>
 
                         <button 
                             type="submit" disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-center justify-center gap-2 group active:scale-95 disabled:opacity-50 mt-2 uppercase tracking-widest text-sm"
+                            className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-center justify-center gap-2 text-lg group"
                         >
                             {isLoading ? (
                                 <FiCpu className="animate-spin text-xl" />
@@ -297,3 +318,5 @@ const LoginWall: React.FC = () => {
 };
 
 export default LoginWall;
+
+
