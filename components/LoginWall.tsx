@@ -167,40 +167,12 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
             data.append('ip_address', clientIP);
             data.append('registro_hora', new Date().toLocaleString('es-ES'));
             
-            // Console log del objeto data antes del fetch (solo en desarrollo)
-            if (typeof window !== 'undefined') {
-                console.log('=== DEBUG: Datos a enviar ===');
-                console.log('URL:', WEBHOOK_URL);
-                console.log('Data Object:', {
-                    nombre: cleanedData.nombre,
-                    email: cleanedData.email,
-                    whatsapp: fullPhone,
-                    pais: cleanedData.pais,
-                    edad: cleanedData.edad,
-                    password: '[REDACTED]', // No mostrar contraseña en logs
-                    ip_address: clientIP,
-                    registro_hora: new Date().toLocaleString('es-ES')
-                });
-                console.log('URLSearchParams (sin password):', 
-                    data.toString().replace(/password=[^&]*(&|$)/, 'password=[REDACTED]$1')
-                );
-                console.log('============================');
-            }
-            
-            const response = await fetch(WEBHOOK_URL, {
+            await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: data.toString()
             });
-            
-            // Nota: mode: 'no-cors' impide leer response.status o response.text()
-            if (typeof window !== 'undefined') {
-                console.log('=== DEBUG: Respuesta ===');
-                console.log('Response type:', response.type);
-                console.log('Response status:', response.status);
-                console.log('========================');
-            }
 
             setTimeout(() => {
                 setIsLoading(false);
@@ -208,11 +180,6 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
             }, 1000);
 
         } catch (error) {
-            if (typeof window !== 'undefined') {
-                console.error('=== DEBUG: Error en fetch ===');
-                console.error('Error:', error);
-                console.error('============================');
-            }
             setIsLoading(false);
             setShowOffer(true); // Fallback exitoso ante error de webhook
         }
