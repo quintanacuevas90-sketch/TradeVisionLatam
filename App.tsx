@@ -200,54 +200,55 @@ const App: React.FC = () => {
         }
     };
 
-    if (isAuthChecking) {
-        return (
-            <div className="fixed inset-0 bg-[#050b14] flex flex-col items-center justify-center z-[9999]">
-                <Logo className="w-24 h-24 animate-pulse drop-shadow-[0_0_25px_rgba(64,224,208,0.5)]" />
-                <div className="mt-10 w-64 h-1.5 bg-white/5 rounded-full overflow-hidden relative border border-white/10">
-                    <div className="h-full bg-brand-accent animate-[shield-progress_2s_infinite] w-1/4 absolute left-0 rounded-full shadow-[0_0_15px_rgba(64,224,208,0.8)]"></div>
-                </div>
-                <style>{`
-                    @keyframes shield-progress {
-                        0% { left: -30%; width: 20%; }
-                        50% { width: 40%; }
-                        100% { left: 110%; width: 20%; }
-                    }
-                `}</style>
-            </div>
-        );
-    }
-
-    if (!isAuthenticated) {
-        return <LoginWall />;
-    }
-
     return (
-        <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
-            <WelcomeBanner />
-            {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={() => navigate('/aviso-legal-riesgo')} />}
-            {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
-            {isEmailModalOpen && <EmailCopyModal onClose={() => setIsEmailModalOpen(false)} />}
-            
-            <Router routes={routes} />
-            {renderModal()}
-            
-            <AffiliateProgramModal 
-                isOpen={isAffiliateLocked} 
-                onClose={() => setIsAffiliateLocked(false)} 
-            />
+        <>
+            {/* Auth Shield - shown during initial session verification */}
+            {isAuthChecking && (
+                <div className="fixed inset-0 bg-[#050b14] flex flex-col items-center justify-center z-[10000]">
+                    <Logo className="w-24 h-24 animate-pulse drop-shadow-[0_0_25px_rgba(64,224,208,0.5)]" />
+                    <div className="mt-10 w-64 h-1.5 bg-white/5 rounded-full overflow-hidden relative border border-white/10">
+                        <div className="h-full bg-brand-accent animate-[shield-progress_2s_infinite] w-1/4 absolute left-0 rounded-full shadow-[0_0_15px_rgba(64,224,208,0.8)]"></div>
+                    </div>
+                    <style>{`
+                        @keyframes shield-progress {
+                            0% { left: -30%; width: 20%; }
+                            50% { width: 40%; }
+                            100% { left: 110%; width: 20%; }
+                        }
+                    `}</style>
+                </div>
+            )}
 
-            <Chatbot
-                isOpen={isChatOpen}
-                setIsOpen={setIsChatOpen}
-                newsItems={newsItems}
-                pageContext={chatbotContext}
-                triggerText={triggerText}
-                onOpenChat={() => setIsChatOpen(true)}
-                onCloseTrigger={closeTrigger}
-            />
-            <WhatsAppButton />
-        </div>
+            {/* LoginWall Overlay - only unmounted when authenticated */}
+            {!isAuthenticated && !isAuthChecking && <LoginWall />}
+
+            {/* Main App Content - ALWAYS rendered in DOM */}
+            <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
+                <WelcomeBanner />
+                {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={() => navigate('/aviso-legal-riesgo')} />}
+                {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
+                {isEmailModalOpen && <EmailCopyModal onClose={() => setIsEmailModalOpen(false)} />}
+                
+                <Router routes={routes} />
+                {renderModal()}
+                
+                <AffiliateProgramModal 
+                    isOpen={isAffiliateLocked} 
+                    onClose={() => setIsAffiliateLocked(false)} 
+                />
+
+                <Chatbot
+                    isOpen={isChatOpen}
+                    setIsOpen={setIsChatOpen}
+                    newsItems={newsItems}
+                    pageContext={chatbotContext}
+                    triggerText={triggerText}
+                    onOpenChat={() => setIsChatOpen(true)}
+                    onCloseTrigger={closeTrigger}
+                />
+                <WhatsAppButton />
+            </div>
+        </>
     );
 };
 
