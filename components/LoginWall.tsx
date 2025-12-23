@@ -167,11 +167,12 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
             data.append('ip_address', clientIP);
             data.append('registro_hora', new Date().toLocaleString('es-ES'));
             
-            await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: data.toString()
+            // Construcción de la URL con Query Params
+            const finalUrl = `${WEBHOOK_URL}?${data.toString()}`;
+            
+            await fetch(finalUrl, {
+                method: 'GET',
+                mode: 'no-cors'
             });
 
             setTimeout(() => {
