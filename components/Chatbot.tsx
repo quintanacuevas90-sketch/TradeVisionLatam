@@ -1,25 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FiX, FiSend, FiThumbsUp, FiThumbsDown, FiCopy, FiSearch, FiMoreVertical, FiDownload, FiTrash2 } from 'react-icons/fi';
-import { FaRobot } from 'react-icons/fa';
-import { sendMessageToGemini, resetChat } from '../services/geminiService';
+import { FiX, FiSend, FiExternalLink } from 'react-icons/fi';
+import { FaRobot, FaRocket, FaGem, FaKey } from 'react-icons/fa';
+import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage } from '../types';
-import ChatbotTrigger from './ChatbotTrigger';
+import { useRouter } from '../hooks/useRouter';
+import Logo from './Logo';
 
 const WELCOME_MESSAGE: ChatMessage = {
     id: 'initial-welcome',
     role: 'model',
-    text: `Soy VisionBot, el Asesor de Marca y Disciplina de TradeVision Latam. Mi propósito es asistirlo con disciplina y precisión.
-
-Usted dispone de un límite estricto de 25 consultas. Priorice la precisión, el tiempo es capital.
-
-He sido entrenado para resolver sus consultas sobre:
-- **Cursos Premium:** Metodología y Acceso.
-- **Ecosistema Gratuito:** Recursos y Beneficios.
-- **Brokers y Afiliados:** Cumplimiento y Ventajas.
-
-Formule su pregunta para iniciar la consulta.
----
-*Advertencia de Riesgo: El trading de derivados conlleva un alto riesgo de pérdida de capital y puede no ser adecuado para todos. El Cliente asume todos los riesgos derivados de la fluctuación de los tipos de cambio. Los resultados pasados ​​no garantizan resultados futuros.*`,
+    text: `Hola, soy Vision Concierge de TradeVision Latam. Estoy aquí para guiarte en tu camino hacia la disciplina profesional. 
+    
+    ¿Qué te gustaría dominar hoy?
+    - ¿Cómo funcionan los **Brokers**?
+    - ¿Qué es la **Lógica Institucional**?
+    - ¿Cuál es el mejor **Curso** para empezar?`,
     timestamp: Date.now(),
 };
 
@@ -29,335 +24,181 @@ interface ChatbotProps {
     newsItems: string[];
     pageContext: string;
     triggerText: string | null;
-    // Fix: Added missing prop definition
     onOpenChat: () => void;
     onCloseTrigger: () => void;
 }
 
-const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, newsItems, pageContext, triggerText, onOpenChat, onCloseTrigger }) => {
-    const [messages, setMessages] = useState<ChatMessage[]>(() => {
-        try {
-            const savedMessages = localStorage.getItem('tradevision-chat-history');
-            return savedMessages ? JSON.parse(savedMessages) : [WELCOME_MESSAGE];
-        } catch (error) {
-            console.error('Failed to parse chat history from localStorage', error);
-            return [WELCOME_MESSAGE];
-        }
-    });
+const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpenChat }) => {
+    const { navigate } = useRouter();
+    const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [shouldRender, setShouldRender] = useState(isOpen);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const menuRef = useRef<HTMLDivElement>(null);
 
-    // Query Limit Logic
-    const userMessagesCount = messages.filter(msg => msg.role === 'user').length;
-    const queryLimit = 25;
-    const queriesLeft = queryLimit - userMessagesCount;
-    const isLimitReached = queriesLeft <= 0;
+    const [messageCount, setMessageCount] = useState(0);
+    const DAILY_LIMIT = 10;
 
     useEffect(() => {
-        if (isOpen) {
-            setShouldRender(true);
+        const stats = JSON.parse(localStorage.getItem('tv_chat_stats') || '{}');
+        const today = new Date().toLocaleDateString();
+        if (stats.date !== today) {
+            localStorage.setItem('tv_chat_stats', JSON.stringify({ date: today, count: 0 }));
+            setMessageCount(0);
         } else {
-            // Wait for animation to finish before unmounting
-            const timer = setTimeout(() => {
-                setShouldRender(false);
-            }, 500); // Should match the animation duration
-            return () => clearTimeout(timer);
+            setMessageCount(stats.count);
         }
-    }, [isOpen]);
+    }, []);
+
+    const incrementMessageCount = () => {
+        const stats = JSON.parse(localStorage.getItem('tv_chat_stats') || '{}');
+        const newCount = stats.count + 1;
+        localStorage.setItem('tv_chat_stats', JSON.stringify({ ...stats, count: newCount }));
+        setMessageCount(newCount);
+    };
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
-    
-    useEffect(() => {
-        if (messages.length > 1 || (messages.length === 1 && messages[0].id !== 'initial-welcome')) {
-             localStorage.setItem('tradevision-chat-history', JSON.stringify(messages));
-        }
-    }, [messages]);
-    
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-                setIsMenuOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    const handleOpenChat = () => {
-        // Fix: Use the provided onOpenChat prop
-        onOpenChat();
-        if (triggerText) {
-            onCloseTrigger();
-        }
-    };
+    }, [messages, isOpen]);
 
     const handleSend = async () => {
-        if (!input.trim() || isLimitReached) return;
+        if (!input.trim() || isLoading) return;
+
+        if (messageCount >= DAILY_LIMIT) {
+            alert("Has alcanzado el límite de 10 mensajes gratuitos por hoy. ¡Regístrate en TradeVision Premium para acceso ilimitado!");
+            return;
+        }
 
         const userMessage: ChatMessage = { id: Date.now().toString(), role: 'user', text: input, timestamp: Date.now() };
         setMessages(prev => [...prev, userMessage]);
         setInput('');
         setIsLoading(true);
+        incrementMessageCount();
 
         const modelMessageId = (Date.now() + 1).toString();
         setMessages(prev => [...prev, { id: modelMessageId, role: 'model', text: '', timestamp: Date.now() }]);
-        
-        const newsContext = newsItems.length > 0 && !newsItems[0].includes("Error") 
-            ? `Noticias financieras recientes para contexto:\n- ${newsItems.join('\n- ')}` 
-            : '';
-            
-        const fullContext = `${pageContext}\n\n${newsContext}`.trim();
 
-        await sendMessageToGemini(input, (chunk, sources) => {
+        await sendMessageToGemini(input, (chunk) => {
             setMessages(prev =>
                 prev.map(msg =>
-                    msg.id === modelMessageId
-                        ? { ...msg, text: msg.text + chunk, sources: sources.length > 0 ? sources : undefined }
-                        : msg
+                    msg.id === modelMessageId ? { ...msg, text: msg.text + chunk } : msg
                 )
             );
-        }, fullContext);
+        }, pageContext);
 
         setIsLoading(false);
     };
 
-    const handleFeedback = (messageId: string, feedback: 'up' | 'down') => {
-        const feedbackMessage = messages.find(msg => msg.id === messageId);
-        if (feedbackMessage) {
-            console.log("Feedback logged for analysis:", {
-                messageId: feedbackMessage.id,
-                feedback: feedback,
-                responseText: feedbackMessage.text,
-            });
-        }
-        setMessages(prevMessages =>
-            prevMessages.map(msg =>
-                msg.id === messageId ? { ...msg, feedback } : msg
-            )
-        );
+    // Función para abrir el modal de afiliados desde el chat
+    const openAffiliateWall = () => {
+        window.dispatchEvent(new CustomEvent('open-affiliate-modal'));
+        setIsOpen(false);
     };
-
-    const handleExportChat = () => {
-        const formattedHistory = messages.map(msg => {
-            const timestamp = new Date(msg.timestamp).toLocaleString();
-            return `[${timestamp}] ${msg.role.toUpperCase()}:\n${msg.text}\n\n`;
-        }).join('');
-    
-        const blob = new Blob([formattedHistory], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `tradevision-chat-${new Date().toISOString().split('T')[0]}.txt`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        setIsMenuOpen(false);
-    };
-    
-    const handleClearHistory = () => {
-        if (window.confirm('¿Estás seguro de que quieres borrar todo el historial de este chat? Esta acción no se puede deshacer.')) {
-            localStorage.removeItem('tradevision-chat-history');
-            setMessages([WELCOME_MESSAGE]);
-            resetChat();
-            setIsMenuOpen(false);
-        }
-    };
-    
-    const filteredMessages = messages.filter(msg =>
-        msg.text.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
     return (
         <>
-            <div className="fixed bottom-[160px] right-6 z-[51]">
-                {triggerText && !isOpen && (
-                    <ChatbotTrigger text={triggerText} onClose={onCloseTrigger} />
-                )}
-            </div>
-        
             <button
-                onClick={handleOpenChat}
-                className="fixed bottom-[160px] right-6 bg-brand-accent text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center transition-transform duration-300 transform hover:scale-110 group animate-pulse z-[52]"
-                aria-label="Abrir Chat"
-                aria-haspopup="dialog"
-                aria-expanded={isOpen}
+                onClick={onOpenChat}
+                className="fixed bottom-[160px] right-6 bg-brand-accent text-brand-primary w-16 h-16 rounded-full shadow-[0_0_30px_rgba(64,224,208,0.5)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 z-[52] animate-pulse"
+                aria-label="Abrir Asistente IA"
             >
                 <FaRobot size={28} />
-                 <span className="absolute right-full mr-3 w-max bg-gray-800 text-white text-sm rounded-md px-3 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                    IA TraderVision
-                </span>
             </button>
 
-            {shouldRender && (
-                <div 
-                    className={`fixed bottom-24 right-5 w-full max-w-sm h-[70vh] max-h-[600px] bg-white dark:bg-brand-primary border border-gray-200 dark:border-white/20 rounded-lg shadow-2xl flex flex-col z-[52] text-gray-800 dark:text-white overflow-hidden bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-500 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-[calc(100%+1.25rem)]'}`}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="chatbot-title"
-                >
-                    <div className="absolute inset-0 bg-white/80 dark:bg-brand-primary/90 backdrop-blur-sm"></div>
+            {isOpen && (
+                <div className="fixed bottom-4 md:bottom-24 right-0 md:right-5 w-full md:max-w-[380px] h-[85vh] md:h-[600px] bg-[#050b14]/95 backdrop-blur-xl border border-white/10 rounded-t-3xl md:rounded-2xl shadow-2xl flex flex-col z-[100] overflow-hidden animate-fade-in-up">
                     
-                    <div className="relative z-10 flex flex-col h-full">
-                        <header className="p-4 border-b border-gray-200 dark:border-white/10 flex-shrink-0">
-                            <div className="flex items-center justify-between">
-                                <h3 id="chatbot-title" className="font-bold text-lg">Asistente TradeVision</h3>
-                                <div className="flex items-center gap-1">
-                                    <div ref={menuRef} className="relative">
-                                        <button
-                                            onClick={() => setIsMenuOpen(prev => !prev)}
-                                            className="p-1 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-500/20 transition-colors"
-                                            aria-label="Opciones del chat"
-                                        >
-                                            <FiMoreVertical size={20} />
-                                        </button>
-                                        {isMenuOpen && (
-                                            <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-20">
-                                                <button onClick={handleExportChat} className="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <FiDownload size={16} /> Exportar Chat
-                                                </button>
-                                                <button onClick={handleClearHistory} className="w-full text-left flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20">
-                                                    <FiTrash2 size={16} /> Limpiar Historial
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <button onClick={() => setIsOpen(false)} className="p-1 rounded-full text-gray-500 dark:text-gray-300 hover:bg-gray-500/20 transition-colors" aria-label="Cerrar chat">
-                                        <FiX size={20} />
-                                    </button>
+                    {/* HEADER DINÁMICO */}
+                    <header className="sticky top-0 z-20 p-4 bg-[#0A1931] border-b border-white/10 flex items-center justify-between min-h-[70px] shadow-lg">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-brand-accent/10 rounded-lg">
+                                <Logo className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h3 className="font-black text-white text-xs uppercase tracking-widest leading-none">Vision Concierge</h3>
+                                <p className="text-[9px] text-brand-accent font-bold mt-1 animate-pulse">SISTEMA ACTIVO</p>
+                            </div>
+                        </div>
+                        <button 
+                            onClick={() => setIsOpen(false)} 
+                            className="p-3 bg-white/5 hover:bg-red-500/20 text-gray-400 hover:text-red-500 rounded-xl transition-all active:scale-90"
+                            title="Cerrar Chat"
+                        >
+                            <FiX size={24} />
+                        </button>
+                    </header>
+
+                    {/* MENSAJES */}
+                    <div className="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar bg-grid-pattern bg-[length:30px_30px] bg-opacity-[0.03]">
+                        {messages.map((msg) => (
+                            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                <div className={`max-w-[88%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm ${
+                                    msg.role === 'user' 
+                                    ? 'bg-brand-accent text-brand-primary font-bold rounded-tr-none' 
+                                    : 'bg-white/5 text-gray-200 border border-white/10 rounded-tl-none'
+                                }`}>
+                                    <p className="whitespace-pre-wrap">{msg.text}</p>
                                 </div>
                             </div>
-                            <div className="relative mt-3">
-                                <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
-                                <input
-                                    type="text"
-                                    placeholder="Buscar en la conversación..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full bg-gray-100 dark:bg-gray-800 p-2 pl-9 rounded-lg text-sm border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-accent focus:border-brand-accent transition-colors"
-                                    aria-label="Buscar en la conversación"
-                                />
-                            </div>
-                        </header>
-                        <div className="flex-1 p-4 overflow-y-auto space-y-4">
-                            {filteredMessages.map((msg, index) => {
-                                 const isLastMessage = index === filteredMessages.length - 1;
-                                 const showFeedback = msg.role === 'model' && msg.text && (!isLoading || !isLastMessage) && msg.id !== 'initial-welcome';
-                                 
-                                 const [mainText, ...disclaimerParts] = msg.text.split('---');
-                                 const disclaimer = disclaimerParts.length > 0 ? disclaimerParts.join('---') : null;
-
-                                 return (
-                                    <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} ${msg.id === 'initial-welcome' ? 'animate-fade-in-up' : ''}`}>
-                                        <div className={`max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-lg relative group ${msg.role === 'user' ? 'bg-brand-accent text-brand-primary' : 'bg-gray-100/90 dark:bg-gray-900/70'}`}>
-                                            <button
-                                                onClick={() => navigator.clipboard.writeText(msg.text)}
-                                                className="absolute -top-2 -right-2 p-1.5 rounded-full text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 shadow-md opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none focus:ring-2 focus:ring-brand-accent"
-                                                aria-label="Copiar mensaje"
-                                            >
-                                                <FiCopy size={12} />
-                                            </button>
-                                            
-                                            <p className="whitespace-pre-wrap text-sm" dangerouslySetInnerHTML={{ __html: mainText.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>') }}></p>
-                                            
-                                            {msg.role === 'model' && isLoading && isLastMessage && msg.text.length === 0 && (
-                                                <span className="animate-pulse">...</span>
-                                            )}
-                                            
-                                            {msg.role === 'model' && disclaimer && (
-                                                <div className="mt-3 pt-3 border-t border-gray-300 dark:border-white/20">
-                                                    <p className="whitespace-pre-wrap text-xs text-gray-500 dark:text-gray-400 italic">
-                                                        {disclaimer.trim()}
-                                                    </p>
-                                                </div>
-                                            )}
-
-                                            {msg.sources && msg.sources.length > 0 && (
-                                                <div className="mt-2 border-t border-brand-primary/20 dark:border-white/20 pt-2">
-                                                    <h4 className="text-xs font-bold mb-1">Fuentes:</h4>
-                                                    <ul className="space-y-1">
-                                                        {msg.sources.map(source => (
-                                                            <li key={source.uri}>
-                                                                <a href={source.uri} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500 dark:text-blue-300 hover:underline truncate block">
-                                                                {source.title || source.uri}
-                                                                </a>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            )}
-                                            <div className="text-right text-xs mt-2 opacity-60">
-                                                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </div>
-                                        </div>
-                                        {showFeedback && (
-                                            <div className="flex gap-2 mt-2">
-                                                <button
-                                                    onClick={() => handleFeedback(msg.id, 'up')}
-                                                    disabled={!!msg.feedback}
-                                                    className={`p-1 rounded-full transition ${
-                                                        msg.feedback === 'up' 
-                                                        ? 'bg-green-500 text-white' 
-                                                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-800 dark:hover:text-white disabled:opacity-50 disabled:hover:bg-transparent'
-                                                    }`}
-                                                    aria-label="Buena respuesta"
-                                                >
-                                                    <FiThumbsUp size={14} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleFeedback(msg.id, 'down')}
-                                                    disabled={!!msg.feedback}
-                                                    className={`p-1 rounded-full transition ${
-                                                        msg.feedback === 'down' 
-                                                        ? 'bg-red-500 text-white' 
-                                                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/20 hover:text-gray-800 dark:hover:text-white disabled:opacity-50 disabled:hover:bg-transparent'
-                                                    }`}
-                                                    aria-label="Mala respuesta"
-                                                >
-                                                    <FiThumbsDown size={14} />
-                                                </button>
-                                            </div>
-                                        )}
+                        ))}
+                        {isLoading && (
+                            <div className="flex justify-start">
+                                <div className="bg-white/5 border border-white/10 p-4 rounded-2xl rounded-tl-none">
+                                    <div className="flex gap-1.5">
+                                        <div className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-bounce"></div>
+                                        <div className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                                        <div className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-bounce [animation-delay:0.4s]"></div>
                                     </div>
-                                 )
-                            })}
-                            <div ref={messagesEndRef} />
-                        </div>
-                        <footer className="p-4 border-t border-gray-200/50 dark:border-white/20 flex-shrink-0">
-                            <div className="flex items-center gap-3">
-                                <input
-                                    type="text"
-                                    value={input}
-                                    onChange={e => setInput(e.target.value)}
-                                    onKeyPress={e => e.key === 'Enter' && !isLoading && !isLimitReached && handleSend()}
-                                    placeholder={isLimitReached ? "Límite de consultas alcanzado" : "Haz una pregunta..."}
-                                    className="flex-1 bg-gray-200 dark:bg-gray-800 text-sm py-3 px-5 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-accent/50 focus:border-brand-accent transition-all duration-300"
-                                    disabled={isLoading || isLimitReached}
-                                    aria-label="Escribe tu pregunta"
-                                />
-                                <button 
-                                    onClick={handleSend} 
-                                    disabled={isLoading || isLimitReached} 
-                                    className="bg-brand-accent text-brand-primary p-3 rounded-full disabled:opacity-50 disabled:scale-100 hover:scale-110 active:scale-100 transition-transform duration-200"
-                                    aria-label="Enviar mensaje"
-                                >
-                                    <FiSend />
-                                </button>
+                                </div>
                             </div>
-                            <p className="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">
-                                {isLimitReached
-                                    ? "Ha alcanzado el límite de 25 consultas."
-                                    : `Consultas restantes: ${queriesLeft < 0 ? 0 : queriesLeft}`}
-                            </p>
-                        </footer>
+                        )}
+                        <div ref={messagesEndRef} />
                     </div>
+
+                    {/* BOTONES DE CONVERSIÓN */}
+                    <div className="px-4 py-3 flex flex-wrap gap-2 bg-[#0A1931]/50 border-t border-white/5">
+                        <button onClick={() => navigate('/premium-courses')} className="flex items-center gap-1.5 px-3 py-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 rounded-xl text-[10px] font-black uppercase hover:bg-yellow-500 hover:text-black transition-all">
+                            <FaGem /> Cursos Premium
+                        </button>
+                        <button onClick={() => navigate('/brokers')} className="flex items-center gap-1.5 px-3 py-2 bg-brand-accent/10 border border-brand-accent/30 text-brand-accent rounded-xl text-[10px] font-black uppercase hover:bg-brand-accent hover:text-brand-primary transition-all">
+                            <FaRocket /> Brokers (Bono)
+                        </button>
+                        <button onClick={openAffiliateWall} className="flex items-center gap-1.5 px-3 py-2 bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded-xl text-[10px] font-black uppercase hover:bg-blue-500 hover:text-white transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                            <FaKey /> Info Privilegiada 🔒
+                        </button>
+                    </div>
+
+                    {/* FOOTER INPUT */}
+                    <footer className="p-4 border-t border-white/10 bg-[#050b14]">
+                        <div className="flex items-center gap-2 mb-3">
+                            <input
+                                type="text"
+                                value={input}
+                                onChange={e => setInput(e.target.value)}
+                                onKeyPress={e => e.key === 'Enter' && handleSend()}
+                                placeholder={messageCount >= DAILY_LIMIT ? "Límite diario alcanzado" : "Escribe tu consulta..."}
+                                className="flex-1 bg-white/5 border border-white/10 text-white text-sm p-3.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-accent transition-all placeholder:text-gray-600"
+                                disabled={isLoading || messageCount >= DAILY_LIMIT}
+                            />
+                            <button 
+                                onClick={handleSend}
+                                className="p-3.5 bg-brand-accent text-brand-primary rounded-xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:grayscale shadow-[0_0_15px_rgba(64,224,208,0.3)]"
+                                disabled={isLoading || messageCount >= DAILY_LIMIT}
+                            >
+                                <FiSend size={20} />
+                            </button>
+                        </div>
+                        <div className="text-center space-y-1.5">
+                            <p className="text-[9px] text-gray-500 leading-tight px-4 italic">
+                                TradeVision Concierge v2.0: Usamos enlaces de afiliación para financiar el soporte gratuito de la comunidad.
+                            </p>
+                            <div className="flex items-center justify-center gap-4">
+                                <span className="text-[8px] text-brand-accent font-bold uppercase tracking-widest bg-brand-accent/5 px-2 py-0.5 rounded border border-brand-accent/20">
+                                    Consultas: {messageCount}/{DAILY_LIMIT}
+                                </span>
+                                <span className="text-[8px] text-gray-500 uppercase font-black">SSL SECURE</span>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
             )}
         </>

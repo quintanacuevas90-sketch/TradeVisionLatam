@@ -46,6 +46,7 @@ import EmailCopyModal from './modals/EmailCopyModal';
 import Chatbot from './components/Chatbot';
 import WhatsAppButton from './components/WhatsAppButton';
 import Logo from './components/Logo';
+import AffiliateProgramModal from './components/AffiliateProgramModal';
 
 import { ModalType, PageType } from './types';
 import { TICKER_MESSAGES } from './constants';
@@ -56,23 +57,22 @@ import { useChatbotTriggers } from './hooks/useChatbotTriggers';
 const App: React.FC = () => {
     const { path, navigate } = useRouter();
     
-    // --- ESTADOS DE AUTENTICACIÓN Y PROTECCIÓN ---
     const [isAuthChecking, setIsAuthChecking] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     
     const [activeModal, setActiveModal] = useState<ModalType | null>(null);
+    const [isAffiliateLocked, setIsAffiliateLocked] = useState(false);
     const [showAgeGate, setShowAgeGate] = useState(() => !localStorage.getItem('age_gate_accepted'));
     const [showCookieConsent, setShowCookieConsent] = useState(() => !localStorage.getItem('cookie_consent'));
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [newsItems, setNewsItems] = useState<string[]>([]);
 
-    // Lógica de verificación de sesión (TTL 48h)
-    const checkAccessStatus = () => {
+    const verifySession = () => {
         const access = localStorage.getItem('member_access');
         const start = localStorage.getItem('session_start');
         const now = Date.now();
-        const SESSION_TTL = 172800000; // 48 Horas
+        const SESSION_TTL = 172800000;
 
         if (access === 'true' && start) {
             const elapsed = now - parseInt(start, 10);
@@ -82,33 +82,30 @@ const App: React.FC = () => {
     };
 
     useEffect(() => {
-        // Verificación inicial inmediata
-        const hasAccess = checkAccessStatus();
+        const hasAccess = verifySession();
         setIsAuthenticated(hasAccess);
-        
-        // Simulación mínima de carga para suavizar la transición del Shield
-        const timer = setTimeout(() => {
-            setIsAuthChecking(false);
-        }, 800);
-
-        return () => clearTimeout(timer);
+        const shieldTimer = setTimeout(() => setIsAuthChecking(false), 1000);
+        return () => clearTimeout(shieldTimer);
     }, []);
 
-    // Observer para detectar cuando LoginWall otorga acceso (sin refrescar)
     useEffect(() => {
         if (isAuthenticated) return;
-
-        const interval = setInterval(() => {
-            if (checkAccessStatus()) {
+        const authInterval = setInterval(() => {
+            if (verifySession()) {
                 setIsAuthenticated(true);
-                clearInterval(interval);
+                clearInterval(authInterval);
             }
         }, 500);
-
-        return () => clearInterval(interval);
+        return () => clearInterval(authInterval);
     }, [isAuthenticated]);
 
-    // --- LÓGICA DE DASHBOARD ---
+    // Listener para eventos globales del chatbot
+    useEffect(() => {
+        const handleOpenAffiliate = () => setIsAffiliateLocked(true);
+        window.addEventListener('open-affiliate-modal', handleOpenAffiliate);
+        return () => window.removeEventListener('open-affiliate-modal', handleOpenAffiliate);
+    }, []);
+
     const pathname = path.split('?')[0];
     const slug = pathname.startsWith('/blog/') ? pathname.split('/')[2] : undefined;
 
@@ -116,27 +113,9 @@ const App: React.FC = () => {
         if (pathname === '/') return 'main';
         if (pathname.startsWith('/blog/')) return 'post';
         if (pathname === '/blog') return 'blog';
-        if (pathname === '/sitemap') return 'sitemap';
         if (pathname === '/faq') return 'faq';
-        if (pathname === '/protocolo-confianza') return 'protocolo-confianza';
         if (pathname === '/brokers') return 'brokers';
         if (pathname === '/premium-courses') return 'premium-courses';
-        if (pathname === '/consultancy') return 'consultancy';
-        if (pathname === '/methodology') return 'methodology';
-        if (pathname === '/acerca-de') return 'acerca-de';
-        if (pathname === '/responsabilidad') return 'responsabilidad';
-        if (pathname === '/impacto-social') return 'impacto-social';
-        if (pathname === '/colabora') return 'colabora';
-        if (pathname === '/cursos/forex-elite') return 'forex-elite';
-        if (pathname === '/cursos/binarias-pro-c90') return 'binarias-pro-c90';
-        if (pathname === '/cursos/binarias-intermedio') return 'binarias-intermedio';
-        if (pathname === '/comunidad') return 'comunidad';
-        if (pathname === '/manual/ia-prompts') return 'ia-manual';
-        if (pathname === '/verificacion-legal') return 'legal-verification';
-        if (pathname === '/aviso-legal-riesgo') return 'aviso-legal-riesgo';
-        if (pathname === '/terminos-academia') return 'terminos-academia';
-        if (pathname === '/politica-privacidad') return 'politica-privacidad';
-        if (pathname === '/transparencia-legal') return 'transparencia-legal';
         if (pathname === '/zona-de-ejecucion') return 'execution-zone';
         return 'main';
     };
@@ -153,22 +132,10 @@ const App: React.FC = () => {
         setShowAgeGate(false);
     };
 
-    const handleViewPolicy = () => {
-        navigate('/aviso-legal-riesgo');
-    };
-
     const handleCookieConsent = (decision: { analysis: boolean; advertising: boolean; }) => {
         localStorage.setItem('cookie_consent', JSON.stringify(decision));
         setShowCookieConsent(false);
     };
-
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.hash.split('?')[1]);
-        const openParam = params.get('open') as ModalType | null;
-        if (openParam) {
-            setActiveModal(openParam);
-        }
-    }, [path]);
 
     useEffect(() => {
         const handleOpenChat = () => setIsChatOpen(true);
@@ -233,41 +200,44 @@ const App: React.FC = () => {
         }
     };
 
-    // --- PRIORIDAD DE RENDERIZADO (ANTI-FLICKER) ---
-
-    // 1. Pantalla de Escudo (Carga Inicial)
     if (isAuthChecking) {
         return (
             <div className="fixed inset-0 bg-[#050b14] flex flex-col items-center justify-center z-[9999]">
-                <Logo className="w-24 h-24 animate-pulse drop-shadow-[0_0_20px_rgba(64,224,208,0.5)]" />
-                <div className="mt-8 w-48 h-1 bg-white/10 rounded-full overflow-hidden relative">
-                    <div className="h-full bg-brand-accent animate-[loading_2s_infinite] w-1/3 absolute left-0 rounded-full shadow-[0_0_10px_rgba(64,224,208,0.8)]"></div>
+                <Logo className="w-24 h-24 animate-pulse drop-shadow-[0_0_25px_rgba(64,224,208,0.5)]" />
+                <div className="mt-10 w-64 h-1.5 bg-white/5 rounded-full overflow-hidden relative border border-white/10">
+                    <div className="h-full bg-brand-accent animate-[shield-progress_2s_infinite] w-1/4 absolute left-0 rounded-full shadow-[0_0_15px_rgba(64,224,208,0.8)]"></div>
                 </div>
+                <p className="mt-6 text-brand-accent text-[10px] font-black tracking-[0.4em] uppercase opacity-40">Verificando Seguridad TradeVision</p>
                 <style>{`
-                    @keyframes loading {
-                        0% { left: -40%; }
-                        100% { left: 110%; }
+                    @keyframes shield-progress {
+                        0% { left: -30%; width: 20%; }
+                        50% { width: 40%; }
+                        100% { left: 110%; width: 20%; }
                     }
                 `}</style>
             </div>
         );
     }
 
-    // 2. Muro de Autenticación (Si no hay sesión válida)
     if (!isAuthenticated) {
         return <LoginWall />;
     }
 
-    // 3. Contenido Principal (Dashboard)
     return (
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
             <WelcomeBanner />
-            {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={handleViewPolicy} />}
+            {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={() => navigate('/aviso-legal-riesgo')} />}
             {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
             {isEmailModalOpen && <EmailCopyModal onClose={() => setIsEmailModalOpen(false)} />}
             
             <Router routes={routes} />
             {renderModal()}
+            
+            <AffiliateProgramModal 
+                isOpen={isAffiliateLocked} 
+                onClose={() => setIsAffiliateLocked(false)} 
+            />
+
             <Chatbot
                 isOpen={isChatOpen}
                 setIsOpen={setIsChatOpen}

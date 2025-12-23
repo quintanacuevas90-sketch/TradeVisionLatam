@@ -136,11 +136,13 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                                                 ? 'text-yellow-600 dark:text-yellow-400 font-bold'
                                                 : item.label.includes('TRADING ARENA')
                                                     ? 'font-bold text-cyber-violet text-glow-violet hover:opacity-80'
-                                                    : 'text-gray-500 dark:text-gray-400 hover:text-brand-accent'
+                                                    : item.label.includes('🏆 Salón de la Fama')
+                                                        ? 'text-yellow-500 hover:text-yellow-400 font-bold'
+                                                        : 'text-gray-500 dark:text-gray-400 hover:text-brand-accent'
                                             }`}
                                         >
                                             <span className="flex-1">
-                                                {item.label}
+                                                {item.label === 'Brokers Recomendados' ? <><span translate="no">Brokers</span> Recomendados</> : item.label}
                                             </span>
                                             {(item as any).isLocked && (
                                                 <FiLock size={12} className="ml-2 opacity-60 group-hover/link:scale-110 transition-transform" />
