@@ -3,7 +3,7 @@ import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, F
 import Logo from './Logo';
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxyAvB6GF3j6AxbfAx74I39QseHxZnW5qUDgXnMKyPrRg6weyvJp7fPR8dQFN6SNwo0KA/exec";
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwA_U_zDdmjtm5mfuV5BRaQd26xtw9iNVUgqnDZUPbo5af2rX07ohPZRHKlyDkPu03etQ/exec";
 const SESSION_TTL = 172800000; // 48 Horas
 const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/5WHSRBUSQSZSS"; 
 
@@ -166,11 +166,13 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
             data.append('password', cleanedData.password);
             data.append('ip_address', clientIP);
             data.append('registro_hora', new Date().toLocaleString('es-ES'));
-            await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: data.toString()
+            
+            // Construcción de la URL con Query Params
+            const finalUrl = `${WEBHOOK_URL}?${data.toString()}`;
+            
+            await fetch(finalUrl, {
+                method: 'GET',
+                mode: 'no-cors'
             });
 
             setTimeout(() => {
