@@ -182,7 +182,7 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
                     registro_hora: new Date().toLocaleString('es-ES')
                 });
                 console.log('URLSearchParams (sin password):', 
-                    data.toString().replace(/password=[^&]*/, 'password=[REDACTED]')
+                    data.toString().replace(/password=[^&]*(&|$)/, 'password=[REDACTED]$1')
                 );
                 console.log('============================');
             }
