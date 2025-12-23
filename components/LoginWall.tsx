@@ -110,8 +110,7 @@ const LoginWall: React.FC = () => {
     };
 
     // Regex simple para validación general de email RFC 5322
- const emailPattern = /^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    const validateForm = () => {
+ const emailPattern = new RegExp('^[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$');    const validateForm = () => {
         const nameParts = formData.nombre.trim().split(/\s+/);
         if (nameParts.length < 2) {
             alert("⚠️ IDENTIDAD: Ingresa tu Nombre y Apellido real.");
