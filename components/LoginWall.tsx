@@ -109,7 +109,8 @@ const LoginWall: React.FC = () => {
     };
 
     // Regex robusta y segura para Cloudflare/esbuild
-    const emailPattern = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+// Regex simple y segura para Cloudflare/esbuild
+const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
     const validateForm = () => {
         const nameParts = formData.nombre.trim().split(/\s+/);
