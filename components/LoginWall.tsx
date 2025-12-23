@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiAlertTriangle, FiCheckCircle, FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import Logo from './Logo';
@@ -108,8 +109,8 @@ const LoginWall: React.FC = () => {
         document.body.style.overflow = 'auto'; // refuerzo
     };
 
-    // Simplified regex for build safety and compatibility
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    // REGEX EMAIL SIMPLIFICADO (solo una arroba y un punto después)
+    const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
     const validateForm = () => {
         const nameParts = formData.nombre.trim().split(/\s+/);
@@ -117,7 +118,7 @@ const LoginWall: React.FC = () => {
             alert("⚠️ IDENTIDAD: Ingresa tu Nombre y Apellido real.");
             return false;
         }
-        // Validación robusta de email
+        // Validación robusta de email (regex simplificado)
         if (!emailPattern.test(formData.email.trim())) {
             alert("⚠️ EMAIL: Ingresa un email válido.");
             return false;
