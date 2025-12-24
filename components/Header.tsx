@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FiMenu, FiX, FiSun, FiMoon, FiSearch, FiLock, FiUnlock, FiKey } from 'react-icons/fi';
+/* Added missing FiArrowRight import */
+import { FiMenu, FiX, FiSun, FiMoon, FiSearch, FiLock, FiUnlock, FiKey, FiStar, FiArrowRight } from 'react-icons/fi';
 import { FaRobot, FaTrophy } from 'react-icons/fa';
 import { ModalType } from '../types';
 import { useTheme } from '../contexts/ThemeContext';
@@ -19,7 +20,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
-    const [isAffiliateLocked, setIsAffiliateLocked] = useState(false);
     
     const lastScrollY = useRef(0);
     const { theme, toggleTheme } = useTheme();
@@ -77,16 +77,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 { label: 'Sobre Nosotros', action: () => navigate('/acerca-de') },
                 { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },
                 { label: 'Impacto Social', action: () => navigate('/impacto-social') },
-                { 
-                    label: 'Forma Parte de TradeVision Latam', 
-                    isLocked: true,
-                    action: () => setIsAffiliateLocked(true) 
-                },
-                { 
-                    label: 'Programa de Afiliados', 
-                    isLocked: true,
-                    action: () => setIsAffiliateLocked(true) 
-                },
                 { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
                 { label: 'Información Legal', action: () => navigate('/aviso-legal-riesgo') },
             ]
@@ -100,8 +90,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
         }, 250);
     };
 
-    const handleSearchClose = () => {
-        setIsSearchOpen(false);
+    const handleVenezuelaClick = () => {
+        setIsSideMenuOpen(false);
+        setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('open-venezuela-modal'));
+        }, 200);
     };
 
     return (
@@ -180,17 +173,31 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
 
                     <div className="flex-grow overflow-y-auto -mr-4 pr-4">
                         <nav className="flex flex-col">
-                            {/* NUEVO BOTÓN DESTACADO: INFO PRIVILEGIADA */}
+                            {/* BOTÓN GOLD */}
                             <div className="px-3 mb-4">
                                 <button 
-                                    onClick={() => handleSideMenuClick(() => setIsAffiliateLocked(true))}
-                                    className="w-full flex items-center justify-between p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 font-black text-xs uppercase tracking-tighter hover:bg-yellow-500/20 transition-all group"
+                                    onClick={() => handleSideMenuClick(() => navigate('/colaboradores'))}
+                                    className="w-full flex items-center justify-between p-4 rounded-xl bg-black border-2 border-[#D4AF37] text-[#D4AF37] font-black text-[10px] uppercase tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all shadow-[0_0_15px_rgba(212,175,55,0.3)] group"
                                 >
                                     <div className="flex items-center gap-3">
-                                        <FiKey className="text-lg group-hover:rotate-12 transition-transform" />
-                                        <span>INFO PRIVILEGIADA</span>
+                                        <FiStar className="text-lg group-hover:rotate-45 transition-transform" />
+                                        <span>ACCESO GOLD | SOCIO</span>
                                     </div>
-                                    <FiUnlock className="opacity-50" />
+                                    <FiArrowRight />
+                                </button>
+                            </div>
+
+                            {/* BOTÓN VENEZUELA (HAMBURGUESA) */}
+                            <div className="px-3 mb-6">
+                                <button 
+                                    onClick={handleVenezuelaClick}
+                                    className="w-full flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#F7D117]/20 via-[#003893]/20 to-[#CE1126]/20 border-2 border-[#003893]/40 text-brand-primary dark:text-white font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] transition-all shadow-md group"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-lg group-hover:animate-bounce">🇻🇪</span>
+                                        <span>ATENCIÓN VENEZUELA</span>
+                                    </div>
+                                    <FiArrowRight className="text-brand-accent" />
                                 </button>
                             </div>
 
@@ -203,17 +210,14 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                                     key={link.label}
                                                     onClick={() => handleSideMenuClick(link.action)}
                                                     className={`text-left text-base transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 w-full flex items-center justify-between ${
-                                                        (link as any).isLocked
-                                                            ? 'text-yellow-600 dark:text-yellow-400 font-bold'
-                                                            : link.label.includes('TRADING ARENA')
-                                                                ? 'font-extrabold text-cyber-violet text-glow-violet hover:opacity-80'
-                                                                : link.label.includes('Salón de la Fama')
-                                                                    ? 'font-bold text-yellow-500'
-                                                                    : 'text-gray-800 dark:text-white hover:text-brand-accent'
+                                                        link.label.includes('TRADING ARENA')
+                                                                    ? 'font-extrabold text-cyber-violet text-glow-violet hover:opacity-80'
+                                                                    : link.label.includes('Salón de la Fama')
+                                                                        ? 'font-bold text-yellow-500'
+                                                                        : 'text-gray-800 dark:text-white hover:text-brand-accent'
                                                     }`}
                                                 >
                                                     <span>{link.label}</span>
-                                                    {(link as any).isLocked && <FiLock size={14} className="opacity-60" />}
                                                 </button>
                                             ))}
                                         </div>
@@ -240,13 +244,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 </div>
             </div>
 
-            <Search isOpen={isSearchOpen} onClose={handleSearchClose} />
-            
-            {/* Modal de Programa de Afiliados (Muro de Seguridad) */}
-            <AffiliateProgramModal 
-                isOpen={isAffiliateLocked} 
-                onClose={() => setIsAffiliateLocked(false)} 
-            />
+            <Search isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
         </>
     );
 };

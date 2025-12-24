@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ModalType } from '../types';
 import { LEGAL_TEXT, IP_LEGAL_TEXT, SOCIAL_LINKS } from '../constants';
 import { useRouter } from '../hooks/useRouter';
 import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 import { FaShieldAlt } from 'react-icons/fa';
-import { FiLock, FiKey, FiUnlock } from 'react-icons/fi';
-import AffiliateProgramModal from './AffiliateProgramModal';
+import { FiStar, FiArrowRight } from 'react-icons/fi';
 
 interface FooterProps {
     onOpenModal: (modal: ModalType) => void;
@@ -13,7 +12,6 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
     const { navigate } = useRouter();
-    const [isAffiliateLocked, setIsAffiliateLocked] = useState(false);
 
     const footerLinkGroups = [
         {
@@ -33,26 +31,13 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                 { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },
                 { label: 'Impacto Social', action: () => navigate('/impacto-social') },
                 { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
-                { 
-                    label: 'Forma Parte de TradeVision Latam', 
-                    isLocked: true,
-                    action: () => setIsAffiliateLocked(true) 
-                },
                 { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
             ]
         },
         {
             title: 'Comunidad',
             links: [
-                { 
-                    label: '🏆 Salón de la Fama', 
-                    action: () => navigate('/hall-of-fame') 
-                },
-                { 
-                    label: 'Programa de Afiliados', 
-                    isLocked: true,
-                    action: () => setIsAffiliateLocked(true) 
-                },
+                { label: '🏆 Salón de la Fama', action: () => navigate('/hall-of-fame') },
                 { label: 'Protocolo de Confianza', action: () => navigate('/protocolo-confianza') },
                 { label: 'Aviso Legal y Riesgo', action: () => navigate('/aviso-legal-riesgo') },
                 { label: 'Términos de la Academia', action: () => navigate('/terminos-academia') },
@@ -61,8 +46,6 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
         }
     ];
 
-    const claimsText = "Reclamaciones de Propiedad de Material: TradeVision Latam respeta la propiedad intelectual de terceros. Si usted considera que algún material alojado en este sitio infringe sus derechos de autor, por favor contacte a nuestro equipo legal a tradevision2026@gmail.com con la petición detallada para su pronta revisión y atención.";
-    const claimsParts = claimsText.split('TradeVision Latam');
     const legalParts = LEGAL_TEXT.split('TradeVision Latam');
     const ipLegalParts = IP_LEGAL_TEXT.split('TradeVision Latam');
 
@@ -70,7 +53,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
         <footer className="bg-gray-100 dark:bg-brand-primary relative overflow-hidden">
             <div className="bg-yellow-500/90 dark:bg-yellow-600/90 text-black py-2 px-4 text-xs font-bold text-center tracking-wide relative z-20">
                 <p>
-                    <span className="font-extrabold">❗ LEYENDA CLAVE: SOPORTE DE ÉLITE.</span> Si no está afiliado a <span translate="no">TRADEVISION LATAM</span> (con ID registrado), NO podemos prestar asistencia ni gestión en problemas de broker o retiros. El soporte es un beneficio exclusivo para la comunidad activa.
+                    <span className="font-extrabold">❗ LEYENDA CLAVE: SOPORTE DE ÉLITE.</span> Si no está afiliado a <span translate="no">TRADEVISION LATAM</span> (con ID registrado), NO podemos prestar asistencia ni gestión en problemas de broker o retiros.
                 </p>
             </div>
             
@@ -80,17 +63,31 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                         <h3 className="text-xl font-extrabold mb-4" translate="no">TradeVision<span className="text-brand-accent"> Latam</span></h3>
                         <p className="text-gray-500 dark:text-gray-400 mb-6">Forjando traders disciplinados en Latinoamérica.</p>
                         
-                        {/* BOTÓN DESTACADO: INFO PRIVILEGIADA */}
-                        <button 
-                            onClick={() => setIsAffiliateLocked(true)}
-                            className="mb-8 flex items-center justify-between p-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 font-black text-xs uppercase tracking-widest hover:bg-yellow-500/20 transition-all group w-full max-w-xs shadow-[0_0_20px_rgba(234,179,8,0.1)]"
-                        >
-                            <div className="flex items-center gap-3">
-                                <FiKey className="text-xl group-hover:rotate-12 transition-transform" />
-                                <span>INFO PRIVILEGIADA</span>
-                            </div>
-                            <FiUnlock className="opacity-50" />
-                        </button>
+                        <div className="space-y-3 mb-8 max-w-xs">
+                            {/* BOTÓN GOLD */}
+                            <button 
+                                onClick={() => navigate('/colaboradores')}
+                                className="flex items-center justify-between p-5 rounded-2xl bg-black border-2 border-[#D4AF37] text-[#D4AF37] font-black text-xs uppercase tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all group w-full shadow-[0_0_30px_rgba(212,175,55,0.15)]"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <FiStar className="text-xl group-hover:rotate-45 transition-transform" />
+                                    <span>ACCESO GOLD</span>
+                                </div>
+                                <FiArrowRight />
+                            </button>
+
+                            {/* BOTÓN VENEZUELA (FOOTER) */}
+                            <button 
+                                onClick={() => window.dispatchEvent(new CustomEvent('open-venezuela-modal'))}
+                                className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-[#112240] border-2 border-[#003893]/30 text-brand-primary dark:text-white font-black text-[10px] uppercase tracking-widest hover:border-brand-accent transition-all group w-full"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <span className="text-lg">🇻🇪</span>
+                                    <span>PAGO MÓVIL (VZLA)</span>
+                                </div>
+                                <FiArrowRight className="text-brand-accent" />
+                            </button>
+                        </div>
 
                         <div className="flex space-x-4 mt-6">
                             {SOCIAL_LINKS.map((link) => {
@@ -132,21 +129,14 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                                         <button 
                                             onClick={item.action} 
                                             className={`transition text-left flex items-center justify-between w-full group/link ${
-                                            (item as any).isLocked
-                                                ? 'text-yellow-600 dark:text-yellow-400 font-bold'
-                                                : item.label.includes('TRADING ARENA')
-                                                    ? 'font-bold text-cyber-violet text-glow-violet hover:opacity-80'
-                                                    : item.label.includes('🏆 Salón de la Fama')
-                                                        ? 'text-yellow-500 hover:text-yellow-400 font-bold'
-                                                        : 'text-gray-500 dark:text-gray-400 hover:text-brand-accent'
+                                                    item.label.includes('TRADING ARENA')
+                                                        ? 'font-bold text-cyber-violet text-glow-violet hover:opacity-80'
+                                                        : item.label.includes('🏆 Salón de la Fama')
+                                                            ? 'text-yellow-500 hover:text-yellow-400 font-bold'
+                                                            : 'text-gray-500 dark:text-gray-400 hover:text-brand-accent'
                                             }`}
                                         >
-                                            <span className="flex-1">
-                                                {item.label === 'Brokers Recomendados' ? <><span translate="no">Brokers</span> Recomendados</> : item.label}
-                                            </span>
-                                            {(item as any).isLocked && (
-                                                <FiLock size={12} className="ml-2 opacity-60 group-hover/link:scale-110 transition-transform" />
-                                            )}
+                                            <span className="flex-1">{item.label}</span>
                                         </button>
                                     </li>
                                 ))}
@@ -160,15 +150,9 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                         {legalParts[0]}<span translate="no">TradeVision Latam</span>{legalParts[1]}
                     </p>
                     
-                    <h5 className="font-bold mb-2 mt-4">Propiedad Intelectual y Prohibición de Distribución</h5>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 whitespace-pre-line">
-                        {ipLegalParts[0]}<span translate="no">TradeVision Latam</span>{ipLegalParts[1]}
-                    </p>
-                    
                     <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mt-6 gap-8 relative">
                         <div className='text-center sm:text-left'>
                             <p className="text-sm text-gray-500 dark:text-gray-400">© {new Date().getFullYear()} <span translate="no">TradeVision Latam</span>. Todos los derechos reservados.</p>
-                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Estructura de Consultoría Educativa registrada para operar en Canadá, Brasil y Unión Europea (España).</p>
                         </div>
                         
                         <div className="relative group flex flex-col items-center cursor-pointer" onClick={() => navigate('/verificacion-legal')}>
@@ -184,23 +168,14 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
                             <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex-shrink-0 z-0 -mt-4">
                                  <img 
                                     src="https://i.pinimg.com/736x/db/31/b4/db31b46235afd233c0372a0c5eaeb931.jpg" 
-                                    alt="Mascota TradeVision Latam Señalando Arriba" 
+                                    alt="Mascota" 
                                     className="w-full h-full object-contain transform transition-transform duration-300 group-hover:scale-105"
                                 />
                             </div>
                         </div>
                     </div>
-
-                    <p className="text-center text-[11px] text-gray-500 dark:text-gray-400 mt-4">
-                        {claimsParts[0]}<span translate="no">TradeVision Latam</span>{claimsParts[1]}
-                    </p>
                 </div>
             </div>
-
-            <AffiliateProgramModal 
-                isOpen={isAffiliateLocked} 
-                onClose={() => setIsAffiliateLocked(false)} 
-            />
         </footer>
     );
 };

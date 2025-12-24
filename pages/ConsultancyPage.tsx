@@ -6,8 +6,8 @@ import ScrollToTopButton from '../components/ScrollToTopButton';
 import Accordion from '../components/Accordion';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
-import { FaWhatsapp } from 'react-icons/fa';
-import { FiMail, FiAward, FiCode, FiUsers, FiCamera, FiEdit, FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';
+import { FaWhatsapp, FaShieldAlt } from 'react-icons/fa';
+import { FiMail, FiAward, FiCode, FiUsers, FiCpu, FiEdit, FiAlertTriangle, FiArrowLeft, FiCheckCircle, FiGlobe, FiLock } from 'react-icons/fi';
 import PageBackButton from '../components/PageBackButton';
 import { handleEmailClick, EMAIL_TOOLTIP } from '../utils/emailHandler';
 
@@ -28,10 +28,10 @@ const ConsultancyPage: React.FC = () => {
     const onOpenModal = (modal: ModalType) => navigate(`/?open=${modal}`);
 
     useEffect(() => {
-        document.title = "Consultoría para Mentores | TradeVision Latam";
+        document.title = "Arquitectos de Comunidades | Consultoría B2B | TradeVision Latam";
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
-            metaDescription.setAttribute('content', "Servicio de consultoría élite para educadores de trading. Construye tu comunidad, marca y sistema de afiliados con nuestra guía profesional y ética.");
+            metaDescription.setAttribute('content', "Construimos la infraestructura digital para mentores de trading. Auditoría de redes, desarrollo web con IA y seguridad SSL profesional.");
         }
     }, []);
 
@@ -44,66 +44,122 @@ const ConsultancyPage: React.FC = () => {
                         <div className="mb-8">
                             <PageBackButton />
                         </div>
-                        {/* Header */}
+                        
+                        {/* Header Principal */}
                         <header className="text-center">
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-brand-primary dark:text-white">Impulsa tu Visión: Consultoría Élite</h1>
-                            <p className="text-lg text-gray-600 dark:text-gray-300 mt-4">
-                                Un servicio integral para educadores y mentores de trading que buscan construir una comunidad profesional y ética desde cero, con el respaldo y la estrategia de TradeVision.
+                            <h1 className="text-4xl md:text-5xl font-black text-brand-primary dark:text-white uppercase tracking-tighter">Arquitectos de Comunidades de Trading</h1>
+                            <p className="text-lg text-gray-600 dark:text-gray-300 mt-4 font-medium">
+                                Desde la auditoría de tu perfil hasta tu propia web con IA. Construimos la infraestructura para que tú solo te ocupes de enseñar.
                             </p>
                         </header>
                         
-                        {/* Pillars */}
+                        {/* Pilares de Servicio */}
                         <div className="space-y-4">
-                            <Accordion title="Pilar 1: Creación 360° desde Cero">
+                            <Accordion title="Pilar 1: Auditoría y Branding (La Imagen)">
                                 <div className="space-y-3 p-2">
-                                    <ServicePillar icon={<FiAward />} title="Branding Profesional" description="Creación de logo, paleta de colores e identidad visual que inspira confianza." />
-                                    <ServicePillar icon={<FiCode />} title="Diseño Web y Digital" description="Desarrollo de una landing page profesional, optimizada para la conversión." />
-                                    <ServicePillar icon={<FiUsers />} title="Ecosistema de Redes" description="Guía estratégica para configurar y hacer crecer tus canales en Telegram, WhatsApp y más." />
-                                    <ServicePillar icon={<FiCamera />} title="Contenido de Alto Impacto" description="Estrategias para crear imágenes, vídeos y recursos educativos que aporten valor real." />
-                                    <ServicePillar icon={<FiEdit />} title="Textos Persuasivos (Copywriting)" description="Creación de textos para tu web, anuncios y bots de Telegram que conecten con tu audiencia." />
+                                    <ServicePillar 
+                                        icon={<FiUsers />} 
+                                        title="Auditoría de Perfil: ¿Vendes o espantas?" 
+                                        description="Realizamos un Estudio Profesional de Redes. Revisamos tu biografía, feed y estrategia de contenido para detectar fugas de credibilidad." 
+                                    />
+                                    <ServicePillar 
+                                        icon={<FiAward />} 
+                                        title="Diseño de Marca sin límites" 
+                                        description="Creamos tu identidad visual (Logos, paletas, tipografías) para que te diferencies del trader promedio y proyectes autoridad." 
+                                    />
                                 </div>
                             </Accordion>
                             
-                            <Accordion title="Pilar 2: Sistema de Afiliados y Legalidad">
-                                <div className="space-y-3 p-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    <p>Te guiamos en la configuración de un sistema de afiliados robusto, cubriendo:</p>
-                                    <ul className="list-disc list-inside pl-4 space-y-1">
-                                        <li><strong>Modelos de Comisión:</strong> Entendiendo y aplicando RevShare y CPA.</li>
-                                        <li><strong>Cumplimiento Legal y Marca:</strong> Cómo usar la marca de los brokers sin infringir sus términos (basada en información oficial de brokers).</li>
-                                        <li><strong>Distinción Crucial:</strong> Énfasis en la diferencia entre brokers Regulados (Forex) y No Regulados (Binarias) en tu comunicación.</li>
-                                    </ul>
+                            <Accordion title="Pilar 2: Infraestructura Web (El Embudo)">
+                                <div className="space-y-3 p-2">
+                                    <ServicePillar 
+                                        icon={<FiCode />} 
+                                        title="Páginas Web a Medida" 
+                                        description="Desde Landing Pages básicas para captar prospectos hasta Ecosistemas Web Profesionales completos con áreas de miembros." 
+                                    />
+                                    <ServicePillar 
+                                        icon={<FiLock />} 
+                                        title="Dominio y Seguridad SSL Profesional" 
+                                        description="Incluimos tu dominio .com y Certificado SSL (El candado verde de seguridad) por 1, 3 o 5 años. Sin esto, Google no te respeta y los navegadores marcarán tu sitio como peligroso." 
+                                    />
+                                    <ServicePillar 
+                                        icon={<FiGlobe />} 
+                                        title="Mantenimiento y Soporte Recurrente" 
+                                        description="Ofrecemos planes de bajo costo para asegurar que tu web esté activa 24/7, segura contra ataques y siempre actualizada." 
+                                    />
                                 </div>
                             </Accordion>
 
-                            <Accordion title="Pilar 3: Compromiso Ético y Transparencia">
-                                <div className="p-4 bg-orange-100 dark:bg-orange-900/20 border-l-4 border-orange-500 text-orange-800 dark:text-orange-300 rounded-r-lg">
-                                    <div className="flex items-start"><FiAlertTriangle className="h-6 w-6 mr-3 mt-1 text-orange-500 flex-shrink-0" /><div><h4 className="font-extrabold text-lg">¡ATENCIÓN! Ética y Transparencia</h4><p className="mt-2 text-sm">Esta consultoría es <strong>legal y real</strong>. No participamos en estafas, pirámides, esquemas de Ponzi, negocios turbios o apuestas. No colaboramos con proyectos basados en promesas falsas o resultados garantizados.</p></div></div>
+                            <Accordion title="Pilar 3: Tecnología y Crecimiento (La IA)">
+                                <div className="space-y-3 p-2">
+                                    <ServicePillar 
+                                        icon={<FiCpu />} 
+                                        title="Marketing con IA" 
+                                        description="Implementamos flujos de inteligencia artificial para captar correos y números (Leads) de forma automática para que hagas Remarketing efectivo." 
+                                    />
+                                    <ServicePillar 
+                                        icon={<FiCheckCircle />} 
+                                        title="Automatización de Ventas" 
+                                        description="No te quedes atrás. Compite con los grandes del sector usando nuestra tecnología de automatización y cierre de ventas." 
+                                    />
                                 </div>
                             </Accordion>
 
-                            <Accordion title="Pilar 4: Proceso de Adquisición y Verificación">
-                                <div className="space-y-3 p-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    <ol className="list-decimal list-inside space-y-2">
-                                        <li><strong>Contacto Inicial:</strong> Envía la frase clave <strong>"CREAR COMUNIDAD"</strong> a nuestro Soporte de WhatsApp para iniciar el proceso.</li>
-                                        <li><strong>Pre-Calificación Obligatoria:</strong> Para filtrar curiosos y asegurar el compromiso, se requiere un pedido mínimo de <strong>$20 USD</strong> para agendar la primera llamada. (Aceptamos Volet, Binance).</li>
-                                        <li><strong>Verificación Legal:</strong> Nos reservamos el derecho a pedir información adicional y documentos legales para garantizar la legitimidad del proyecto.</li>
-                                    </ol>
+                            {/* Sección: Condiciones Comerciales */}
+                            <div className="bg-white dark:bg-gray-900 border border-brand-accent/20 rounded-xl p-6 shadow-lg">
+                                <h3 className="text-xl font-bold text-brand-primary dark:text-white mb-4 flex items-center gap-2">
+                                    <FiEdit className="text-brand-accent" /> Condiciones Comerciales y Transparencia
+                                </h3>
+                                <div className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
+                                    <div className="flex gap-3">
+                                        <span className="font-black text-brand-accent">01.</span>
+                                        <p><strong className="text-gray-800 dark:text-gray-200">Modelo de Trabajo:</strong> Todo desarrollo web requiere un 50% de anticipo para iniciar el montaje y el 50% restante contra entrega final verificada.</p>
+                                    </div>
+                                    <div className="flex gap-3">
+                                        <span className="font-black text-brand-accent">02.</span>
+                                        <p><strong className="text-gray-800 dark:text-gray-200">Compromiso de Seriedad:</strong> Para filtrar curiosos y asegurar el tiempo de nuestros arquitectos, la Primera Sesión de Estrategia requiere una inversión de <strong className="text-white">$20 USD</strong> (vía Volet/Binance). Si contratas cualquier servicio, estos $20 se descuentan del precio final. Es nuestra garantía de tu compromiso.</p>
+                                    </div>
                                 </div>
-                            </Accordion>
+                            </div>
+
+                            {/* Alerta Ética */}
+                            <div className="p-4 bg-orange-100 dark:bg-orange-900/20 border-l-4 border-orange-500 text-orange-800 dark:text-orange-300 rounded-r-lg">
+                                <div className="flex items-start">
+                                    <FiAlertTriangle className="h-6 w-6 mr-3 mt-1 text-orange-500 flex-shrink-0" />
+                                    <div>
+                                        <h4 className="font-extrabold text-lg">FILTRO ÉTICO OBLIGATORIO</h4>
+                                        <p className="mt-2 text-sm italic">
+                                            Esta consultoría es <strong>legal y real</strong>. No construimos infraestructura para estafas, pirámides, esquemas de Ponzi o negocios que no incluyan Advertencias de Riesgo claras. Si tu proyecto no es ético, no pierdas tu tiempo ni el nuestro.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
                         {/* Final CTAs */}
                         <section className="text-center pt-8 border-t border-gray-200 dark:border-white/10">
-                            <h3 className="text-xl font-bold mb-4">¿Listo para construir tu legado?</h3>
+                            <h3 className="text-xl font-bold mb-4">¿Listo para construir tu legado digital?</h3>
                             <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                <a href="https://wa.me/message/T6UFHN3SSTIEJ1" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition"><FaWhatsapp /> Contactar por WhatsApp</a>
-                                <button onClick={handleEmailClick} title={EMAIL_TOOLTIP} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition"><FiMail /> Enviar un Correo</button>
+                                <a 
+                                    href="https://wa.me/message/T6UFHN3SSTIEJ1?text=QUIERO%20MI%20INFRAESTRUCTURA" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-black py-4 px-8 rounded-xl hover:bg-green-600 transition shadow-lg transform hover:scale-[1.02]"
+                                >
+                                    <FaWhatsapp className="text-2xl" /> ENVIAR "QUIERO MI INFRAESTRUCTURA"
+                                </a>
+                                <button onClick={handleEmailClick} title={EMAIL_TOOLTIP} className="inline-flex items-center justify-center gap-2 bg-gray-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-700 transition">
+                                    <FiMail /> Consulta Vía Correo
+                                </button>
                             </div>
+                            <p className="mt-4 text-xs text-gray-500 uppercase font-bold tracking-widest">Soporte Humano Elite 24/7</p>
                         </section>
 
-                        {/* Return Button */}
-                        <div className="text-center mt-8">
-                            <button onClick={() => navigate('/')} className="inline-flex items-center justify-center gap-2 bg-brand-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-brand-accent hover:text-brand-primary transition-colors duration-300"><FiArrowLeft /> Volver a la Página Principal</button>
+                        {/* Botón de Retorno */}
+                        <div className="text-center mt-12">
+                            <button onClick={() => navigate('/')} className="inline-flex items-center justify-center gap-2 bg-brand-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-brand-accent hover:text-brand-primary transition-colors duration-300">
+                                <FiArrowLeft /> Volver a la Página Principal
+                            </button>
                         </div>
                     </div>
                 </AnimatedSection>

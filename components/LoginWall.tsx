@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiCheckCircle, FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiCheckCircle, FiArrowRight, FiEye, FiEyeOff, FiLogOut } from 'react-icons/fi';
 import Logo from './Logo';
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
-// RESTAURACIÓN CRÍTICA: URL original del Webhook para Google Sheets.
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwA_U_zDdmjtm5mfuV5BRaQd26xtw9iNVUgqnDZUPbo5af2rX07ohPZRHKlyDkPu03etQ/exec";
 const SESSION_TTL = 172800000; // 48 Horas
 
@@ -37,14 +36,20 @@ const BLACKLIST = {
 };
 
 const LoginWall: React.FC = () => {
+    // --- ESTADOS DE FLUJO ---
     const [isVisible, setIsVisible] = useState(true);
+    const [mode, setMode] = useState<'register' | 'login'>('register');
     const [isLoading, setIsLoading] = useState(false);
     const [isBanned, setIsBanned] = useState(false);
     const [clientIP, setClientIP] = useState('0.0.0.0');
+    
+    // --- ESTADOS DE FORMULARIO ---
     const [phonePrefix, setPhonePrefix] = useState('');
     const [phoneDigits, setPhoneDigits] = useState(0);
     const [showPassword, setShowPassword] = useState(false);
-
+    const [loginPassword, setLoginPassword] = useState('');
+    const [savedName, setSavedName] = useState('');
+    
     const [formData, setFormData] = useState({
         nombre: '',
         email: '',
@@ -56,16 +61,20 @@ const LoginWall: React.FC = () => {
 
     const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
-    // Limpieza de scroll al ocultar el componente
+    // --- EFECTOS INICIALES ---
     useEffect(() => {
-        if (!isVisible) {
-            document.body.style.overflow = 'auto';
-        }
-    }, [isVisible]);
-
-    useEffect(() => {
-        const initSecurity = async () => {
+        const initSecurityAndSession = async () => {
             document.body.style.overflow = 'hidden';
+            
+            // 1. Verificar si ya está registrado localmente
+            const isRegistered = localStorage.getItem('tv_is_registered') === 'true';
+            const firstName = localStorage.getItem('tv_user_name');
+            if (isRegistered && firstName) {
+                setMode('login');
+                setSavedName(firstName);
+            }
+
+            // 2. Seguridad de IP
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 2000);
@@ -78,15 +87,19 @@ const LoginWall: React.FC = () => {
                 }
             } catch (e) {
                 setClientIP('IP_NO_DETECTADA');
-                console.warn("IP check bypassed or timed out"); 
             }
         };
-        initSecurity();
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
+        initSecurityAndSession();
+        return () => { document.body.style.overflow = 'auto'; };
     }, []);
 
+    useEffect(() => {
+        if (!isVisible) {
+            document.body.style.overflow = 'auto';
+        }
+    }, [isVisible]);
+
+    // --- ACCIONES ---
     const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const country = e.target.value;
         const info = LATAM_DATA.find(item => item.country === country);
@@ -101,49 +114,41 @@ const LoginWall: React.FC = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Otorga acceso inmediato configurando la sesión local
     const grantAccess = () => {
         localStorage.setItem('member_access', 'true');
         localStorage.setItem('session_start', Date.now().toString());
         setIsVisible(false);
     };
 
-    const validateForm = () => {
+    const handleSwitchAccount = () => {
+        if (confirm("¿Quieres registrar una nueva cuenta? Se borrarán tus credenciales locales.")) {
+            localStorage.removeItem('tv_user_name');
+            localStorage.removeItem('tv_user_pass');
+            localStorage.removeItem('tv_is_registered');
+            setMode('register');
+            setFormData({ nombre: '', email: '', whatsapp: '', pais: '', edad: '', password: '' });
+        }
+    };
+
+    // --- LÓGICA DE REGISTRO (NUEVO USUARIO) ---
+    const handleSubmitRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        // Validación básica
         const nameParts = formData.nombre.trim().split(/\s+/);
-        if (nameParts.length < 2) {
-            alert("⚠️ IDENTIDAD: Ingresa tu Nombre y Apellido real.");
-            return false;
-        }
-        if (!emailPattern.test(formData.email.trim())) {
-            alert("⚠️ EMAIL: Ingresa un email válido.");
-            return false;
-        }
+        if (nameParts.length < 2) { alert("⚠️ IDENTIDAD: Ingresa Nombre y Apellido."); return; }
+        if (!emailPattern.test(formData.email.trim())) { alert("⚠️ EMAIL: Ingresa un email válido."); return; }
+        
         if (phoneDigits > 0) {
             const cleanPhone = formData.whatsapp.replace(/\D/g, '');
             if (cleanPhone.length !== phoneDigits) {
-                alert(`⚠️ NÚMERO: Para ${formData.pais}, el número debe tener ${phoneDigits} dígitos.`);
-                return false;
+                alert(`⚠️ NÚMERO: Para ${formData.pais}, deben ser ${phoneDigits} dígitos.`);
+                return;
             }
         }
-        return true;
-    };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!validateForm()) return;
-
-        const cleanedData = {
-            nombre: formData.nombre.trim(),
-            email: formData.email.trim(),
-            whatsapp: formData.whatsapp.trim(),
-            pais: formData.pais.trim(),
-            edad: formData.edad.trim(),
-            password: formData.password.trim(),
-        };
-
-        const fullPhone = `${phonePrefix}${cleanedData.whatsapp}`.replace(/\s/g, '');
-
-        if (BLACKLIST.emails.includes(cleanedData.email.toLowerCase()) || BLACKLIST.phones.includes(fullPhone)) {
+        const fullPhone = `${phonePrefix}${formData.whatsapp}`.replace(/\s/g, '');
+        if (BLACKLIST.emails.includes(formData.email.toLowerCase()) || BLACKLIST.phones.includes(fullPhone)) {
             setIsBanned(true);
             return;
         }
@@ -152,35 +157,49 @@ const LoginWall: React.FC = () => {
 
         try {
             const data = new URLSearchParams();
-            data.append('nombre', cleanedData.nombre);
-            data.append('email', cleanedData.email);
+            data.append('nombre', formData.nombre.trim());
+            data.append('email', formData.email.trim());
             data.append('whatsapp', fullPhone);
-            data.append('pais', cleanedData.pais);
-            data.append('edad', cleanedData.edad);
-            data.append('password', cleanedData.password);
+            data.append('pais', formData.pais.trim());
+            data.append('edad', formData.edad.trim());
+            data.append('password', formData.password.trim());
             data.append('ip_address', clientIP);
             data.append('registro_hora', new Date().toLocaleString('es-ES'));
             
             const finalUrl = `${WEBHOOK_URL}?${data.toString()}`;
             
-            // Envío al Webhook de Google Sheets
-            await fetch(finalUrl, {
-                method: 'GET',
-                mode: 'no-cors'
-            });
+            // Envío al Webhook
+            await fetch(finalUrl, { method: 'GET', mode: 'no-cors' });
 
-            // BUFFER DE TRANSMISIÓN: 500ms para asegurar el handshake SSL antes de cerrar
+            // Persistencia para Login Recurrente
+            localStorage.setItem('tv_user_name', formData.nombre.trim());
+            localStorage.setItem('tv_user_pass', formData.password.trim());
+            localStorage.setItem('tv_is_registered', 'true');
+
             setTimeout(() => {
                 setIsLoading(false);
                 grantAccess();
-            }, 500);
+            }, 800);
 
         } catch (error) {
-            // Fallback: Si el webhook falla, permitimos el acceso para no bloquear al alumno
+            console.error("Webhook error, granting bypass access...");
+            grantAccess();
+        }
+    };
+
+    // --- LÓGICA DE LOGIN (USUARIO RECURRENTE) ---
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        const savedPass = localStorage.getItem('tv_user_pass');
+        
+        if (loginPassword === savedPass) {
+            setIsLoading(true);
             setTimeout(() => {
                 setIsLoading(false);
                 grantAccess();
             }, 500);
+        } else {
+            alert("❌ Contraseña incorrecta para esta cuenta.");
         }
     };
 
@@ -189,8 +208,8 @@ const LoginWall: React.FC = () => {
             <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center p-6 text-center">
                 <div className="max-w-md">
                     <FiShieldOff className="text-red-500 text-7xl mx-auto mb-4 animate-pulse" />
-                    <h1 className="text-white text-3xl font-black mb-4 uppercase">Acceso Bloqueado</h1>
-                    <p className="text-gray-400 font-mono text-sm">Tu IP o identidad ha sido restringida por seguridad institucional.</p>
+                    <h1 className="text-white text-3xl font-black mb-4 uppercase">Acceso Restringido</h1>
+                    <p className="text-gray-400 font-mono text-sm">Tu identidad ha sido bloqueada por seguridad institucional.</p>
                 </div>
             </div>
         );
@@ -200,97 +219,133 @@ const LoginWall: React.FC = () => {
 
     return (
         <div className="fixed inset-0 z-[9999] bg-[#050b14]/98 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto">
-            <div className="w-full max-w-md bg-[#0A1931] rounded-3xl border border-white/10 p-8 relative flex flex-col items-center animate-fade-in-up shadow-[0_0_100px_rgba(0,229,255,0.1)]">
+            <div className="w-full max-w-md bg-[#0A1931] rounded-3xl border border-white/10 p-8 relative flex flex-col items-center animate-fade-in-up shadow-[0_0_100px_rgba(0,229,255,0.15)]">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-40"></div>
                 
                 <div className="text-center mb-6">
                     <Logo className="w-16 h-16 drop-shadow-[0_0_15px_rgba(64,224,208,0.4)] mb-4 mx-auto" />
-                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-1">Terminal de Acceso</h2>
-                    <p className="text-brand-accent text-[10px] uppercase font-bold tracking-widest opacity-60">Seguridad TradeVision v5.0</p>
+                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-1">
+                        {mode === 'register' ? 'Terminal de Registro' : 'Bienvenido de Nuevo'}
+                    </h2>
+                    <p className="text-brand-accent text-[10px] uppercase font-bold tracking-widest opacity-60">
+                        {mode === 'register' ? 'Crea tu Identidad Académica' : `Hola, ${savedName}`}
+                    </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4 w-full">
-                    <div className="relative group">
-                        <FiUser className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                        <input 
-                            name="nombre" type="text" required placeholder="Nombre Completo"
-                            value={formData.nombre} onChange={handleChange}
-                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                        />
-                    </div>
-
-                    <div className="relative group">
-                        <FiMail className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                        <input 
-                            name="email" type="email" required placeholder="Email de Registro"
-                            value={formData.email} onChange={handleChange}
-                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                        />
-                    </div>
-
-                    <div className="relative group">
-                        <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                        <select 
-                            name="pais" required value={formData.pais} onChange={handleCountryChange}
-                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition-all cursor-pointer"
-                        >
-                            <option value="" disabled>País de Residencia</option>
-                            {LATAM_DATA.map(i => <option key={i.country} value={i.country} className="bg-[#0A1931]">{i.country}</option>)}
-                        </select>
-                    </div>
-
-                    <div className="flex gap-2">
-                        <div className="w-20 bg-[#050b14] text-brand-accent border border-white/5 rounded-xl flex items-center justify-center font-bold text-xs font-mono">
-                            {phonePrefix || '+--'}
-                        </div>
-                        <div className="relative flex-1 group">
-                            <FiPhone className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                {mode === 'register' ? (
+                    // FORMULARIO DE REGISTRO
+                    <form onSubmit={handleSubmitRegister} className="space-y-4 w-full">
+                        <div className="relative group">
+                            <FiUser className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
                             <input 
-                                name="whatsapp" type="tel" required placeholder="WhatsApp"
-                                value={formData.whatsapp} onChange={handleChange}
+                                name="nombre" type="text" required placeholder="Nombre y Apellido"
+                                value={formData.nombre} onChange={handleChange}
                                 className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
                             />
                         </div>
-                    </div>
 
-                    <div className="relative group">
-                        <FiLock className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                        <input 
-                            name="password" 
-                            type={showPassword ? "text" : "password"} 
-                            required placeholder="Contraseña de Acceso"
-                            value={formData.password} onChange={handleChange}
-                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                        />
-                        <div className="absolute right-3 top-3.5 cursor-pointer text-gray-500" onClick={() => setShowPassword(!showPassword)}>
-                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                        <div className="relative group">
+                            <FiMail className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                            <input 
+                                name="email" type="email" required placeholder="Email Principal"
+                                value={formData.email} onChange={handleChange}
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                            />
                         </div>
-                    </div>
 
-                    <div className="relative group">
-                        <FiHash className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                        <input 
-                            name="edad" type="number" min="18" max="99" required placeholder="Edad"
-                            value={formData.edad} onChange={handleChange}
-                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                        />
-                    </div>
+                        <div className="relative group">
+                            <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                            <select 
+                                name="pais" required value={formData.pais} onChange={handleCountryChange}
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition-all cursor-pointer"
+                            >
+                                <option value="" disabled>Selecciona tu País</option>
+                                {LATAM_DATA.map(i => <option key={i.country} value={i.country} className="bg-[#0A1931]">{i.country}</option>)}
+                            </select>
+                        </div>
 
-                    <button 
-                        type="submit" disabled={isLoading}
-                        className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-center justify-center gap-2 group active:scale-95 disabled:opacity-50 mt-2"
-                    >
-                        {isLoading ? (
-                            <FiCpu className="animate-spin text-xl" />
-                        ) : (
-                            <><FiLock /> VALIDAR ACCESO <FiArrowRight className="group-hover:translate-x-1 transition-transform" /></>
-                        )}
-                    </button>
+                        <div className="flex gap-2">
+                            <div className="w-20 bg-[#050b14] text-brand-accent border border-white/5 rounded-xl flex items-center justify-center font-bold text-xs font-mono">
+                                {phonePrefix || '+--'}
+                            </div>
+                            <div className="relative flex-1 group">
+                                <FiPhone className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                                <input 
+                                    name="whatsapp" type="tel" required placeholder="WhatsApp"
+                                    value={formData.whatsapp} onChange={handleChange}
+                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                                />
+                            </div>
+                        </div>
 
-                    <p className="text-[9px] text-center text-gray-500 uppercase font-black tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-60">
-                        <FiCheckCircle className="text-brand-accent" /> SSL SECURE TERMINAL
-                    </p>
-                </form>
+                        <div className="relative group">
+                            <FiLock className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                            <input 
+                                name="password" 
+                                type={showPassword ? "text" : "password"} 
+                                required placeholder="Crea una Contraseña"
+                                value={formData.password} onChange={handleChange}
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                            />
+                            <div className="absolute right-3 top-3.5 cursor-pointer text-gray-500" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? <FiEyeOff /> : <FiEye />}
+                            </div>
+                        </div>
+
+                        <div className="relative group">
+                            <FiHash className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                            <input 
+                                name="edad" type="number" min="18" max="99" required placeholder="Edad (Mín 18)"
+                                value={formData.edad} onChange={handleChange}
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                            />
+                        </div>
+
+                        <button 
+                            type="submit" disabled={isLoading}
+                            className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-center justify-center gap-2 group active:scale-95 disabled:opacity-50 mt-2"
+                        >
+                            {isLoading ? <FiCpu className="animate-spin text-xl" /> : <><FiLock /> REGISTRAR Y ENTRAR <FiArrowRight className="group-hover:translate-x-1 transition-transform" /></>}
+                        </button>
+                    </form>
+                ) : (
+                    // FORMULARIO DE LOGIN (USUARIO EXISTENTE)
+                    <form onSubmit={handleLogin} className="space-y-6 w-full py-4">
+                        <div className="relative group">
+                            <FiLock className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                            <input 
+                                type={showPassword ? "text" : "password"} 
+                                required placeholder="Ingresa tu Contraseña"
+                                value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)}
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-4 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-2 focus:ring-brand-accent outline-none transition-all text-center text-lg tracking-widest"
+                            />
+                            <div className="absolute right-4 top-4.5 cursor-pointer text-gray-500" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                            </div>
+                        </div>
+
+                        <button 
+                            type="submit" disabled={isLoading}
+                            className="w-full bg-brand-accent text-[#0A1931] font-black py-4 rounded-xl shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-brand-accent/50 transition-all flex items-center justify-center gap-2 group active:scale-95 disabled:opacity-50"
+                        >
+                            {isLoading ? <FiCpu className="animate-spin text-xl" /> : <><FiCheckCircle /> ACCEDER AL ECOSISTEMA</>}
+                        </button>
+
+                        <div className="text-center">
+                            <button 
+                                type="button"
+                                onClick={handleSwitchAccount}
+                                className="text-[10px] text-gray-500 hover:text-brand-accent uppercase font-bold tracking-widest transition-colors flex items-center justify-center gap-2 mx-auto"
+                            >
+                                <FiLogOut /> ¿No eres {savedName.split(' ')[0]}? Crear nueva cuenta
+                            </button>
+                        </div>
+                    </form>
+                )}
+
+                <p className="text-[9px] text-center text-gray-500 uppercase font-black tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-60 mt-6">
+                    <FiCheckCircle className="text-brand-accent" /> SSL SECURE TERMINAL
+                </p>
             </div>
         </div>
     );

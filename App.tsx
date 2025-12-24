@@ -28,6 +28,7 @@ import TransparenciaLegalPage from './pages/TransparenciaLegalPage';
 import ExecutionZonePage from './pages/ExecutionZonePage';
 import HallOfFamePage from './pages/HallOfFamePage';
 import BattlegroundsPage from './pages/BattlegroundsPage';
+import ColaboradoresPage from './pages/ColaboradoresPage';
 
 import { PremiumCoursesModal } from './modals/PremiumCoursesModal';
 import AffiliateModal from './modals/AffiliateModal';
@@ -45,8 +46,8 @@ import CookieConsentModal from './components/CookieConsentModal';
 import EmailCopyModal from './modals/EmailCopyModal';
 import Chatbot from './components/Chatbot';
 import WhatsAppButton from './components/WhatsAppButton';
+import VenezuelaSpecialModal from './components/VenezuelaSpecialModal';
 import Logo from './components/Logo';
-import AffiliateProgramModal from './components/AffiliateProgramModal';
 
 import { ModalType, PageType } from './types';
 import { TICKER_MESSAGES } from './constants';
@@ -61,7 +62,6 @@ const App: React.FC = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     
     const [activeModal, setActiveModal] = useState<ModalType | null>(null);
-    const [isAffiliateLocked, setIsAffiliateLocked] = useState(false);
     const [showAgeGate, setShowAgeGate] = useState(() => !localStorage.getItem('age_gate_accepted'));
     const [showCookieConsent, setShowCookieConsent] = useState(() => !localStorage.getItem('cookie_consent'));
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -84,7 +84,6 @@ const App: React.FC = () => {
     useEffect(() => {
         const hasAccess = verifySession();
         setIsAuthenticated(hasAccess);
-        // Garantizar un tiempo mínimo para el Shield
         const shieldTimer = setTimeout(() => setIsAuthChecking(false), 1200);
         return () => clearTimeout(shieldTimer);
     }, []);
@@ -100,12 +99,6 @@ const App: React.FC = () => {
         return () => clearInterval(authInterval);
     }, [isAuthenticated]);
 
-    useEffect(() => {
-        const handleOpenAffiliate = () => setIsAffiliateLocked(true);
-        window.addEventListener('open-affiliate-modal', handleOpenAffiliate);
-        return () => window.removeEventListener('open-affiliate-modal', handleOpenAffiliate);
-    }, []);
-
     const pathname = path.split('?')[0];
     const slug = pathname.startsWith('/blog/') ? pathname.split('/')[2] : undefined;
 
@@ -117,6 +110,7 @@ const App: React.FC = () => {
         if (pathname === '/brokers') return 'brokers';
         if (pathname === '/premium-courses') return 'premium-courses';
         if (pathname === '/zona-de-ejecucion') return 'execution-zone';
+        if (pathname === '/colaboradores') return 'colaboradores';
         return 'main';
     };
 
@@ -171,6 +165,7 @@ const App: React.FC = () => {
         '/responsabilidad': <ResponsibilityPage onOpenModal={openModal} />,
         '/impacto-social': <SocialImpactPage />,
         '/colabora': <CollaboratePage onOpenModal={openModal} />,
+        '/colaboradores': <ColaboradoresPage />,
         '/cursos/forex-elite': <ForexElitePage />,
         '/cursos/binarias-pro-c90': <BinariasProPage />,
         '/cursos/binarias-intermedio': <BinariasIntermedioPage />,
@@ -233,11 +228,6 @@ const App: React.FC = () => {
             <Router routes={routes} />
             {renderModal()}
             
-            <AffiliateProgramModal 
-                isOpen={isAffiliateLocked} 
-                onClose={() => setIsAffiliateLocked(false)} 
-            />
-
             <Chatbot
                 isOpen={isChatOpen}
                 setIsOpen={setIsChatOpen}
@@ -248,6 +238,7 @@ const App: React.FC = () => {
                 onCloseTrigger={closeTrigger}
             />
             <WhatsAppButton />
+            <VenezuelaSpecialModal />
         </div>
     );
 };
