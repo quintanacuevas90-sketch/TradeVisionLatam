@@ -3,8 +3,8 @@ import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, F
 import Logo from './Logo';
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
-// La lógica de registro en Google Sheets se mantiene intacta para la gestión operativa.
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxyAvB6GF3j6AxbfAx74I39QseHxZnW5qUDgXnMKyPrRg6weyvJp7fPR8dQFN6SNwo0KA/exec";
+// RESTAURACIÓN CRÍTICA: URL original del Webhook para Google Sheets.
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwA_U_zDdmjtm5mfuV5BRaQd26xtw9iNVUgqnDZUPbo5af2rX07ohPZRHKlyDkPu03etQ/exec";
 const SESSION_TTL = 172800000; // 48 Horas
 
 const LATAM_DATA = [
@@ -169,14 +169,18 @@ const LoginWall: React.FC = () => {
                 mode: 'no-cors'
             });
 
-            // Tras el registro exitoso, se otorga acceso directo al dashboard
-            setIsLoading(false);
-            grantAccess();
+            // BUFFER DE TRANSMISIÓN: 500ms para asegurar el handshake SSL antes de cerrar
+            setTimeout(() => {
+                setIsLoading(false);
+                grantAccess();
+            }, 500);
 
         } catch (error) {
-            // Fallback: Si el webhook falla, permitimos el acceso para no bloquear la experiencia del alumno
-            setIsLoading(false);
-            grantAccess();
+            // Fallback: Si el webhook falla, permitimos el acceso para no bloquear al alumno
+            setTimeout(() => {
+                setIsLoading(false);
+                grantAccess();
+            }, 500);
         }
     };
 
