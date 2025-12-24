@@ -98,7 +98,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpe
 
     return (
         <>
-            {/* Botón Flotante */}
+            {/* Botón Flotante Principal */}
             <button
                 onClick={onOpenChat}
                 className="fixed bottom-[160px] right-6 bg-brand-accent text-brand-primary w-14 h-14 md:w-16 md:h-16 rounded-full shadow-[0_0_30px_rgba(64,224,208,0.5)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 z-[52] animate-pulse"
@@ -110,7 +110,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpe
             {isOpen && (
                 <div className="fixed bottom-4 right-4 left-4 md:left-auto md:bottom-24 md:right-5 md:w-[380px] h-[75vh] md:h-[600px] bg-[#050b14] border border-white/10 rounded-2xl shadow-2xl flex flex-col z-[100] overflow-hidden animate-fade-in-up">
                     
-                    {/* HEADER: Rediseñado para ser amigable y fácil de cerrar */}
+                    {/* HEADER: Sticky y amigable */}
                     <header className="sticky top-0 z-20 p-4 bg-[#0A1931] border-b border-white/10 flex items-center justify-between min-h-[60px] shadow-lg">
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-brand-accent/10 rounded-lg">
@@ -118,7 +118,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpe
                             </div>
                             <div>
                                 <h3 className="font-black text-white text-[10px] md:text-xs uppercase tracking-widest leading-none">Vision Concierge</h3>
-                                <p className="text-[8px] text-brand-accent font-bold mt-1 animate-pulse tracking-tighter">SISTEMA ACTIVO</p>
+                                <p className="text-[8px] text-brand-accent font-bold mt-1 animate-pulse tracking-tighter">TERMINAL ACTIVA</p>
                             </div>
                         </div>
                         <button 
@@ -130,7 +130,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpe
                         </button>
                     </header>
 
-                    {/* CUERPO: Scroll manejable */}
+                    {/* CUERPO: Scroll independiente */}
                     <div className="flex-1 p-4 overflow-y-auto space-y-4 custom-scrollbar bg-grid-pattern bg-[length:30px_30px] bg-opacity-[0.02]">
                         {messages.map((msg) => (
                             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -157,7 +157,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpe
                         <div ref={messagesEndRef} />
                     </div>
 
-                    {/* BOTONES DE CONVERSIÓN: Acceso rápido sin navegar */}
+                    {/* ACCIONES RÁPIDAS DE CONVERSIÓN */}
                     <div className="px-4 py-2.5 flex flex-wrap gap-2 bg-[#0A1931]/50 border-t border-white/5">
                         <button onClick={() => navigate('/premium-courses')} className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 rounded-lg text-[9px] font-black uppercase hover:bg-yellow-500 hover:text-black transition-all">
                             <FaGem /> Cursos
@@ -170,7 +170,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpe
                         </button>
                     </div>
 
-                    {/* FOOTER: Input */}
+                    {/* FOOTER: Input de mensaje */}
                     <footer className="p-4 border-t border-white/10 bg-[#050b14]">
                         <div className="flex items-center gap-2 mb-3">
                             <input
@@ -178,7 +178,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpe
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
                                 onKeyPress={e => e.key === 'Enter' && handleSend()}
-                                placeholder={messageCount >= DAILY_LIMIT ? "Límite diario alcanzado" : "Consulta algo..."}
+                                placeholder={messageCount >= DAILY_LIMIT ? "Límite alcanzado" : "Consulta algo..."}
                                 className="flex-1 bg-white/5 border border-white/10 text-white text-xs p-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-accent transition-all placeholder:text-gray-600"
                                 disabled={isLoading || messageCount >= DAILY_LIMIT}
                             />
@@ -192,7 +192,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ isOpen, setIsOpen, pageContext, onOpe
                         </div>
                         <div className="text-center">
                             <p className="text-[8px] text-gray-500 leading-tight">
-                                TradeVision Concierge: Respuestas educativas basadas en nuestra metodología.
+                                Respuestas educativas basadas en nuestra metodología institucional.
                             </p>
                             <p className="text-[8px] text-brand-accent font-bold uppercase tracking-widest opacity-60 mt-1">
                                 Consultas hoy: {messageCount}/{DAILY_LIMIT}

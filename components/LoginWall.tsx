@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiAlertTriangle, FiCheckCircle, FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiGlobe, FiHash, FiLock, FiCpu, FiShieldOff, FiCheckCircle, FiArrowRight, FiEye, FiEyeOff } from 'react-icons/fi';
 import Logo from './Logo';
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
-const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwA_U_zDdmjtm5mfuV5BRaQd26xtw9iNVUgqnDZUPbo5af2rX07ohPZRHKlyDkPu03etQ/exec";
+// La lógica de registro en Google Sheets se mantiene intacta para la gestión operativa.
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxyAvB6GF3j6AxbfAx74I39QseHxZnW5qUDgXnMKyPrRg6weyvJp7fPR8dQFN6SNwo0KA/exec";
 const SESSION_TTL = 172800000; // 48 Horas
-const PAYPAL_LINK = "https://www.paypal.com/ncp/payment/5WHSRBUSQSZSS"; 
 
 const LATAM_DATA = [
   { country: "Argentina", code: "+54", digits: 10 }, 
@@ -37,10 +37,8 @@ const BLACKLIST = {
 };
 
 const LoginWall: React.FC = () => {
-    // IMPORTANTE: Inicializamos en true porque el componente solo se llama si no hay sesión
     const [isVisible, setIsVisible] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const [showOffer, setShowOffer] = useState(false);
     const [isBanned, setIsBanned] = useState(false);
     const [clientIP, setClientIP] = useState('0.0.0.0');
     const [phonePrefix, setPhonePrefix] = useState('');
@@ -56,7 +54,9 @@ const LoginWall: React.FC = () => {
         password: ''
     });
 
-    // Limpieza overflow segura al desaparecer modal por cualquier vía
+    const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+
+    // Limpieza de scroll al ocultar el componente
     useEffect(() => {
         if (!isVisible) {
             document.body.style.overflow = 'auto';
@@ -101,16 +101,12 @@ const LoginWall: React.FC = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSkipOffer = () => {
+    // Otorga acceso inmediato configurando la sesión local
+    const grantAccess = () => {
         localStorage.setItem('member_access', 'true');
         localStorage.setItem('session_start', Date.now().toString());
         setIsVisible(false);
-        document.body.style.overflow = 'auto'; // refuerzo
     };
-
-    // Regex robusta y segura para Cloudflare/esbuild
-// Regex simple y segura para Cloudflare/esbuild
-const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
     const validateForm = () => {
         const nameParts = formData.nombre.trim().split(/\s+/);
@@ -118,7 +114,6 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
             alert("⚠️ IDENTIDAD: Ingresa tu Nombre y Apellido real.");
             return false;
         }
-        // Validación robusta de email
         if (!emailPattern.test(formData.email.trim())) {
             alert("⚠️ EMAIL: Ingresa un email válido.");
             return false;
@@ -137,7 +132,6 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
         e.preventDefault();
         if (!validateForm()) return;
 
-        // Limpiar todos los campos de espacios antes de enviar
         const cleanedData = {
             nombre: formData.nombre.trim(),
             email: formData.email.trim(),
@@ -167,22 +161,22 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
             data.append('ip_address', clientIP);
             data.append('registro_hora', new Date().toLocaleString('es-ES'));
             
-            // Construcción de la URL con Query Params
             const finalUrl = `${WEBHOOK_URL}?${data.toString()}`;
             
+            // Envío al Webhook de Google Sheets
             await fetch(finalUrl, {
                 method: 'GET',
                 mode: 'no-cors'
             });
 
-            setTimeout(() => {
-                setIsLoading(false);
-                setShowOffer(true); 
-            }, 1000);
+            // Tras el registro exitoso, se otorga acceso directo al dashboard
+            setIsLoading(false);
+            grantAccess();
 
         } catch (error) {
+            // Fallback: Si el webhook falla, permitimos el acceso para no bloquear la experiencia del alumno
             setIsLoading(false);
-            setShowOffer(true); // Fallback exitoso ante error de webhook
+            grantAccess();
         }
     };
 
@@ -191,8 +185,8 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
             <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center p-6 text-center">
                 <div className="max-w-md">
                     <FiShieldOff className="text-red-500 text-7xl mx-auto mb-4 animate-pulse" />
-                    <h1 className="text-white text-3xl font-black mb-4">ACCESO BLOQUEADO</h1>
-                    <p className="text-gray-400 font-mono text-sm">Tu IP o identidad ha sido restringida por seguridad.</p>
+                    <h1 className="text-white text-3xl font-black mb-4 uppercase">Acceso Bloqueado</h1>
+                    <p className="text-gray-400 font-mono text-sm">Tu IP o identidad ha sido restringida por seguridad institucional.</p>
                 </div>
             </div>
         );
@@ -202,119 +196,98 @@ const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
     return (
         <div className="fixed inset-0 z-[9999] bg-[#050b14]/98 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto">
-            {showOffer ? (
-                <div className="w-full max-w-md bg-[#0A1931] rounded-2xl shadow-2xl overflow-hidden border-4 border-yellow-500 p-8 animate-fade-in-up text-center relative">
-                    <div className="absolute top-0 left-0 w-full h-2 bg-yellow-500 animate-pulse"></div>
-                    <h2 className="text-xl font-bold text-green-400 mb-2 uppercase tracking-widest">¡Excelente!</h2>
-                    <h1 className="text-3xl font-black text-white mb-4 leading-none uppercase italic">OFERTA DE BIENVENIDA</h1>
-                    <p className="text-gray-300 text-sm mb-6 leading-relaxed">
-                        Desbloquea los <strong className="text-yellow-400">PROMPTS MAESTROS</strong>. Solo por hoy.
-                    </p>
-                    <div className="mb-8 bg-black/30 p-4 rounded-lg border border-white/10">
-                        <span className="text-red-500 line-through text-lg font-bold mr-3">$97.00</span>
-                        <span className="text-yellow-400 text-4xl font-black">$19.99</span>
-                    </div>
-                    <button onClick={() => window.open(PAYPAL_LINK, '_blank')} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-4 rounded-lg shadow-[0_0_20px_rgba(234,234,59,0.3)]">
-                        <FiLock /> ASEGURAR COPIA
-                    </button>
-                    <button onClick={handleSkipOffer} className="text-gray-500 text-xs hover:text-white underline transition-colors">
-                        Saltar y entrar al Dashboard gratuito.
-                    </button>
+            <div className="w-full max-w-md bg-[#0A1931] rounded-3xl border border-white/10 p-8 relative flex flex-col items-center animate-fade-in-up shadow-[0_0_100px_rgba(0,229,255,0.1)]">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-40"></div>
+                
+                <div className="text-center mb-6">
+                    <Logo className="w-16 h-16 drop-shadow-[0_0_15px_rgba(64,224,208,0.4)] mb-4 mx-auto" />
+                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-1">Terminal de Acceso</h2>
+                    <p className="text-brand-accent text-[10px] uppercase font-bold tracking-widest opacity-60">Seguridad TradeVision v5.0</p>
                 </div>
-            ) : (
-                <div className="w-full max-w-md bg-[#0A1931] rounded-3xl border border-white/10 p-8 relative flex flex-col items-center animate-fade-in-up shadow-[0_0_100px_rgba(0,229,255,0.1)]">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-accent to-transparent opacity-40"></div>
-                    
-                    <div className="text-center mb-6">
-                        <Logo className="w-16 h-16 drop-shadow-[0_0_15px_rgba(64,224,208,0.4)] mb-4 mx-auto" />
-                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-1">Terminal de Acceso</h2>
-                        <p className="text-brand-accent text-[10px] uppercase font-bold tracking-widest opacity-60">Seguridad TradeVision v4.0</p>
+
+                <form onSubmit={handleSubmit} className="space-y-4 w-full">
+                    <div className="relative group">
+                        <FiUser className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                        <input 
+                            name="nombre" type="text" required placeholder="Nombre Completo"
+                            value={formData.nombre} onChange={handleChange}
+                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                        />
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4 w-full">
-                        <div className="relative group">
-                            <FiUser className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                            <input 
-                                name="nombre" type="text" required placeholder="Nombre Completo"
-                                value={formData.nombre} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                            />
-                        </div>
+                    <div className="relative group">
+                        <FiMail className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                        <input 
+                            name="email" type="email" required placeholder="Email de Registro"
+                            value={formData.email} onChange={handleChange}
+                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                        />
+                    </div>
 
-                        <div className="relative group">
-                            <FiMail className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                            <input 
-                                name="email" type="email" required placeholder="Email de Registro"
-                                value={formData.email} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                            />
-                        </div>
-
-                        <div className="relative group">
-                            <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                            <select 
-                                name="pais" required value={formData.pais} onChange={handleCountryChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition-all"
-                            >
-                                <option value="" disabled>País de Residencia</option>
-                                {LATAM_DATA.map(i => <option key={i.country} value={i.country} className="bg-[#0A1931]">{i.country}</option>)}
-                            </select>
-                        </div>
-
-                        <div className="flex gap-2">
-                            <div className="w-20 bg-[#050b14] text-brand-accent border border-white/5 rounded-xl flex items-center justify-center font-bold text-xs font-mono">
-                                {phonePrefix || '+--'}
-                            </div>
-                            <div className="relative flex-1 group">
-                                <FiPhone className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                                <input 
-                                    name="whatsapp" type="tel" required placeholder="WhatsApp"
-                                    value={formData.whatsapp} onChange={handleChange}
-                                    className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="relative group">
-                            <FiLock className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                            <input 
-                                name="password" 
-                                type={showPassword ? "text" : "password"} 
-                                required placeholder="Crea tu Contraseña"
-                                value={formData.password} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                            />
-                            <div className="absolute right-3 top-3.5 cursor-pointer text-gray-500" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? <FiEyeOff /> : <FiEye />}
-                            </div>
-                        </div>
-
-                        <div className="relative group">
-                            <FiHash className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
-                            <input 
-                                name="edad" type="number" min="18" max="99" required placeholder="Edad"
-                                value={formData.edad} onChange={handleChange}
-                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
-                            />
-                        </div>
-
-                        <button 
-                            type="submit" disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-center justify-center gap-2 group"
+                    <div className="relative group">
+                        <FiGlobe className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                        <select 
+                            name="pais" required value={formData.pais} onChange={handleCountryChange}
+                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:ring-1 focus:ring-brand-accent outline-none appearance-none transition-all cursor-pointer"
                         >
-                            {isLoading ? (
-                                <FiCpu className="animate-spin text-xl" />
-                            ) : (
-                                <><FiLock /> VALIDAR ACCESO <FiArrowRight className="group-hover:translate-x-1 transition-transform" /></>
-                            )}
-                        </button>
+                            <option value="" disabled>País de Residencia</option>
+                            {LATAM_DATA.map(i => <option key={i.country} value={i.country} className="bg-[#0A1931]">{i.country}</option>)}
+                        </select>
+                    </div>
 
-                        <p className="text-[9px] text-center text-gray-500 uppercase font-black tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-60">
-                            <FiCheckCircle className="text-brand-accent" /> SSL SECURE TERMINAL
-                        </p>
-                    </form>
-                </div>
-            )}
+                    <div className="flex gap-2">
+                        <div className="w-20 bg-[#050b14] text-brand-accent border border-white/5 rounded-xl flex items-center justify-center font-bold text-xs font-mono">
+                            {phonePrefix || '+--'}
+                        </div>
+                        <div className="relative flex-1 group">
+                            <FiPhone className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                            <input 
+                                name="whatsapp" type="tel" required placeholder="WhatsApp"
+                                value={formData.whatsapp} onChange={handleChange}
+                                className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="relative group">
+                        <FiLock className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                        <input 
+                            name="password" 
+                            type={showPassword ? "text" : "password"} 
+                            required placeholder="Contraseña de Acceso"
+                            value={formData.password} onChange={handleChange}
+                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-10 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                        />
+                        <div className="absolute right-3 top-3.5 cursor-pointer text-gray-500" onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? <FiEyeOff /> : <FiEye />}
+                        </div>
+                    </div>
+
+                    <div className="relative group">
+                        <FiHash className="absolute left-3 top-3.5 text-brand-accent/40 group-focus-within:text-brand-accent transition-colors" />
+                        <input 
+                            name="edad" type="number" min="18" max="99" required placeholder="Edad"
+                            value={formData.edad} onChange={handleChange}
+                            className="w-full bg-[#112240] border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:ring-1 focus:ring-brand-accent outline-none transition-all"
+                        />
+                    </div>
+
+                    <button 
+                        type="submit" disabled={isLoading}
+                        className="w-full bg-gradient-to-r from-brand-accent to-blue-600 text-[#0A1931] font-black py-4 rounded-xl shadow-lg hover:shadow-brand-accent/20 transition-all flex items-center justify-center gap-2 group active:scale-95 disabled:opacity-50 mt-2"
+                    >
+                        {isLoading ? (
+                            <FiCpu className="animate-spin text-xl" />
+                        ) : (
+                            <><FiLock /> VALIDAR ACCESO <FiArrowRight className="group-hover:translate-x-1 transition-transform" /></>
+                        )}
+                    </button>
+
+                    <p className="text-[9px] text-center text-gray-500 uppercase font-black tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-60">
+                        <FiCheckCircle className="text-brand-accent" /> SSL SECURE TERMINAL
+                    </p>
+                </form>
+            </div>
         </div>
     );
 };
