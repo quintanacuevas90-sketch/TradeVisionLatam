@@ -43,18 +43,19 @@ const PremiumCoursesPage: React.FC = () => {
 
     const courses = [
         {
-            title: "MANUAL PRO: INGENIERÍA DE PROMPTS CON IA",
-            price: "19.99",
-            anchor: "Valor Real: $50 USD",
-            urgency: "OFERTA DE LANZAMIENTO",
-            description: "Aprende los 6 Prompts maestros para entrenar a la IA como tu asesor experto en gestión de riesgo, Order Flow y Smart Money.",
+            title: "El Cerebro Digital: Ingeniería de Prompts para Traders",
+            price: "BECA",
+            anchor: "RECURSO VIP",
+            urgency: "100% BONIFICADO HOY",
+            description: "No necesitas saber programar. Necesitas saber preguntar.",
             content: [
-                "Ahorra $30 USD hoy mismo.",
-                "Arquitectura de <strong>Prompts Dinámicos</strong> V2.0.",
-                "Protocolo de entrega personalizada (2 días)."
+                "<strong>Crear Scripts:</strong> Genera indicadores personalizados en Pine Script en segundos.",
+                "<strong>Auditoría de Estrategia:</strong> Haz que la IA destroce tu operativa y encuentre las fallas.",
+                "<strong>Backtesting Forense:</strong> Analiza 10 años de data de mercado en minutos.",
+                "Este documento se vendía por $50 USD. Hoy es tu regalo de bienvenida."
             ],
-            cta: "ASEGURAR MI COPIA",
-            link: "OPEN_MANUAL_MODAL" 
+            cta: "DESCARGAR ARSENAL IA (PDF)",
+            link: "/cerebro-digital-tradevision.pdf" 
         },
         { title: "SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO", price: "99", anchor: "Valor Real: $150 USD", urgency: "¡SOLO 20 CUPOS DISPONIBLES ESTE MES!", description: "Diseñado para el trader estancado. Elimina la improvisación y opera con un sistema basado en probabilidad y gestión de riesgo.", content: ["4 Fórmulas de Operación de Alta Efectividad.", "<strong>Backtesting al Extremo</strong> para confirmar validez.", "<strong>Psicotrading y Gestión de Riesgo</strong> (La Clave Maestra)."], cta: "Explorar Módulos del Programa", link: "#/cursos/binarias-intermedio" },
         { title: "VISIÓN AVANZADA: EL LENGUAJE DEL PRECIO (BINARIAS PRO)", price: "199", anchor: "Valor Real: $299 USD", urgency: "¡Oferta válida solo por 48 horas!", description: "Un reseteo mental completo. Olvida los indicadores y los mitos. Aprende a leer el verdadero motor del mercado: el lenguaje del precio.", content: ["<strong>ROMPIENDO MITOS:</strong> Olvídate de Bots y Scripts.", "Aprende el verdadero motor del mercado: <strong>Lenguaje del Precio</strong>.", "Aplicación universal para cualquier activo y temporalidad."], cta: "Asegure su Cupo Exclusivo", link: "#/cursos/binarias-pro-c90" },

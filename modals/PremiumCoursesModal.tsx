@@ -28,18 +28,19 @@ export const PremiumCoursesModal: React.FC<{ onClose: () => void }> = ({ onClose
 
     const courses = [
         {
-            title: "PRE-VENTA: Protocolo de Prompts V2.0",
-            price: "19.99",
-            anchor: "Valor Real: $29.99 USD",
-            urgency: "¡SOLO 50 CUPOS DE PRE-VENTA!",
-            description: "Estamos actualizando el motor de IA. Congela el precio más bajo ahora y recibe prioridad de entrega en el lanzamiento.",
+            title: "El Cerebro Digital: Ingeniería de Prompts para Traders",
+            price: "BECA",
+            anchor: "RECURSO VIP",
+            urgency: "100% BONIFICADO HOY",
+            description: "No necesitas saber programar. Necesitas saber preguntar.",
             content: [
-                "Ahorra $10 USD pre-ordenando hoy.",
-                "Arquitectura de <strong>Prompts Dinámicos</strong> V2.0.",
-                "Acceso prioritario 24h antes del público."
+                "<strong>Crear Scripts:</strong> Genera indicadores personalizados en Pine Script en segundos.",
+                "<strong>Auditoría de Estrategia:</strong> Haz que la IA destroce tu operativa y encuentre las fallas.",
+                "<strong>Backtesting Forense:</strong> Analiza 10 años de data de mercado en minutos.",
+                "Un trader educado es un cliente para toda la vida. Por eso te lo regalamos hoy."
             ],
-            cta: "Pre-Ordenar Ahora ($19.99)",
-            link: "OPEN_MANUAL_MODAL"
+            cta: "DESCARGAR ARSENAL IA (PDF)",
+            link: "/cerebro-digital-tradevision.pdf" 
         },
         {
             title: "SISTEMA DE EJECUCIÓN: BINARIAS INTERMEDIO",

@@ -41,6 +41,7 @@ import ConsultancyModal from './modals/ConsultancyModal';
 
 import LoginWall from './components/LoginWall';
 import WelcomeBanner from './components/WelcomeBanner';
+import UserStatusBar from './components/UserStatusBar'; // NUEVA IMPORTACIÓN
 import AgeGateModal from './components/AgeGateModal';
 import CookieConsentModal from './components/CookieConsentModal';
 import EmailCopyModal from './modals/EmailCopyModal';
@@ -72,11 +73,18 @@ const App: React.FC = () => {
         const access = localStorage.getItem('member_access');
         const start = localStorage.getItem('session_start');
         const now = Date.now();
-        const SESSION_TTL = 172800000;
+        const SESSION_TTL = 172800000; // 48 Horas
 
         if (access === 'true' && start) {
             const elapsed = now - parseInt(start, 10);
-            return elapsed < SESSION_TTL;
+            if (elapsed < SESSION_TTL) {
+                return true;
+            } else {
+                // SESIÓN EXPIRADA: Limpiar acceso pero conservar identidad para el LoginWall (tv_is_registered)
+                localStorage.removeItem('member_access');
+                localStorage.removeItem('session_start');
+                return false;
+            }
         }
         return false;
     };
@@ -221,6 +229,7 @@ const App: React.FC = () => {
     return (
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
             <WelcomeBanner />
+            <UserStatusBar /> {/* NUEVO COMPONENTE INTEGRADO */}
             {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={() => navigate('/aviso-legal-riesgo')} />}
             {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
             {isEmailModalOpen && <EmailCopyModal onClose={() => setIsEmailModalOpen(false)} />}
