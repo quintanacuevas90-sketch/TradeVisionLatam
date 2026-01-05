@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { ModalType } from '../types';
 import AnimatedSection from '../components/AnimatedSection';
 import { useRouter } from '../hooks/useRouter';
+import { FiStar } from 'react-icons/fi';
 
 interface HeroSectionProps {
   onOpenModal: (modal: ModalType) => void;
@@ -42,7 +42,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
             {/* Content Container */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-8">
-                    {/* Image Column - Circular Mascot - TAMAÑO REDUCIDO Y PADDING AJUSTADO */}
+                    {/* Image Column - Circular Mascot */}
                     <div className="flex flex-col items-center flex-shrink-0">
                         <div className="relative w-36 h-36 md:w-52 md:h-52 rounded-full border-4 border-brand-accent/20 overflow-hidden drop-shadow-[0_0_20px_rgba(64,224,208,0.3)] hover:scale-105 transition-transform duration-500 bg-white flex items-center justify-center p-1">
                             <img 
@@ -60,7 +60,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
                         <p className="text-xs text-gray-400 italic mt-3 font-semibold tracking-wide">Mascota TradeVision Latam</p>
                     </div>
 
-                    {/* Title Column - OPTIMIZADO PARA MÓVIL */}
+                    {/* Title Column */}
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-relaxed tracking-wide text-white text-center md:text-left">
                         <span className="block lg:inline">
                             Bienvenido a <span translate="no" className="whitespace-nowrap">TradeVision Latam</span>:
@@ -72,26 +72,25 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
                     </h1>
                 </div>
 
-                <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+                <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed">
                     <p>
                         Una academia de <span translate="no">trading</span> para <span translate="no">traders</span>, con la misión de forjar la disciplina y la rentabilidad en Latinoamérica.
                     </p>
                 </div>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
                     <button
                         onClick={() => navigate('/premium-courses')}
-                        className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-bold py-3 px-8 rounded-lg text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg"
+                        className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-black py-4 px-10 rounded-xl text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg shadow-brand-accent/20 uppercase tracking-wider"
                     >
                         Cursos Premium
                     </button>
-                    <a
-                        href="https://wa.me/message/T6UFHN3SSTIEJ1?text=Hola,%20quisiera%20recibir%20la%20guía%20gratuita%20de%20Patrones%20de%20Velas."
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 bg-transparent border-2 border-brand-accent text-brand-accent font-bold py-3 px-8 rounded-lg text-lg hover:bg-brand-accent hover:text-brand-primary transition duration-300 w-full sm:w-auto"
+                    <button
+                        onClick={() => navigate('/colaboradores')}
+                        className="inline-flex items-center justify-center gap-3 bg-[#D4AF37] text-black font-black py-4 px-10 rounded-xl text-lg hover:bg-[#FDB931] transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-[0_0_25px_rgba(212,175,55,0.3)] uppercase tracking-wider group"
                     >
-                        Descargar Guía Exclusiva
-                    </a>
+                        <FiStar className="text-2xl group-hover:rotate-45 transition-transform" />
+                        ACCESO GOLD | SOCIO
+                    </button>
                 </div>
             </div>
         </AnimatedSection>
