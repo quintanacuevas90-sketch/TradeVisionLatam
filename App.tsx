@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import Router from './components/Router';
 import { useRouter } from './hooks/useRouter';
@@ -29,6 +30,7 @@ import ExecutionZonePage from './pages/ExecutionZonePage';
 import HallOfFamePage from './pages/HallOfFamePage';
 import BattlegroundsPage from './pages/BattlegroundsPage';
 import ColaboradoresPage from './pages/ColaboradoresPage';
+import SuccessPage from './pages/SuccessPage';
 
 import { PremiumCoursesModal } from './modals/PremiumCoursesModal';
 import AffiliateModal from './modals/AffiliateModal';
@@ -41,7 +43,7 @@ import ConsultancyModal from './modals/ConsultancyModal';
 
 import LoginWall from './components/LoginWall';
 import WelcomeBanner from './components/WelcomeBanner';
-import UserStatusBar from './components/UserStatusBar'; // NUEVA IMPORTACIÓN
+import UserStatusBar from './components/UserStatusBar';
 import AgeGateModal from './components/AgeGateModal';
 import CookieConsentModal from './components/CookieConsentModal';
 import EmailCopyModal from './modals/EmailCopyModal';
@@ -80,7 +82,6 @@ const App: React.FC = () => {
             if (elapsed < SESSION_TTL) {
                 return true;
             } else {
-                // SESIÓN EXPIRADA: Limpiar acceso pero conservar identidad para el LoginWall (tv_is_registered)
                 localStorage.removeItem('member_access');
                 localStorage.removeItem('session_start');
                 return false;
@@ -119,6 +120,7 @@ const App: React.FC = () => {
         if (pathname === '/premium-courses') return 'premium-courses';
         if (pathname === '/zona-de-ejecucion') return 'execution-zone';
         if (pathname === '/colaboradores') return 'colaboradores';
+        if (pathname === '/checkout/complete') return 'checkout-complete';
         return 'main';
     };
 
@@ -187,6 +189,7 @@ const App: React.FC = () => {
         '/zona-de-ejecucion': <ExecutionZonePage />,
         '/hall-of-fame': <HallOfFamePage />,
         '/battlegrounds': <BattlegroundsPage />,
+        '/checkout/complete': <SuccessPage />,
     };
 
     const renderModal = () => {
@@ -222,6 +225,16 @@ const App: React.FC = () => {
         );
     }
 
+    // EXCEPCIÓN PARA LA PÁGINA DE ÉXITO (PÚBLICA)
+    if (pathname === '/checkout/complete') {
+        return (
+            <div className="bg-brand-primary min-h-screen">
+                <SuccessPage />
+            </div>
+        );
+    }
+
+    // Bloqueo de seguridad para el resto de la academia
     if (!isAuthenticated) {
         return <LoginWall />;
     }
@@ -229,7 +242,7 @@ const App: React.FC = () => {
     return (
         <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
             <WelcomeBanner />
-            <UserStatusBar /> {/* NUEVO COMPONENTE INTEGRADO */}
+            <UserStatusBar />
             {showAgeGate && <AgeGateModal onAccept={handleAcceptAgeGate} onViewPolicy={() => navigate('/aviso-legal-riesgo')} />}
             {!showAgeGate && showCookieConsent && <CookieConsentModal onConsent={handleCookieConsent} />}
             {isEmailModalOpen && <EmailCopyModal onClose={() => setIsEmailModalOpen(false)} />}

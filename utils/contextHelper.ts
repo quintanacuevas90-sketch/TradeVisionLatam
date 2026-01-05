@@ -102,6 +102,9 @@ export const generateContextualSummary = (modal: ModalType | null, page: PageTyp
         case 'execution-zone':
             context += `\nEstá en la 'TRADING ARENA', una página interactiva para traders. Contiene módulos de entrenamiento.`;
             break;
+        case 'checkout-complete':
+            context += `\nEl usuario acaba de completar una compra exitosa y está en la página de bienvenida a la Zona de Disciplina.`;
+            break;
         case 'main':
         default:
              context += `\nLa página principal de TradeVision Latam, una academia de trading.`;

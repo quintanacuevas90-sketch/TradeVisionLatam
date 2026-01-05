@@ -1,8 +1,8 @@
 
 export type ModalType = 'premium-courses' | 'affiliate' | 'brokers' | 'community' | 'support' | 'mentors' | 'consultancy' | 'education';
 
-/* Added 'colaboradores' to PageType union */
-export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora' | 'colaboradores' | 'forex-elite' | 'binarias-pro-c90' | 'binarias-intermedio' | 'comunidad' | 'ia-manual' | 'legal-verification' | 'aviso-legal-riesgo' | 'terminos-academia' | 'politica-privacidad' | 'transparencia-legal' | 'execution-zone' | 'protocolo-confianza';
+/* Added 'colaboradores' and 'checkout-complete' to PageType union */
+export type PageType = 'main' | 'blog' | 'post' | 'sitemap' | 'faq' | 'brokers' | 'premium-courses' | 'consultancy' | 'methodology' | 'acerca-de' | 'responsabilidad' | 'impacto-social' | 'colabora' | 'colaboradores' | 'forex-elite' | 'binarias-pro-c90' | 'binarias-intermedio' | 'comunidad' | 'ia-manual' | 'legal-verification' | 'aviso-legal-riesgo' | 'terminos-academia' | 'politica-privacidad' | 'transparencia-legal' | 'execution-zone' | 'protocolo-confianza' | 'checkout-complete';
 
 export interface Testimonial {
     name: string;
