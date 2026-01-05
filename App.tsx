@@ -225,16 +225,12 @@ const App: React.FC = () => {
         );
     }
 
-    // EXCEPCIÓN PARA LA PÁGINA DE ÉXITO (PÚBLICA)
+    // EXCEPCIÓN DE SEGURIDAD PARA EL ALUMNO NUEVO
     if (pathname === '/checkout/complete') {
-        return (
-            <div className="bg-brand-primary min-h-screen">
-                <SuccessPage />
-            </div>
-        );
+        return <SuccessPage />;
     }
 
-    // Bloqueo de seguridad para el resto de la academia
+    // RESTO DE LA ACADEMIA PROTEGIDA
     if (!isAuthenticated) {
         return <LoginWall />;
     }
