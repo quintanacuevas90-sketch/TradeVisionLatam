@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
-import { FiArrowRight, FiDownload } from 'react-icons/fi';
+import { FiArrowRight, FiDownload, FiCreditCard } from 'react-icons/fi';
 import { useRouter } from '../hooks/useRouter';
 
 interface CourseCardProps {
@@ -17,35 +18,38 @@ interface CourseCardProps {
     };
     isFeatured?: boolean;
     onClose?: () => void;
+    onCustomClick?: () => void; // Nueva prop para acciones como Whop
 }
 
 const CEREBRO_PDF_URL = 'https://www.tradevision.me/cerebro-digital-tradevision.pdf';
 const CEREBRO_PDF_FILENAME = 'Manual_IA_TradeVision.pdf';
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false, onClose }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false, onClose, onCustomClick }) => {
     const { navigate } = useRouter();
 
-    // --- Estrategia de URL Absoluta para Manual ---
     const isManual =
         course.price === 'BECA' ||
         (typeof course.title === 'string' && course.title.toLowerCase().includes('cerebro'));
 
-    // Definir atributos finales del botón/link
+    const isWhopCheckout = course.link.includes('plan_');
+
     let finalHref = course.link;
     let finalTarget: string | undefined = undefined;
     let finalRel: string | undefined = undefined;
     let finalDownload: string | undefined = undefined;
     let finalOnClick: ((e: React.MouseEvent<HTMLAnchorElement>) => void) | undefined = undefined;
     
-    if (isManual) {
-        // Forzar el enlace al manual absoluto
+    if (onCustomClick) {
+        finalOnClick = (e) => {
+            e.preventDefault();
+            onCustomClick();
+        };
+    } else if (isManual) {
         finalHref = CEREBRO_PDF_URL;
         finalTarget = '_blank';
         finalRel = 'noopener noreferrer';
         finalDownload = CEREBRO_PDF_FILENAME;
-        finalOnClick = undefined;
     } else if (course.link.startsWith('#/')) {
-        // Ruta interna
         finalHref = course.link;
         finalOnClick = (e) => {
             e.preventDefault();
@@ -53,27 +57,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false, onC
             navigate(path);
             onClose?.();
         };
-    } else if (course.link === 'OPEN_MANUAL_MODAL' || course.link === '#') {
-        // Acción especial (modal, ancla nula, etc.)
-        finalHref = course.link;
-        finalOnClick = (e) => {
-            e.preventDefault();
-            // Lógica extra opcional
-        };
-    } else if (course.link.toLowerCase().endsWith('.pdf')) {
-        // Cualquier otro PDF (NO manual)
-        finalHref = course.link;
-        finalDownload = undefined;
-        finalTarget = '_blank';
-        finalRel = 'noopener noreferrer';
-        finalOnClick = undefined;
     } else {
-        // Externo o normal
         finalHref = course.link;
         finalTarget = '_blank';
         finalRel = 'noopener noreferrer';
-        finalDownload = undefined;
-        finalOnClick = undefined;
     }
     
     return (
@@ -119,25 +106,16 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false, onC
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 font-bold tracking-tight">{course.description}</p>
             
             <ul className="text-left space-y-2 mb-6 text-sm text-gray-700 dark:text-gray-300 flex-grow">
-                {course.content.map((item, index) => {
-                    const isImportant = item.includes('<strong>');
-                    return (
-                        <li key={index} className="flex items-start">
-                            <FaCheckCircle
-                                size={14}
-                                className={`${isImportant ? 'text-brand-accent' : 'text-green-500'} mr-3 mt-1 flex-shrink-0`}
-                            />
-                            <span className="leading-tight" dangerouslySetInnerHTML={{ __html: item }} />
-                        </li>
-                    );
-                })}
+                {course.content.map((item, index) => (
+                    <li key={index} className="flex items-start">
+                        <FaCheckCircle
+                            size={14}
+                            className={`${item.includes('<strong>') ? 'text-brand-accent' : 'text-green-500'} mr-3 mt-1 flex-shrink-0`}
+                        />
+                        <span className="leading-tight" dangerouslySetInnerHTML={{ __html: item }} />
+                    </li>
+                ))}
             </ul>
-
-            {isManual && (
-                <p className="text-[10px] text-gray-500 mb-4 italic leading-tight px-2">
-                    "Este manual es el 'Vehículo'. La habilidad de conducir se aprende en nuestros programas de formación profesional."
-                </p>
-            )}
 
             <a
                 href={finalHref}
@@ -148,10 +126,14 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, isFeatured = false, onC
                 className={`mt-auto w-full font-black py-4 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-lg ${
                     isManual 
                         ? 'bg-transparent border-2 border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-brand-primary' 
+                        : isWhopCheckout
+                        ? 'bg-gradient-to-r from-brand-accent to-blue-600 text-brand-primary hover:scale-[1.02]'
                         : 'bg-brand-accent text-brand-primary hover:bg-opacity-90'
                 }`}
             >
-                {course.cta} {isManual ? <FiDownload /> : <FiArrowRight />}
+                {isWhopCheckout && <FiCreditCard />}
+                {course.cta} 
+                {isManual ? <FiDownload /> : <FiArrowRight />}
             </a>
         </div>
     );

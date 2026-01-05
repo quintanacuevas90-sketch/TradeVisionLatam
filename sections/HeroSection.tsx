@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { ModalType } from '../types';
 import AnimatedSection from '../components/AnimatedSection';
 import { useRouter } from '../hooks/useRouter';
-import { FiStar } from 'react-icons/fi';
+import { FiStar, FiShield, FiTrendingUp } from 'react-icons/fi';
 
 interface HeroSectionProps {
   onOpenModal: (modal: ModalType) => void;
@@ -11,86 +12,86 @@ interface HeroSectionProps {
 const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
     const { navigate } = useRouter();
     return (
-        <AnimatedSection className="relative text-center overflow-hidden bg-brand-primary py-24 md:py-32">
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-primary via-brand-primary/90 to-brand-primary z-0"></div>
+        <AnimatedSection className="relative overflow-hidden bg-[#020617] py-24 md:py-40">
+            {/* Immersive Animated Background */}
+            <div className="absolute inset-0 z-0">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#0A1931]/40 via-[#020617] to-[#020617]"></div>
+                <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
+                
+                {/* Floating Glows */}
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-accent/5 blur-[120px] rounded-full animate-pulse"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyber-violet/5 blur-[120px] rounded-full animate-pulse [animation-delay:2s]"></div>
 
-             {/* Subtle trading graph background */}
-            <div className="absolute inset-0 z-0 opacity-10 mix-blend-soft-light pointer-events-none">
-                <svg
-                    className="w-full h-full"
-                    viewBox="0 0 1440 600"
-                    xmlns="http://www.w3.org/2000/svg"
-                    preserveAspectRatio="none"
-                >
-                    <path
-                        d="M0,320L48,314.7C96,309,192,299,288,272C384,245,480,203,576,197.3C672,192,768,224,864,240C960,256,1056,256,1152,234.7C1248,213,1344,171,1392,149.3L1440,128"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                        fill="none"
-                        className="text-brand-accent"
-                    />
-                    <path
-                        d="M0,400L48,380C96,360,192,320,288,325.3C384,331,480,384,576,394.7C672,405,768,373,864,362.7C960,352,1056,363,1152,341.3C1248,320,1344,267,1392,240L1440,213"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        fill="none"
-                        className="text-white"
-                    />
+                {/* Cyber Graph Vectors */}
+                <svg className="absolute bottom-0 left-0 w-full h-1/2 opacity-20 pointer-events-none" viewBox="0 0 1440 320" fill="none">
+                    <path d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,229.3C960,256,1056,256,1152,229.3C1248,203,1344,149,1392,122.7L1440,96" stroke="rgba(64,224,208,0.2)" strokeWidth="2" />
+                    <path d="M0,100L60,120C120,140,240,180,360,170C480,160,600,100,720,100C840,100,960,160,1080,190C1200,220,1320,220,1380,220L1440,220" stroke="rgba(188,19,254,0.1)" strokeWidth="1" />
                 </svg>
             </div>
 
-            {/* Content Container */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-8">
-                    {/* Image Column - Circular Mascot */}
-                    <div className="flex flex-col items-center flex-shrink-0">
-                        <div className="relative w-36 h-36 md:w-52 md:h-52 rounded-full border-4 border-brand-accent/20 overflow-hidden drop-shadow-[0_0_20px_rgba(64,224,208,0.3)] hover:scale-105 transition-transform duration-500 bg-white flex items-center justify-center p-1">
-                            <img 
-                                id="buho-bienvenida"
-                                src="https://i.pinimg.com/736x/6b/6f/a2/6b6fa26efc0259fecd2a789d209b559a.jpg" 
-                                alt="Mascota TradeVision Latam Presentando" 
-                                loading="lazy"
-                                className="w-full h-full object-contain object-center"
-                                style={{ 
-                                    opacity: 0, 
-                                    animation: 'fade-in-up 1.5s ease-out 0.5s forwards' 
-                                }}
-                            />
-                        </div>
-                        <p className="text-xs text-gray-400 italic mt-3 font-semibold tracking-wide">Mascota TradeVision Latam</p>
+                <div className="max-w-5xl mx-auto flex flex-col items-center">
+                    
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/20 text-brand-accent text-[10px] font-black uppercase tracking-[0.3em] mb-10 animate-fade-in-up">
+                        <FiShield /> Academia de Disciplina Institucional
                     </div>
 
-                    {/* Title Column */}
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-relaxed tracking-wide text-white text-center md:text-left">
-                        <span className="block lg:inline">
-                            Bienvenido a <span translate="no" className="whitespace-nowrap">TradeVision Latam</span>:
-                        </span>
-                        {' '}
-                        <span className="block lg:inline text-brand-accent mt-2 lg:mt-0">
-                            La Disciplina es la Estrategia
-                        </span>
-                    </h1>
-                </div>
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 mb-12">
+                        {/* Mascot Frame */}
+                        <div className="relative shrink-0 animate-fade-in-up">
+                            <div className="absolute inset-0 bg-brand-accent/20 blur-3xl rounded-full animate-pulse"></div>
+                            <div className="relative w-40 h-40 md:w-64 md:h-64 rounded-full border-2 border-white/5 p-1 bg-[#0f172a]/80 backdrop-blur-xl overflow-hidden group">
+                                <img 
+                                    src="https://i.pinimg.com/736x/6b/6f/a2/6b6fa26efc0259fecd2a789d209b559a.jpg" 
+                                    alt="TradeVision Mascot" 
+                                    className="w-full h-full object-cover object-center transform transition-transform duration-700 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/60 to-transparent"></div>
+                            </div>
+                            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white text-brand-primary px-3 py-1 rounded-full font-black text-[9px] uppercase tracking-tighter shadow-xl">
+                                MASTER INSTRUCTOR
+                            </div>
+                        </div>
 
-                <div className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed">
-                    <p>
-                        Una academia de <span translate="no">trading</span> para <span translate="no">traders</span>, con la misión de forjar la disciplina y la rentabilidad en Latinoamérica.
-                    </p>
-                </div>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-                    <button
-                        onClick={() => navigate('/premium-courses')}
-                        className="inline-flex items-center justify-center gap-2 bg-brand-accent text-brand-primary font-black py-4 px-10 rounded-xl text-lg hover:bg-opacity-90 transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-lg shadow-brand-accent/20 uppercase tracking-wider"
-                    >
-                        Cursos Premium
-                    </button>
-                    <button
-                        onClick={() => navigate('/colaboradores')}
-                        className="inline-flex items-center justify-center gap-3 bg-[#D4AF37] text-black font-black py-4 px-10 rounded-xl text-lg hover:bg-[#FDB931] transition duration-300 w-full sm:w-auto transform hover:scale-105 shadow-[0_0_25px_rgba(212,175,55,0.3)] uppercase tracking-wider group"
-                    >
-                        <FiStar className="text-2xl group-hover:rotate-45 transition-transform" />
-                        ACCESO GOLD | SOCIO
-                    </button>
+                        {/* Heading */}
+                        <div className="text-center md:text-left animate-fade-in-up [animation-delay:0.2s]">
+                            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black leading-[1.1] tracking-tight text-white mb-6">
+                                La Disciplina es<br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-white to-cyber-violet">la Única Estrategia.</span>
+                            </h1>
+                            <p className="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed font-medium">
+                                Deja de ser la liquidez del mercado. Aprende a operar con la <span className="text-white">Lógica del Smart Money</span> y la tecnología de élite.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* CTAs */}
+                    <div className="flex flex-col sm:flex-row items-center gap-6 w-full max-w-2xl animate-fade-in-up [animation-delay:0.4s]">
+                        <button
+                            onClick={() => navigate('/premium-courses')}
+                            className="flex-1 w-full flex items-center justify-center gap-3 bg-brand-accent text-[#020617] font-black py-5 px-10 rounded-2xl text-lg hover:bg-white transition-all transform hover:scale-[1.02] shadow-[0_20px_50px_rgba(64,224,208,0.2)] group"
+                        >
+                            <FiTrendingUp className="text-2xl group-hover:rotate-12 transition-transform" />
+                            CURSOS PREMIUM
+                        </button>
+                        <button
+                            onClick={() => navigate('/colaboradores')}
+                            className="flex-1 w-full flex items-center justify-center gap-3 bg-[#1e293b] border border-white/10 text-white font-black py-5 px-10 rounded-2xl text-lg hover:bg-white hover:text-black transition-all transform hover:scale-[1.02] group"
+                        >
+                            <FiStar className="text-2xl text-yellow-500 group-hover:rotate-45 transition-transform" />
+                            ACCESO GOLD
+                        </button>
+                    </div>
+
+                    <div className="mt-16 flex items-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-700 animate-fade-in-up [animation-delay:0.6s]">
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500">Operando con:</p>
+                        <div className="flex items-center gap-6 text-xl font-black text-white italic tracking-tighter">
+                            <span>FUSION MARKETS</span>
+                            <span>BINANCE</span>
+                            <span>cTRADER</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </AnimatedSection>
