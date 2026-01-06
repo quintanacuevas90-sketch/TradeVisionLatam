@@ -1,37 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
-import { FaTelegram, FaWhatsapp, FaComments, FaCheckCircle, FaUserPlus, FaUsers } from 'react-icons/fa';
+import { FaTelegram, FaWhatsapp, FaCheckCircle, FaUserPlus, FaUsers } from 'react-icons/fa';
 import { FiArrowDown, FiAward } from 'react-icons/fi';
 import PageBackButton from '../components/PageBackButton';
 
 // --- SUB-COMPONENTS ---
-
-const CountdownTimer: React.FC = () => {
-    const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
-
-    useEffect(() => {
-        if (timeLeft <= 0) {
-            setTimeLeft(10 * 60); // Reset timer
-            return;
-        }
-
-        const timer = setInterval(() => {
-            setTimeLeft((prevTime) => prevTime - 1);
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, [timeLeft]);
-
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-
-    return (
-        <div className="font-mono text-5xl md:text-7xl font-bold tracking-widest" style={{ textShadow: '0 0 10px #FF003C, 0 0 20px #FF003C' }}>
-            <span>{String(minutes).padStart(2, '0')}</span>
-            <span className="animate-pulse">:</span>
-            <span>{String(seconds).padStart(2, '0')}</span>
-        </div>
-    );
-};
 
 const SocialProofToast: React.FC = () => {
     const [notification, setNotification] = useState<{ text: string; isVisible: boolean } | null>(null);
@@ -101,12 +74,6 @@ const UrgencyCtaSection: React.FC<UrgencyCtaSectionProps> = ({ showBackButton = 
             benefits: ['Últimas noticias TradeVision', 'Lives Exclusivos', 'Códigos de Torneos', 'Nuevas Apps', 'Actualizaciones Academia']
         },
         {
-            icon: <FaComments />,
-            buttonText: "INGRESAR AL GRUPO",
-            link: "https://t.me/TFTRADER25",
-            benefits: ['Biblioteca (+2000 Libros)', 'Cursos Binarias y Forex', 'Info de Interés Global']
-        },
-        {
             icon: <FaWhatsapp />,
             buttonText: "INGRESAR AL CANAL",
             link: "https://whatsapp.com/channel/0029Vb6gcptJZg49w13b0L1H",
@@ -129,23 +96,8 @@ const UrgencyCtaSection: React.FC<UrgencyCtaSectionProps> = ({ showBackButton = 
                     </div>
                 )}
                 <div className="space-y-12">
-                    {/* 1. Alert Header */}
-                    <div className="p-4 border-2 border-transparent animate-blink-red-border rounded-lg text-center bg-red-900/30">
-                        <h1 className="text-2xl md:text-4xl font-extrabold uppercase" style={{ color: '#FF003C', textShadow: '0 0 10px #FF003C' }}>
-                            ¡ALTO! AÚN NO ESTÁS DENTRO DE LA COMUNIDAD
-                        </h1>
-                        <p className="text-sm md:text-base text-gray-300 mt-2">Tu registro está incompleto hasta que ingresas a los canales oficiales.</p>
-                    </div>
-                    
-                    {/* 2. Important Step Card */}
-                    <div className="p-6 md:p-8 rounded-xl bg-gradient-to-b from-gray-900/50 to-[#0B1120] border border-white/10 text-center">
-                        <h2 className="text-xl md:text-3xl font-bold uppercase text-brand-accent mb-2">Paso Importante: Activa tu Acceso Ahora</h2>
-                        <p className="text-gray-400 mb-4">Esta invitación vence en:</p>
-                        <CountdownTimer />
-                    </div>
-
-                    {/* 3. Access Buttons & Benefits */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {/* Access Buttons & Benefits - Grid adjusted to 2 columns */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                         {channels.map((channel, index) => (
                             <div key={index} className="p-6 rounded-lg bg-[#111827]/70 border border-white/10 flex flex-col items-center">
                                 <div className="text-6xl text-brand-accent mb-6">{channel.icon}</div>
@@ -165,7 +117,7 @@ const UrgencyCtaSection: React.FC<UrgencyCtaSectionProps> = ({ showBackButton = 
                         ))}
                     </div>
 
-                    {/* 5. Authority Section */}
+                    {/* Authority Section */}
                     <div className="p-6 md:p-8 rounded-lg bg-[#111827] border border-white/10 text-center">
                         <h3 className="text-2xl md:text-3xl font-extrabold text-white">YA SOMOS <span className="text-brand-accent">1,620</span> MIEMBROS EN LA ACADEMIA</h3>
                         <p className="text-xs md:text-sm text-gray-400 mt-2 max-w-3xl mx-auto">
@@ -183,7 +135,7 @@ const UrgencyCtaSection: React.FC<UrgencyCtaSectionProps> = ({ showBackButton = 
                 </div>
             </div>
             
-            {/* 4. Social Proof Toast */}
+            {/* Social Proof Toast */}
             <SocialProofToast />
 
         </section>

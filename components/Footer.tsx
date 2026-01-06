@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ModalType } from '../types';
 import { LEGAL_TEXT, IP_LEGAL_TEXT, SOCIAL_LINKS } from '../constants';
@@ -19,6 +20,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenModal }) => {
             links: [
                 { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
                 { label: 'TRADING ARENA 🎮', action: () => navigate('/zona-de-ejecucion') },
+                { label: 'Programa de Afiliados', action: () => navigate('/partners') },
                 { label: 'Recursos Gratuitos', action: () => navigate('/comunidad') },
                 { label: 'Brokers Recomendados', action: () => navigate('/brokers') },
                 { label: 'Blog de Trading', action: () => navigate('/blog') },

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Modal from './Modal';
 import { FaTelegram, FaWhatsapp, FaLink, FaRobot, FaShieldAlt, FaBrain, FaExclamationTriangle } from 'react-icons/fa';
@@ -5,7 +6,6 @@ import { FaTelegram, FaWhatsapp, FaLink, FaRobot, FaShieldAlt, FaBrain, FaExclam
 const socialLinks = [
     { name: "Canal de WhatsApp", icon: <FaWhatsapp />, href: "https://whatsapp.com/channel/0029Vb6gcptJZg49w13b0L1H", color: "bg-whatsapp-green", description: "Anuncios y noticias importantes" },
     { name: "Comunidad Telegram", icon: <FaTelegram />, href: "https://t.me/tradevision90", color: "bg-telegram-blue", description: "Grupo principal para debates y análisis" },
-    { name: "Canal Cursos Telegram", icon: <FaTelegram />, href: "https://t.me/TFTRADER25", color: "bg-telegram-blue", description: "Acceso a cursos y material gratuito" },
     { name: "Curso Forex Premium", icon: <FaRobot />, href: "https://t.me/trainfxbot", color: "bg-telegram-blue", description: "Bot para acceder a nuestro curso Forex Pro" },
     { name: "Todas las Redes", icon: <FaLink />, href: "https://linktr.ee/TradeVisionLatam", color: "bg-link-gray", description: "Encuéntranos en todas las plataformas" },
 ];
@@ -46,7 +46,7 @@ const CommunityModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     <h3 className="text-xl font-bold text-center mb-6">El Camino del Comerciante Responsable</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
                         <EthicalPillar icon={<FaShieldAlt />} title="1. Empieza sin Riesgo">
-                            <p>Antes de arriesgar tu capital, domina la plataforma. Abre tu <strong>cuenta demo gratuita</strong> con $10,000 virtuales en <a href="https://affiliate.iqoption.net/redir/?aff=753088&aff_model=revenue&afftrack=PaginaWeb" target="_blank" rel="noopener noreferrer" className="text-brand-accent hover:underline">IQ Option</a> o <a href="https://exnova.org/es/?aff=753088&afftrack=PaginaWeb&aff_model=revenue" target="_blank" rel="noopener noreferrer" className="text-brand-accent hover:underline">Exnova</a>.</p>
+                            <p>Antes de arriesgar tu capital, domina la plataforma. Abre tu <strong>cuenta demo gratuita</strong> con $10,000 virtuales en <a href="https://affiliate.iqoption.net/redir/?aff=753088&afftrack=PaginaWeb" target="_blank" rel="noopener noreferrer" className="text-brand-accent hover:underline">IQ Option</a> o <a href="https://exnova.org/es/?aff=753088&afftrack=PaginaWeb&aff_model=revenue" target="_blank" rel="noopener noreferrer" className="text-brand-accent hover:underline">Exnova</a>.</p>
                         </EthicalPillar>
                         <EthicalPillar icon={<FaBrain />} title="2. El Conocimiento es Poder">
                              <p>Accede a nuestra <strong>Guía de Patrones de Velas</strong> gratuita y explora nuestros <strong>Cursos Premium</strong> para una formación profunda. El mercado premia la preparación.</p>

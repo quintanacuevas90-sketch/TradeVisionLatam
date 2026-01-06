@@ -31,6 +31,7 @@ import HallOfFamePage from './pages/HallOfFamePage';
 import BattlegroundsPage from './pages/BattlegroundsPage';
 import ColaboradoresPage from './pages/ColaboradoresPage';
 import SuccessPage from './pages/SuccessPage';
+import PartnersPage from './pages/PartnersPage';
 
 import { PremiumCoursesModal } from './modals/PremiumCoursesModal';
 import AffiliateModal from './modals/AffiliateModal';
@@ -121,6 +122,7 @@ const App: React.FC = () => {
         if (pathname === '/zona-de-ejecucion') return 'execution-zone';
         if (pathname === '/colaboradores') return 'colaboradores';
         if (pathname === '/checkout/complete') return 'checkout-complete';
+        if (pathname === '/partners') return 'partners' as any;
         return 'main';
     };
 
@@ -165,6 +167,7 @@ const App: React.FC = () => {
         '/blog': <BlogListPage />,
         '/blog/:slug': ({ slug }: { slug: string }) => <BlogPostPage slug={slug} />,
         '/sitemap': <SitemapPage onOpenModal={openModal} />,
+        // Fix: corrected onOpenModal={onOpenModal} to onOpenModal={openModal} to fix "Cannot find name 'onOpenModal'" error
         '/faq': <FaqPage onOpenModal={openModal} />,
         '/protocolo-confianza': <FaqTrustPage onOpenModal={openModal} />,
         '/brokers': <BrokersPage onOpenModal={openModal} />,
@@ -190,6 +193,7 @@ const App: React.FC = () => {
         '/hall-of-fame': <HallOfFamePage />,
         '/battlegrounds': <BattlegroundsPage />,
         '/checkout/complete': <SuccessPage />,
+        '/partners': <PartnersPage />,
     };
 
     const renderModal = () => {

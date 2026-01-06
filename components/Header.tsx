@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 /* Added missing FiArrowRight import */
-import { FiMenu, FiX, FiSun, FiMoon, FiSearch, FiLock, FiUnlock, FiKey, FiStar, FiArrowRight } from 'react-icons/fi';
+import { FiMenu, FiX, FiSun, FiMoon, FiSearch, FiLock, FiUnlock, FiKey, FiStar, FiArrowRight, FiBriefcase } from 'react-icons/fi';
 import { FaRobot, FaTrophy } from 'react-icons/fa';
 import { ModalType } from '../types';
 import { useTheme } from '../contexts/ThemeContext';
@@ -50,6 +51,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
         { label: 'Brokers', action: () => navigate('/brokers') },
         { label: 'Cursos', action: () => navigate('/premium-courses') },
         { label: 'Comunidad', action: () => navigate('/comunidad') },
+        { label: 'Partners', action: () => navigate('/partners') },
         { label: 'Blog', action: () => navigate('/blog') },
         { label: 'Soporte', action: () => onOpenModal('support') },
     ];
@@ -60,6 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
             links: [
                 { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
                 { label: 'Comunidad', action: () => navigate('/comunidad') },
+                { label: 'SOCIOS / PARTNERS', action: () => navigate('/partners') },
                 { label: 'Brokers', action: () => navigate('/brokers') },
                 { label: 'Blog', action: () => navigate('/blog') },
                 { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
@@ -117,8 +120,9 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                 <button
                                     key={link.label}
                                     onClick={link.action}
-                                    className="font-semibold text-gray-600 dark:text-gray-300 hover:text-brand-accent dark:hover:text-brand-accent transition-colors duration-300"
+                                    className={`font-semibold transition-colors duration-300 flex items-center gap-1.5 ${link.label === 'Partners' ? 'text-brand-accent' : 'text-gray-600 dark:text-gray-300 hover:text-brand-accent dark:hover:text-brand-accent'}`}
                                 >
+                                    {link.label === 'Partners' && <FiBriefcase size={16} />}
                                     {link.label}
                                 </button>
                             ))}
@@ -214,10 +218,15 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                                                     ? 'font-extrabold text-cyber-violet text-glow-violet hover:opacity-80'
                                                                     : link.label.includes('Salón de la Fama')
                                                                         ? 'font-bold text-yellow-500'
-                                                                        : 'text-gray-800 dark:text-white hover:text-brand-accent'
+                                                                        : link.label.includes('SOCIOS')
+                                                                            ? 'font-bold text-brand-accent flex items-center gap-2'
+                                                                            : 'text-gray-800 dark:text-white hover:text-brand-accent'
                                                     }`}
                                                 >
-                                                    <span>{link.label}</span>
+                                                    <span className="flex items-center gap-2">
+                                                        {link.label.includes('SOCIOS') && <FiBriefcase size={18} />}
+                                                        {link.label}
+                                                    </span>
                                                 </button>
                                             ))}
                                         </div>
