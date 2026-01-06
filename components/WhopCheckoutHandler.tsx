@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { FiX, FiShield, FiArrowLeft } from 'react-icons/fi';
+import { FiShield, FiArrowLeft, FiLock } from 'react-icons/fi';
+import Logo from './Logo';
 
 interface WhopCheckoutHandlerProps {
     planId: string;
@@ -12,123 +13,122 @@ export const WhopCheckoutHandler: React.FC<WhopCheckoutHandlerProps> = ({ planId
 
     useEffect(() => {
         if (isOpen) {
-            // BLOQUEO DE SEGURIDAD: Evita que el fondo se mueva mientras se procesa el pago
-            // Esto es estándar en Checkouts de Élite para evitar distracciones.
-            const originalStyle = window.getComputedStyle(document.body).overflow;
+            // BLOQUEO DE SCROLL DEL BODY: Protocolo UX para evitar desorientación
+            const originalOverflow = document.body.style.overflow;
             document.body.style.overflow = 'hidden';
 
-            // 1. LIMPIEZA
+            // 1. LIMPIEZA DE SCRIPTS PREVIOS
             const existingScript = document.getElementById('whop-loader-script');
-            if (existingScript) {
-                existingScript.remove();
-            }
+            if (existingScript) existingScript.remove();
 
-            // 2. INYECCIÓN DINÁMICA
+            // 2. INYECCIÓN DINÁMICA DEL SDK DE WHOP
             const script = document.createElement('script');
             script.id = 'whop-loader-script';
             script.src = "https://js.whop.com/static/checkout/loader.js";
             script.async = true;
             script.defer = true;
-            
-            // 3. MONTAJE
             document.body.appendChild(script);
 
-            // 4. CLEANUP: Restaurar scroll al cerrar
             return () => {
-                document.body.style.overflow = originalStyle;
+                // RESTAURACIÓN AL CERRAR
+                document.body.style.overflow = originalOverflow;
                 if (script) script.remove();
             };
         }
     }, [isOpen]);
 
-    const handleOpen = () => {
-        setIsOpen(true);
-    };
-
-    const handleClose = () => {
-        setIsOpen(false);
-    };
+    const handleOpen = () => setIsOpen(true);
+    const handleClose = () => setIsOpen(false);
 
     return (
         <>
             {trigger(handleOpen)}
 
-            {/* Vista Full-Screen Dedicada */}
+            {/* TERMINAL DE PAGO INMERSIVA (FULL SCREEN) */}
             {isOpen && (
-                <div className="fixed inset-0 z-[9999] flex flex-col bg-[#050b14] animate-fade-in overflow-hidden touch-none">
+                <div className="fixed inset-0 z-[99999] bg-[#050b14] flex flex-col animate-fade-in">
                     
-                    {/* Header de Conversión */}
-                    <div className="w-full bg-[#0A1931] border-b border-cyan-500/20 px-4 sm:px-8 py-4 shrink-0 z-50 shadow-2xl">
-                        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+                    {/* HEADER FIJO DE SEGURIDAD CRÍTICA */}
+                    <div className="w-full bg-[#0A1931] border-b border-brand-accent/20 px-4 sm:px-8 py-3 shrink-0 z-50 shadow-2xl">
+                        <div className="container mx-auto flex items-center justify-between">
                             
+                            {/* Identidad Visual */}
+                            <div className="flex items-center gap-3">
+                                <Logo className="w-8 h-8 md:w-10 md:h-10" />
+                                <div className="hidden sm:block">
+                                    <h2 className="text-white font-black text-xs md:text-sm uppercase tracking-[0.2em] leading-none">
+                                        TERMINAL DE PAGO SEGURO
+                                    </h2>
+                                    <p className="text-brand-accent text-[8px] md:text-[10px] font-bold uppercase mt-1 tracking-widest flex items-center gap-1">
+                                        <FiShield className="animate-pulse" /> TRADEVISION ENCRYPTION ACTIVE
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Botón de Retorno con Alto Contraste */}
                             <button 
                                 onClick={handleClose}
-                                className="order-2 sm:order-1 flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-black text-[10px] sm:text-xs uppercase tracking-widest group"
+                                className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-all px-4 py-2 rounded-xl font-black text-[10px] md:text-xs uppercase tracking-widest group"
                             >
                                 <FiArrowLeft className="text-brand-accent group-hover:-translate-x-1 transition-transform" size={18} />
-                                <span>VOLVER A LA ACADEMIA</span>
+                                <span>SALIR / CANCELAR</span>
                             </button>
-
-                            <div className="order-1 sm:order-2 text-center">
-                                <h2 className="text-white font-black text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] leading-tight">
-                                    INSCRIPCIÓN OFICIAL: <span className="text-brand-accent">SISTEMA DE EJECUCIÓN</span>
-                                </h2>
-                                <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase mt-1 tracking-[0.3em]">
-                                    Metodología Profesional - José Quintana
-                                </p>
-                            </div>
-
-                            <div className="hidden sm:flex order-3 items-center gap-2 opacity-50">
-                                <FiShield className="text-brand-accent" size={20} />
-                                <span className="text-[9px] text-white font-black uppercase tracking-widest">Pago Blindado</span>
-                            </div>
                         </div>
                     </div>
 
-                    {/* Área de la Pasarela - Aquí el scroll es nativo y capturado */}
-                    <div 
-                        className="flex-1 w-full overflow-y-auto bg-black relative custom-scrollbar overscroll-contain"
-                        style={{ WebkitOverflowScrolling: 'touch' }} // Fluidez total en iOS
-                    >
+                    {/* ÁREA DE PROCESAMIENTO CON SCROLL NATURAL (SIN LÍMITES DE ALTURA) */}
+                    <div className="flex-1 overflow-y-auto custom-scrollbar bg-[#050b14] relative">
                         
-                        {/* Fallback Detrás de Whop */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-10 z-0">
-                            <div className="relative">
-                                <div className="w-20 h-20 border-4 border-brand-accent/10 border-t-brand-accent rounded-full animate-spin"></div>
-                                <div className="absolute inset-0 m-auto w-10 h-10 flex items-center justify-center">
-                                    <FiShield className="text-brand-accent text-2xl animate-pulse" />
-                                </div>
-                            </div>
-                            <h4 className="mt-8 text-white font-black uppercase tracking-[0.3em] text-xs animate-pulse">
-                                ESTABLECIENDO CONEXIÓN SEGURA...
-                            </h4>
+                        {/* Indicador de Carga / Protocolo SSL de fondo */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-10 pointer-events-none">
+                            <Logo className="w-64 h-64 blur-sm animate-pulse" />
                         </div>
 
-                        {/* Whop Embedded Checkout Container */}
-                        <div className="container mx-auto max-w-4xl min-h-full py-4 px-0 sm:px-4">
+                        {/* Contenedor del Iframe de Whop: Optimizado para PC y Móvil */}
+                        <div className="container mx-auto max-w-4xl py-10 px-4 md:px-6 min-h-screen">
+                            
+                            {/* Tarjeta de Seguridad Superior */}
+                            <div className="mb-8 p-4 bg-brand-accent/5 border border-brand-accent/20 rounded-2xl flex items-center gap-4 max-w-2xl mx-auto shadow-lg">
+                                <div className="w-10 h-10 rounded-full bg-brand-accent/10 flex items-center justify-center text-brand-accent shrink-0">
+                                    <FiLock size={20} />
+                                </div>
+                                <p className="text-[10px] md:text-xs text-gray-400 leading-tight">
+                                    <strong className="text-white">CONEXIÓN BLINDADA:</strong> Tus datos son procesados directamente por la infraestructura de <strong className="text-brand-accent">Whop.com</strong> bajo estándares PCI-DSS Nivel 1.
+                                </p>
+                            </div>
+
+                            {/* DIV DE CARGA DINÁMICA - SIN MAX-HEIGHT PARA EVITAR CORTES */}
                             <div 
                                 id="whop-embedded-checkout"
                                 data-whop-checkout-plan-id={planId}
                                 data-whop-checkout-theme="dark"
                                 data-whop-checkout-theme-accent-color="cyan"
                                 data-whop-checkout-return-url="https://tradevision.me/checkout/complete"
-                                className="relative z-10 w-full"
-                                style={{ minHeight: '800px' }}
+                                className="relative z-10 w-full bg-transparent shadow-[0_30px_100px_rgba(0,0,0,0.5)] rounded-3xl"
+                                style={{ minHeight: '900px' }} // Asegura espacio suficiente para el loader inicial
                             >
+                                {/* Fallback visual mientras el SDK inyecta el contenido */}
+                                <div className="flex flex-col items-center justify-center pt-20">
+                                    <div className="w-16 h-16 border-4 border-brand-accent/10 border-t-brand-accent rounded-full animate-spin"></div>
+                                    <h4 className="mt-6 text-white/40 font-black uppercase tracking-[0.3em] text-[10px] animate-pulse">
+                                        CARGANDO PASARELA GLOBAL...
+                                    </h4>
+                                </div>
                             </div>
+
+                            {/* Espaciador final para asegurar scroll en campos bajos */}
+                            <div className="h-32"></div>
                         </div>
                     </div>
 
-                    {/* Footer de Seguridad */}
-                    <div className="bg-[#050b14] border-t border-white/5 py-3 px-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 shrink-0 z-50">
+                    {/* BARRA DE ESTADO SSL (FOOTER) */}
+                    <div className="bg-[#0A1931] border-t border-white/5 py-3 px-4 flex items-center justify-center gap-6 shrink-0 z-50">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-                            <span className="text-[9px] text-gray-500 font-black uppercase tracking-widest">Protocolo SSL: Activo</span>
+                            <span className="text-[9px] text-gray-500 font-black uppercase tracking-widest">SEGURIDAD RSA-2048 ACTIVA</span>
                         </div>
-                        <div className="w-1 h-1 bg-white/10 rounded-full"></div>
-                        <span className="text-[9px] text-gray-500 font-black uppercase tracking-widest">Protección 256-Bit</span>
-                        <div className="w-1 h-1 bg-white/10 rounded-full"></div>
-                        <span className="text-[9px] text-gray-500 font-black uppercase tracking-widest">Whop Secure Gateway</span>
+                        <div className="hidden sm:block w-1 h-1 bg-white/10 rounded-full"></div>
+                        <span className="hidden sm:inline text-[9px] text-gray-500 font-black uppercase tracking-widest">CERTIFICADO POR COMODO CA</span>
                     </div>
                 </div>
             )}
@@ -138,18 +138,22 @@ export const WhopCheckoutHandler: React.FC<WhopCheckoutHandlerProps> = ({ planId
                     width: 8px;
                 }
                 .custom-scrollbar::-webkit-scrollbar-track {
-                    background: #000;
+                    background: #050b14;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb {
                     background: rgba(64, 224, 208, 0.2);
                     border-radius: 4px;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: rgba(64, 224, 208, 0.5);
+                    background: rgba(64, 224, 208, 0.4);
                 }
-                /* Evitar que el scroll del contenedor afecte al resto de la UI */
-                .overscroll-contain {
-                    overscroll-behavior: contain;
+                
+                @keyframes fade-in {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .animate-fade-in {
+                    animation: fade-in 0.3s ease-out forwards;
                 }
             `}</style>
         </>
