@@ -167,7 +167,6 @@ const App: React.FC = () => {
         '/blog': <BlogListPage />,
         '/blog/:slug': ({ slug }: { slug: string }) => <BlogPostPage slug={slug} />,
         '/sitemap': <SitemapPage onOpenModal={openModal} />,
-        // Fix: corrected onOpenModal={onOpenModal} to onOpenModal={openModal} to fix "Cannot find name 'onOpenModal'" error
         '/faq': <FaqPage onOpenModal={openModal} />,
         '/protocolo-confianza': <FaqTrustPage onOpenModal={openModal} />,
         '/brokers': <BrokersPage onOpenModal={openModal} />,
@@ -229,11 +228,14 @@ const App: React.FC = () => {
         );
     }
 
-    // EXCEPCIÓN PARA LA PÁGINA DE ÉXITO (PÚBLICA)
-    if (pathname === '/checkout/complete') {
+    // --- SECCIÓN DE ACCESO PÚBLICO (PARA ADS Y REDIRECCIÓN) ---
+    const PUBLIC_PATHS = ['/checkout/complete', '/comunidad'];
+    
+    if (PUBLIC_PATHS.includes(pathname)) {
         return (
-            <div className="bg-brand-primary min-h-screen">
-                <SuccessPage />
+            <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
+                <Router routes={routes} />
+                <WhatsAppButton />
             </div>
         );
     }
