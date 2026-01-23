@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { FaTelegram, FaWhatsapp, FaCheckCircle, FaUserPlus, FaUsers } from 'react-icons/fa';
-import { FiArrowDown, FiAward } from 'react-icons/fi';
+import { FaTelegram, FaWhatsapp, FaCheckCircle, FaUserPlus, FaUsers, FaArrowRight } from 'react-icons/fa';
+import { FiArrowDown, FiAward, FiTarget } from 'react-icons/fi';
 import PageBackButton from '../components/PageBackButton';
 
 // --- SUB-COMPONENTS ---
@@ -95,7 +95,39 @@ const UrgencyCtaSection: React.FC<UrgencyCtaSectionProps> = ({ showBackButton = 
                         <PageBackButton variant="on-dark" />
                     </div>
                 )}
+                
                 <div className="space-y-12">
+                    {/* --- HERO CONVERSION BUTTON (NEW) --- */}
+                    <div className="max-w-4xl mx-auto animate-fade-in-up">
+                        <a 
+                            href="https://tradevision.me/#/cursos/binarias-intermedio"
+                            className="group relative flex flex-col md:flex-row items-center justify-center gap-4 bg-[#FACC15] hover:bg-[#EAB308] text-black p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-[0_20px_50px_rgba(250,204,21,0.2)] hover:shadow-[0_25px_60px_rgba(250,204,21,0.4)] border-b-8 border-[#A16207] active:border-b-0 active:translate-y-1 transition-all duration-300 text-center md:text-left overflow-hidden"
+                        >
+                            {/* Brillo animado */}
+                            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+                            
+                            <div className="bg-black/10 p-3 rounded-full hidden md:block group-hover:scale-110 transition-transform">
+                                <FiTarget size={40} className="text-black" />
+                            </div>
+                            
+                            <div className="flex-1">
+                                <h2 className="text-xl md:text-2xl lg:text-3xl font-black uppercase leading-tight tracking-tighter">
+                                    CONOCE EL CURSO QUE TE LLEVARÁ <br className="hidden lg:block" /> A LA RENTABILIDAD AQUÍ
+                                </h2>
+                                <p className="text-xs md:text-sm font-bold uppercase mt-1 opacity-70 tracking-widest flex items-center justify-center md:justify-start gap-2">
+                                    <span className="w-2 h-2 bg-red-600 rounded-full animate-ping"></span> OFERTA DE LANZAMIENTO V2.0
+                                </p>
+                            </div>
+                            
+                            <div className="shrink-0 flex items-center justify-center bg-black text-white w-12 h-12 md:w-16 md:h-16 rounded-full group-hover:translate-x-2 transition-transform shadow-xl">
+                                <FaArrowRight size={24} />
+                            </div>
+                        </a>
+                        <p className="text-center text-[10px] text-gray-500 uppercase font-black tracking-[0.3em] mt-4 opacity-50">
+                            Prioridad de acceso recomendada por José Quintana
+                        </p>
+                    </div>
+
                     {/* Access Buttons & Benefits - Grid adjusted to 2 columns */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                         {channels.map((channel, index) => (
