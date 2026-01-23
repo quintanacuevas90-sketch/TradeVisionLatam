@@ -229,7 +229,8 @@ const App: React.FC = () => {
     }
 
     // --- SECCIÓN DE ACCESO PÚBLICO (PARA ADS Y REDIRECCIÓN) ---
-    const PUBLIC_PATHS = ['/checkout/complete', '/comunidad'];
+    // Se añade '/cursos/binarias-intermedio' para que el curso de $99 sea público
+    const PUBLIC_PATHS = ['/checkout/complete', '/comunidad', '/cursos/binarias-intermedio'];
     
     if (PUBLIC_PATHS.includes(pathname)) {
         return (
