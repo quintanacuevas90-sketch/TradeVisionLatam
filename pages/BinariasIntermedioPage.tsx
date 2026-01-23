@@ -6,8 +6,8 @@ import AnimatedSection from '../components/AnimatedSection';
 import ScrollToTopButton from '../components/ScrollToTopButton';
 import { ModalType } from '../types';
 import { useRouter } from '../hooks/useRouter';
-import { FaBookOpen, FaWhatsapp } from 'react-icons/fa';
-import { FiCheck, FiClock, FiCheckSquare, FiShield, FiAlertTriangle, FiArrowLeft, FiCreditCard } from 'react-icons/fi';
+import { FaBookOpen, FaWhatsapp, FaMoneyBillWave, FaUniversity } from 'react-icons/fa';
+import { FiCheck, FiClock, FiCheckSquare, FiShield, FiAlertTriangle, FiArrowLeft, FiCreditCard, FiLock } from 'react-icons/fi';
 import PageBackButton from '../components/PageBackButton';
 import SocialProofWidget from '../components/SocialProofWidget';
 import WhopCheckoutHandler from '../components/WhopCheckoutHandler';
@@ -65,10 +65,8 @@ const BinariasIntermedioPage: React.FC = () => {
                         </ul>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            {/* INTEGRACIÓN DE WHOP CHECKOUT */}
                             <WhopCheckoutHandler 
                                 planId="plan_ojropXjBUERKG"
-                                /* Fix: Removed isLoading from parameters as WhopCheckoutHandler only provides 'open' function to trigger */
                                 trigger={(open) => (
                                     <button 
                                         onClick={open}
@@ -86,7 +84,6 @@ const BinariasIntermedioPage: React.FC = () => {
                     </div>
                 </AnimatedSection>
 
-                {/* Secciones de contenido omitidas para brevedad, permanecen igual */}
                 <AnimatedSection className="py-20 bg-gray-50 dark:bg-gray-800">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
                         <h2 className="text-3xl font-extrabold text-brand-primary dark:text-white uppercase">I. ¿Por Qué Sigues Quemando Cuentas?</h2>
@@ -114,8 +111,54 @@ const BinariasIntermedioPage: React.FC = () => {
                             </div>
                             <div className="p-8 bg-gray-50 dark:bg-white/5 rounded-2xl border-2 border-brand-accent shadow-lg">
                                 <h3 className="text-2xl font-bold text-brand-accent uppercase">Pilar 2: El Psicotrading (El 80% Mental)</h3>
-                                <p className="mt-4 text-gray-600 dark:text-gray-300">Aquí es donde fallan el 99% de los cursos. Te enseñamos a dominar el FOMO, la impaciencia y el miedo.</p>
+                                <p className="mt-4 text-gray-600 dark:text-gray-400">Aquí es donde fallan el 99% de los cursos. Te enseñamos a dominar el FOMO, la impaciencia y el miedo.</p>
                             </div>
+                        </div>
+                    </div>
+                </AnimatedSection>
+
+                {/* --- SECCIÓN PROGRAMA DE PARTNERS (NUEVO) --- */}
+                <AnimatedSection className="py-20 bg-[#0B1120] border-y border-brand-gold/30">
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+                        <div className="text-center mb-10">
+                            <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4">
+                                🦅 Programa de Partners Estratégicos de TradeVision
+                            </h2>
+                            <p className="text-gray-300 text-lg leading-relaxed font-medium">
+                                Creemos en el crecimiento orgánico y transparente. Como alumno oficial de la Metodología C90, obtienes acceso exclusivo a nuestro sistema de recomendación directa. Ayúdanos a profesionalizar la visión de más traders en Venezuela mientras capitalizas tu influencia.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-brand-gold transition-colors text-center group">
+                                <div className="w-12 h-12 bg-brand-gold/20 rounded-full flex items-center justify-center text-brand-gold mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform">
+                                    <FaMoneyBillWave />
+                                </div>
+                                <h4 className="font-black text-white uppercase text-sm mb-2">35% de Comisión Directa</h4>
+                                <p className="text-gray-400 text-xs">Gana el 35% por cada nuevo alumno que se inscriba con tu recomendación.</p>
+                            </div>
+
+                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-brand-gold transition-colors text-center group">
+                                <div className="w-12 h-12 bg-brand-gold/20 rounded-full flex items-center justify-center text-brand-gold mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform">
+                                    <FaUniversity />
+                                </div>
+                                <h4 className="font-black text-white uppercase text-sm mb-2">Pagos Flexibles</h4>
+                                <p className="text-gray-400 text-xs">Recibe tus ganancias en USDT o transferencia bancaria (Pago Móvil/Banesco).</p>
+                            </div>
+
+                            <div className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-brand-gold transition-colors text-center group">
+                                <div className="w-12 h-12 bg-brand-gold/20 rounded-full flex items-center justify-center text-brand-gold mx-auto mb-4 text-2xl group-hover:scale-110 transition-transform">
+                                    <FiLock />
+                                </div>
+                                <h4 className="font-black text-white uppercase text-sm mb-2">Sin Niveles</h4>
+                                <p className="text-gray-400 text-xs">Esto <strong className="text-red-500">NO</strong> es multinivel. Es una recompensa simple y directa por expandir la educación profesional.</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-brand-primary/50 p-6 rounded-2xl border border-brand-gold/20 text-center">
+                            <p className="text-gray-200 text-sm font-bold italic">
+                                "Al inscribirte, recibirás las instrucciones para activar tu panel de partner si decides participar. Tu prioridad es aprender; la nuestra, crecer contigo."
+                            </p>
                         </div>
                     </div>
                 </AnimatedSection>
@@ -131,7 +174,6 @@ const BinariasIntermedioPage: React.FC = () => {
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
                             <WhopCheckoutHandler 
                                 planId="plan_ojropXjBUERKG"
-                                /* Fix: Removed isLoading from parameters as WhopCheckoutHandler only provides 'open' function to trigger */
                                 trigger={(open) => (
                                     <button 
                                         onClick={open}
