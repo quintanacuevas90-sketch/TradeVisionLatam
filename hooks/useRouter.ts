@@ -1,27 +1,28 @@
 
 import { useState, useEffect } from 'react';
 
-const getCurrentPath = () => window.location.hash.slice(1) || '/';
+const getCurrentPath = () => window.location.pathname || '/';
 
 export const useRouter = () => {
     const [path, setPath] = useState(getCurrentPath());
 
     useEffect(() => {
-        const onHashChange = () => {
+        const onPopState = () => {
             setPath(getCurrentPath());
-            window.scrollTo(0, 0); // Scroll to top on navigation
+            window.scrollTo(0, 0);
         };
 
-        window.addEventListener('hashchange', onHashChange);
-        return () => window.removeEventListener('hashchange', onHashChange);
+        window.addEventListener('popstate', onPopState);
+        return () => window.removeEventListener('popstate', onPopState);
     }, []);
 
     const navigate = (newPath: string) => {
-        if (window.location.hash.slice(1) !== newPath) {
-             window.location.hash = newPath;
+        if (window.location.pathname !== newPath) {
+            window.history.pushState({}, '', newPath);
+            setPath(newPath);
+            window.scrollTo(0, 0);
         } else {
-            // If navigating to the same path, still trigger a scroll to top
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
         }
     };
 

@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-/* Added missing FiArrowRight import */
 import { FiMenu, FiX, FiSun, FiMoon, FiSearch, FiLock, FiUnlock, FiKey, FiStar, FiArrowRight, FiBriefcase } from 'react-icons/fi';
 import { FaRobot, FaTrophy } from 'react-icons/fa';
 import { ModalType } from '../types';
@@ -10,7 +9,6 @@ import Search from './Search';
 import { useRouter } from '../hooks/useRouter';
 import TrendingCurrenciesWidget from './TrendingCurrenciesWidget';
 import Accordion from './Accordion';
-import AffiliateProgramModal from './AffiliateProgramModal';
 
 interface HeaderProps {
     onOpenModal: (modal: ModalType) => void;
@@ -29,20 +27,10 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-            if (currentScrollY > 10) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
-
-            if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
-                setIsVisible(false);
-            } else {
-                setIsVisible(true);
-            }
+            setIsScrolled(currentScrollY > 10);
+            setIsVisible(currentScrollY <= lastScrollY.current || currentScrollY <= 80);
             lastScrollY.current = currentScrollY;
         };
-
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
@@ -65,40 +53,20 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 { label: 'SOCIOS / PARTNERS', action: () => navigate('/partners'), rel: 'nofollow' },
                 { label: 'Brokers', action: () => navigate('/brokers') },
                 { label: 'Blog', action: () => navigate('/blog') },
-                { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
                 { label: '🏆 Salón de la Fama', action: () => navigate('/hall-of-fame') },
                 { label: 'Soporte 24/7', action: () => onOpenModal('support') },
             ]
         },
         {
-            title: 'Contenido y Recursos',
+            title: 'Recursos',
             links: [
-                { label: 'Protocolo de Confianza', action: () => navigate('/protocolo-confianza') },
                 { label: 'TRADING ARENA 🎮', action: () => navigate('/zona-de-ejecucion') },
                 { label: 'Nuestra Metodología', action: () => navigate('/methodology') },
-                { label: 'Conoce a los Mentores', action: () => onOpenModal('mentors') },
                 { label: 'Sobre Nosotros', action: () => navigate('/acerca-de') },
-                { label: 'Nuestra Responsabilidad', action: () => navigate('/responsabilidad') },
-                { label: 'Impacto Social', action: () => navigate('/impacto-social') },
-                { label: 'Consultoría para Mentores', action: () => navigate('/consultancy') },
                 { label: 'Información Legal', action: () => navigate('/aviso-legal-riesgo') },
             ]
         }
     ];
-
-    const handleSideMenuClick = (action: () => void) => {
-        setIsSideMenuOpen(false);
-        setTimeout(() => {
-            action();
-        }, 250);
-    };
-
-    const handleVenezuelaClick = () => {
-        setIsSideMenuOpen(false);
-        setTimeout(() => {
-            window.dispatchEvent(new CustomEvent('open-venezuela-modal'));
-        }, 200);
-    };
 
     return (
         <>
@@ -106,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-20">
                         <div className="flex items-center gap-4 lg:flex-1 justify-start">
-                            <button onClick={() => setIsSideMenuOpen(true)} className="text-gray-800 dark:text-white p-2 -ml-2" aria-label="Open menu">
+                            <button onClick={() => setIsSideMenuOpen(true)} className="text-gray-800 dark:text-white p-2" aria-label="Open menu">
                                 <FiMenu size={24} />
                             </button>
                             <button onClick={() => navigate('/')} className="flex items-center gap-3 text-2xl font-extrabold text-gray-900 dark:text-white">
@@ -114,147 +82,40 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                 <span translate="no">TradeVision<span className="text-brand-accent"> Latam</span></span>
                             </button>
                         </div>
-
                         <nav className="hidden lg:flex items-center gap-6">
                             {mainNavLinks.map((link) => (
-                                <button
-                                    key={link.label}
-                                    onClick={link.action}
-                                    className={`font-semibold transition-colors duration-300 flex items-center gap-1.5 ${link.label === 'Partners' ? 'text-brand-accent' : 'text-gray-600 dark:text-gray-300 hover:text-brand-accent dark:hover:text-brand-accent'}`}
-                                >
-                                    {link.label === 'Partners' && <FiBriefcase size={16} />}
+                                <button key={link.label} onClick={link.action} className="font-semibold text-gray-600 dark:text-gray-300 hover:text-brand-accent transition-colors">
                                     {link.label}
                                 </button>
                             ))}
                         </nav>
-                        
                         <div className="flex items-center lg:flex-1 justify-end gap-2">
                             <TrendingCurrenciesWidget />
-                            <button
-                                onClick={() => setIsSearchOpen(true)}
-                                className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition duration-300"
-                                aria-label="Search"
-                            >
-                                <FiSearch size={20} />
-                            </button>
-                            <button
-                                onClick={toggleTheme}
-                                className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition duration-300"
-                                aria-label="Toggle theme"
-                            >
-                                {theme === 'light' ? <FiMoon size={20} /> : <FiSun size={20} />}
-                            </button>
+                            <button onClick={() => setIsSearchOpen(true)} className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 rounded-full transition"><FiSearch size={20} /></button>
+                            <button onClick={toggleTheme} className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 rounded-full transition">{theme === 'light' ? <FiMoon size={20} /> : <FiSun size={20} />}</button>
                         </div>
                     </div>
                 </div>
             </header>
-            
-            {isSideMenuOpen && (
-                <div 
-                    onClick={() => setIsSideMenuOpen(false)}
-                    className="fixed inset-0 bg-black/60 z-50"
-                    aria-hidden="true"
-                ></div>
-            )}
-            
-            <div
-                className={`fixed top-0 left-0 h-full w-full max-w-xs bg-white dark:bg-brand-primary shadow-2xl z-[51] transform transition-transform duration-300 ease-in-out ${
-                    isSideMenuOpen ? 'translate-x-0' : '-translate-x-full'
-                }`}
-                aria-modal="true"
-                role="dialog"
-            >
+            <div className={`fixed top-0 left-0 h-full w-full max-w-xs bg-white dark:bg-brand-primary shadow-2xl z-[51] transform transition-transform duration-300 ${isSideMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="p-4 flex flex-col h-full">
                     <div className="flex items-center justify-between mb-6">
-                         <div className="flex items-center gap-3">
-                            <Logo className="w-8 h-8" />
-                            <h2 className="text-xl font-bold">Menú</h2>
-                        </div>
-                        <button onClick={() => setIsSideMenuOpen(false)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10" aria-label="Close menu">
-                            <FiX size={24} />
-                        </button>
+                         <div className="flex items-center gap-3"><Logo className="w-8 h-8" /><h2 className="text-xl font-bold">Menú</h2></div>
+                        <button onClick={() => setIsSideMenuOpen(false)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10"><FiX size={24} /></button>
                     </div>
-
-                    <div className="flex-grow overflow-y-auto -mr-4 pr-4">
-                        <nav className="flex flex-col">
-                            {/* BOTÓN GOLD */}
-                            <div className="px-3 mb-4">
-                                <a 
-                                    href="#/colaboradores"
-                                    rel="nofollow"
-                                    onClick={(e) => { e.preventDefault(); handleSideMenuClick(() => navigate('/colaboradores')); }}
-                                    className="w-full flex items-center justify-between p-4 rounded-xl bg-black border-2 border-[#D4AF37] text-[#D4AF37] font-black text-[10px] uppercase tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all shadow-[0_0_15px_rgba(212,175,55,0.3)] group"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <FiStar className="text-lg group-hover:rotate-45 transition-transform" />
-                                        <span>ACCESO GOLD | SOCIO</span>
-                                    </div>
-                                    <FiArrowRight />
-                                </a>
-                            </div>
-
-                            {/* BOTÓN VENEZUELA (HAMBURGUESA) */}
-                            <div className="px-3 mb-6">
-                                <button 
-                                    onClick={handleVenezuelaClick}
-                                    className="w-full flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#F7D117]/20 via-[#003893]/20 to-[#CE1126]/20 border-2 border-[#003893]/40 text-brand-primary dark:text-white font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] transition-all shadow-md group"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-lg group-hover:animate-bounce">🇻🇪</span>
-                                        <span>ATENCIÓN VENEZUELA</span>
-                                    </div>
-                                    <FiArrowRight className="text-brand-accent" />
-                                </button>
-                            </div>
-
-                            {navLinkGroups.map((group) => (
-                                <div key={group.title} className="border-b border-gray-200 dark:border-white/10 last:border-b-0">
-                                    <Accordion variant="menu" title={group.title}>
-                                        <div className="flex flex-col space-y-1">
-                                            {group.links.map(link => (
-                                                <button
-                                                    key={link.label}
-                                                    onClick={() => handleSideMenuClick(link.action)}
-                                                    className={`text-left text-base transition duration-300 py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 w-full flex items-center justify-between ${
-                                                        link.label.includes('TRADING ARENA')
-                                                                    ? 'font-extrabold text-cyber-violet text-glow-violet hover:opacity-80'
-                                                                    : link.label.includes('Salón de la Fama')
-                                                                        ? 'font-bold text-yellow-500'
-                                                                        : link.label.includes('SOCIOS')
-                                                                            ? 'font-bold text-brand-accent flex items-center gap-2'
-                                                                            : 'text-gray-800 dark:text-white hover:text-brand-accent'
-                                                    }`}
-                                                >
-                                                    <span className="flex items-center gap-2">
-                                                        {link.label.includes('SOCIOS') && <FiBriefcase size={18} />}
-                                                        {link.label}
-                                                    </span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </Accordion>
+                    <nav className="flex-grow overflow-y-auto">
+                        {navLinkGroups.map((group) => (
+                            <Accordion key={group.title} variant="menu" title={group.title}>
+                                <div className="flex flex-col space-y-1">
+                                    {group.links.map(link => (
+                                        <button key={link.label} onClick={() => { setIsSideMenuOpen(false); link.action(); }} className="text-left py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-white/10 w-full text-gray-800 dark:text-white">{link.label}</button>
+                                    ))}
                                 </div>
-                            ))}
-                        </nav>
-                    </div>
-
-                    <div className="mt-auto pt-4 border-t border-gray-200 dark:border-white/10">
-                        <button
-                            onClick={() => {
-                                setIsSideMenuOpen(false);
-                                setTimeout(() => {
-                                    window.dispatchEvent(new CustomEvent('open-chatbot'));
-                                }, 150);
-                            }}
-                            className="w-full flex items-center justify-center gap-3 bg-brand-accent text-brand-primary font-bold py-3 px-4 rounded-lg transition-transform duration-200 transform hover:scale-105"
-                        >
-                            <FaRobot className="animate-pulse" size={20} />
-                            Asistente IA
-                        </button>
-                    </div>
+                            </Accordion>
+                        ))}
+                    </nav>
                 </div>
             </div>
-
             <Search isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
         </>
     );
