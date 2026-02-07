@@ -172,7 +172,7 @@ const App: React.FC = () => {
         '/brokers': <BrokersPage onOpenModal={openModal} />,
         '/premium-courses': <PremiumCoursesPage />,
         '/consultancy': <ConsultancyPage />,
-        '/methodology': <MethodologyPage />,
+        '/metodologia-c90': <MethodologyPage />,
         '/acerca-de': <AboutPage onOpenModal={openModal} />,
         '/responsabilidad': <ResponsibilityPage onOpenModal={openModal} />,
         '/impacto-social': <SocialImpactPage />,
@@ -228,20 +228,42 @@ const App: React.FC = () => {
         );
     }
 
-    // --- SECCIÓN DE ACCESO PÚBLICO (PARA ADS Y REDIRECCIÓN) ---
-    // Se añade '/cursos/binarias-intermedio' para que el curso de $99 sea público
-    const PUBLIC_PATHS = ['/checkout/complete', '/comunidad', '/cursos/binarias-intermedio'];
+    // --- LÓGICA DE ACCESO PÚBLICO (PARA SEO Y ADS) ---
+    const isPublicPath = 
+        pathname === '/' ||
+        pathname === '/blog' ||
+        pathname.startsWith('/blog/') ||
+        pathname === '/metodologia-c90' ||
+        pathname === '/comunidad' ||
+        pathname === '/checkout/complete' ||
+        pathname === '/cursos/binarias-intermedio' ||
+        pathname === '/sitemap' ||
+        pathname === '/aviso-legal-riesgo' ||
+        pathname === '/politica-privacidad' ||
+        pathname === '/terminos-academia' ||
+        pathname === '/verificacion-legal' ||
+        pathname === '/transparencia-legal';
     
-    if (PUBLIC_PATHS.includes(pathname)) {
+    if (isPublicPath) {
         return (
             <div className="bg-gray-50 dark:bg-brand-primary text-gray-800 dark:text-brand-white min-h-screen">
+                {isAuthenticated && <UserStatusBar />}
                 <Router routes={routes} />
+                <Chatbot
+                    isOpen={isChatOpen}
+                    setIsOpen={setIsChatOpen}
+                    newsItems={newsItems}
+                    pageContext={chatbotContext}
+                    triggerText={triggerText}
+                    onOpenChat={() => setIsChatOpen(true)}
+                    onCloseTrigger={closeTrigger}
+                />
                 <WhatsAppButton />
             </div>
         );
     }
 
-    // Bloqueo de seguridad para el resto de la academia
+    // Bloqueo de seguridad para el resto de la academia (Cursos PRO, Arena, Partners)
     if (!isAuthenticated) {
         return <LoginWall />;
     }
