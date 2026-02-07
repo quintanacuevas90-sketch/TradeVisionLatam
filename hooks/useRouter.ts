@@ -20,6 +20,7 @@ export const useRouter = () => {
         if (window.location.pathname !== newPath) {
             window.history.pushState({}, '', newPath);
             setPath(newPath);
+                  window.dispatchEvent(new PopStateEvent('popstate'));
             window.scrollTo(0, 0);
         } else {
             window.scrollTo(0, 0);
