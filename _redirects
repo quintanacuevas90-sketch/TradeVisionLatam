@@ -1,0 +1,6 @@
+# Liberar el sitemap.xml para que no sea procesado por el SPA router
+/sitemap.xml  /sitemap.xml  200
+/robots.txt   /robots.txt   200
+
+# SPA fallback - DEBE estar DESPUÉS de las excepciones estáticas
+/*  /index.html   200      
