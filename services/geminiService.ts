@@ -12,8 +12,7 @@ let ai: GoogleGenAI | null = null;
 
 function getAiInstance(): GoogleGenAI | null {
     if (ai) return ai;
-    const apiKey = process.env.API_KEY;
-    if (!apiKey) return null;
+const apiKey = typeof process !== 'undefined' && process.env ? process.env.API_KEY : '';    if (!apiKey) return null;
     try {
         ai = new GoogleGenAI({ apiKey });
         return ai;
