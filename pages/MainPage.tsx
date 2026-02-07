@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import NewsTicker from '../components/NewsTicker';
 import HeroSection from '../sections/HeroSection';
@@ -45,8 +45,8 @@ const DisciplineCtaSection: React.FC = () => {
                         </blockquote>
                         <div className="flex flex-col items-center">
                             <div className="w-12 h-1 bg-brand-accent rounded-full mb-4"></div>
-                            <p className="text-brand-accent font-black text-xs uppercase tracking-[0.3em]">José Quintana</p>
-                            <p className="text-gray-500 text-[10px] font-bold uppercase mt-1 tracking-widest">Asesor Principal & Voz de la Marca</p>
+                            <p className="text-brand-accent font-black text-xs uppercase tracking-[0.3em]">TradeVision Latam</p>
+                            <p className="text-gray-500 text-[10px] font-bold uppercase mt-1 tracking-widest">Infraestructura Líder en Formación Financiera</p>
                         </div>
                     </div>
                 </div>
@@ -57,6 +57,10 @@ const DisciplineCtaSection: React.FC = () => {
 
 
 const MainPage: React.FC<MainPageProps> = ({ onOpenModal, tickerItems }) => {
+    useEffect(() => {
+        document.title = "TradeVision Latam | Academia de Trading Profesional y Estrategia C90";
+    }, []);
+
     return (
         <>
             <Header onOpenModal={onOpenModal} />

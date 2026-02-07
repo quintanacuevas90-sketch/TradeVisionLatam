@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
             links: [
                 { label: 'Cursos Premium', action: () => navigate('/premium-courses') },
                 { label: 'Comunidad', action: () => navigate('/comunidad') },
-                { label: 'SOCIOS / PARTNERS', action: () => navigate('/partners') },
+                { label: 'SOCIOS / PARTNERS', action: () => navigate('/partners'), rel: 'nofollow' },
                 { label: 'Brokers', action: () => navigate('/brokers') },
                 { label: 'Blog', action: () => navigate('/blog') },
                 { label: 'Preguntas Frecuentes', action: () => navigate('/faq') },
@@ -179,8 +179,10 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                         <nav className="flex flex-col">
                             {/* BOTÓN GOLD */}
                             <div className="px-3 mb-4">
-                                <button 
-                                    onClick={() => handleSideMenuClick(() => navigate('/colaboradores'))}
+                                <a 
+                                    href="#/colaboradores"
+                                    rel="nofollow"
+                                    onClick={(e) => { e.preventDefault(); handleSideMenuClick(() => navigate('/colaboradores')); }}
                                     className="w-full flex items-center justify-between p-4 rounded-xl bg-black border-2 border-[#D4AF37] text-[#D4AF37] font-black text-[10px] uppercase tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all shadow-[0_0_15px_rgba(212,175,55,0.3)] group"
                                 >
                                     <div className="flex items-center gap-3">
@@ -188,7 +190,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenModal }) => {
                                         <span>ACCESO GOLD | SOCIO</span>
                                     </div>
                                     <FiArrowRight />
-                                </button>
+                                </a>
                             </div>
 
                             {/* BOTÓN VENEZUELA (HAMBURGUESA) */}

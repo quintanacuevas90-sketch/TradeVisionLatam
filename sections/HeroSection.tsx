@@ -44,25 +44,25 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenModal }) => {
                             <div className="relative w-40 h-40 md:w-64 md:h-64 rounded-full border-2 border-white/5 p-1 bg-[#0f172a]/80 backdrop-blur-xl overflow-hidden group">
                                 <img 
                                     src="https://i.pinimg.com/736x/6b/6f/a2/6b6fa26efc0259fecd2a789d209b559a.jpg" 
-                                    alt="TradeVision Mascot" 
+                                    alt="Mascota TradeVision" 
                                     className="w-full h-full object-cover object-center transform transition-transform duration-700 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/60 to-transparent"></div>
                             </div>
                             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white text-brand-primary px-3 py-1 rounded-full font-black text-[9px] uppercase tracking-tighter shadow-xl">
-                                MASTER INSTRUCTOR
+                                INFRAESTRUCTURA LÍDER
                             </div>
                         </div>
 
                         {/* Heading */}
                         <div className="text-center md:text-left animate-fade-in-up [animation-delay:0.2s]">
                             <h1 className="text-4xl sm:text-6xl md:text-7xl font-black leading-[1.1] tracking-tight text-white mb-6">
-                                La Disciplina es<br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-white to-cyber-violet">la Única Estrategia.</span>
+                                TradeVision Latam | <span className="text-brand-accent">Academia de Disciplina Institucional</span>
                             </h1>
-                            <p className="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed font-medium">
-                                Deja de ser la liquidez del mercado. Aprende a operar con la <span className="text-white">Lógica del Smart Money</span> y la tecnología de élite.
-                            </p>
+                            <h2 className="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed font-medium">
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent via-white to-cyber-violet block text-2xl md:text-3xl font-bold mb-4">La Disciplina es la Estrategia.</span>
+                                Deja de ser la liquidez del mercado. Aprende a operar con la <span className="text-white">Lógica del Smart Money</span> y la tecnología de élite de la Estrategia C90.
+                            </h2>
                         </div>
                     </div>
 
